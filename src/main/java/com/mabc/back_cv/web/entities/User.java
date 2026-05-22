@@ -13,9 +13,14 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Collection;
 
 @Entity
 @Table(name= "users")
@@ -23,7 +28,8 @@ import java.util.ArrayList;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class User{
+@Builder
+public class User implements UserDetails {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -76,6 +82,41 @@ public class User{
                 ", idioma='" + idioma + '\'' +
                 ", activo=" + activo +
                 '}';
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(rol.getNombre()));
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return activo;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return activo;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return activo;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return activo;
     }
 
     @Override

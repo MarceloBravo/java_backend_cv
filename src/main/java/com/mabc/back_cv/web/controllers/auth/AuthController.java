@@ -1,13 +1,12 @@
 package com.mabc.back_cv.web.controllers.auth;
 
-import com.mabc.back_cv.entities.User;
+import com.mabc.back_cv.web.entities.User;
 import com.mabc.back_cv.web.services.AuthService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 
 @RestController
-@ प्रांतMapping
 @RequestMapping("/api/auth")
 public class AuthController {
 

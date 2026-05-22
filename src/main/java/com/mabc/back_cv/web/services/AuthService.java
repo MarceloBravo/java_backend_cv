@@ -1,8 +1,9 @@
 package com.mabc.back_cv.web.services;
 
-import com.mabc.back_cv.entities.User;
-import com.mabc.back_cv.repositories.UserRepository;
-import com.mabc.back_cv.repositories.RolRepository;
+import com.mabc.back_cv.web.entities.User;
+import com.mabc.back_cv.web.entities.Rol;
+import com.mabc.back_cv.web.repositories.UserRepository;
+import com.mabc.back_cv.web.repositories.RolRepository;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
