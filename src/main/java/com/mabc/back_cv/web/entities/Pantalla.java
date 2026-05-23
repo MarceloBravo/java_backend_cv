@@ -27,9 +27,10 @@ public class Pantalla {
 
     @Column(name = "nombre_pantalla", nullable = false, length = 100)
     private String nombre_pantalla;
-
+    /*
     @Column(name = "url_archivo", nullable = false, length = 255)
     private String url_archivo;
+    */
 
     @ManyToOne
     @JoinColumn(name = "menu_id", nullable = false)
@@ -76,7 +77,7 @@ public class Pantalla {
         return "Pantalla{" +
                 "id=" + id +
                 ", nombre_pantalla='" + nombre_pantalla + '\'' +
-                ", url_archivo='" + url_archivo + '\'' +
+                //", url_archivo='" + url_archivo + '\'' +
                 ", accion_crear=" + accion_crear +
                 ", accion_editar=" + accion_editar +
                 ", accion_eliminar=" + accion_eliminar +

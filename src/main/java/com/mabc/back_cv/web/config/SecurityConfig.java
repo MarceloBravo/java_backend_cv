@@ -28,12 +28,13 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtAuthenticationFilter jwtAuthFilter) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtAuthenticationFilter jwtAuthFilter,
+            DynamicAuthorizationManager dynamicAuthorizationManager) throws Exception {
         http
             .csrf(csrf -> csrf.disable()) // Deshabilitamos CSRF ya que usamos JWT
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/api/auth/**").permitAll() // Rutas públicas (Login/Registro)
-                .anyRequest().authenticated()               // Todo lo demás requiere JWT
+                .anyRequest().access(dynamicAuthorizationManager) // Autorización dinámica por DB
             )
             .sessionManagement(session -> session
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // Sin estado (sin HTTP Session)

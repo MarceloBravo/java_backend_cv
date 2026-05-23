@@ -59,8 +59,9 @@ public class User implements UserDetails {
     @Column(name = "password", nullable = false, length = 100)
     private String password;
     
+    @Builder.Default
     @Column(name = "activo", nullable = false, columnDefinition = "BOOLEAN DEFAULT TRUE")
-    private Boolean activo;
+    private Boolean activo = true;
 
     @ManyToOne
     @JoinColumn(name = "rol_id", nullable = false)
@@ -101,22 +102,22 @@ public class User implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return activo;
+        return Boolean.TRUE.equals(activo);
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return activo;
+        return Boolean.TRUE.equals(activo);
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return activo;
+        return Boolean.TRUE.equals(activo);
     }
 
     @Override
     public boolean isEnabled() {
-        return activo;
+        return Boolean.TRUE.equals(activo);
     }
 
     @Override
