@@ -1,6 +1,5 @@
 package com.mabc.back_cv.web.controllers.auth;
 
-import com.mabc.back_cv.web.dto.AuthTokens;
 import com.mabc.back_cv.web.dto.RefreshTokenRequest;
 import com.mabc.back_cv.web.entities.User;
 import com.mabc.back_cv.web.services.AuthService;
@@ -13,7 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Map;
 
 /**
- * Controlador REST encargado de manejar los endpoints de autenticación y registro de usuarios.
+ * Controlador REST encargado de manejar los endpoints de autenticación y
+ * registro de usuarios.
  * Mapea las solicitudes que inician con /api/auth.
  */
 @RestController
@@ -21,7 +21,8 @@ import java.util.Map;
 public class AuthController {
 
     /**
-     * Servicio que contiene la lógica de negocio para la autenticación y gestión de usuarios.
+     * Servicio que contiene la lógica de negocio para la autenticación y gestión de
+     * usuarios.
      */
     private final AuthService authService;
 
@@ -37,46 +38,51 @@ public class AuthController {
     /**
      * Registra un nuevo usuario en el sistema.
      *
-     * @param user Objeto {@link User} con los datos de registro (email, password, etc.).
-     * @return Una respuesta HTTP que contiene el token de acceso y de refresco recién generados.
+     * @param user Objeto {@link User} con los datos de registro (email, password,
+     *             etc.).
+     * @return Una respuesta HTTP que contiene el token de acceso y de refresco
+     *         recién generados.
      */
     @PostMapping("/register")
     public ResponseEntity<Map<String, String>> register(@RequestBody User user) {
-        return ResponseEntity.ok(toTokenResponse(authService.register(user)));
+        try {
+            return ResponseEntity.ok(authService.register(user));
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(Map.of("error", e.getMessage()));
+        }
     }
 
     /**
-     * Autentica a un usuario existente utilizando sus credenciales (email y password).
+     * Autentica a un usuario existente utilizando sus credenciales (email y
+     * password).
      *
      * @param user Objeto {@link User} con las credenciales de inicio de sesión.
-     * @return Una respuesta HTTP que contiene el token de acceso y de refresco generados.
+     * @return Una respuesta HTTP que contiene el token de acceso y de refresco
+     *         generados.
      */
     @PostMapping("/login")
     public ResponseEntity<Map<String, String>> login(@RequestBody User user) {
-        return ResponseEntity.ok(toTokenResponse(authService.authenticate(user)));
+        try {
+            return ResponseEntity.ok(authService.authenticate(user));
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(Map.of("error", e.getMessage()));
+        }
     }
 
     /**
-     * Genera un nuevo par de tokens de acceso y refresco a partir de un token de refresco válido.
+     * Genera un nuevo par de tokens de acceso y refresco a partir de un token de
+     * refresco válido.
      *
-     * @param request La solicitud {@link RefreshTokenRequest} que incluye el token de refresco actual.
+     * @param request La solicitud {@link RefreshTokenRequest} que incluye el token
+     *                de refresco actual.
      * @return Una respuesta HTTP con los nuevos tokens generados.
      */
     @PostMapping("/refresh")
     public ResponseEntity<Map<String, String>> refresh(@RequestBody RefreshTokenRequest request) {
-        return ResponseEntity.ok(toTokenResponse(authService.refreshTokens(request.refreshToken())));
-    }
-
-    /**
-     * Convierte un objeto {@link AuthTokens} en un mapa con formato JSON de respuesta.
-     *
-     * @param tokens El par de tokens.
-     * @return Un mapa que asocia las claves "accessToken" y "refreshToken" con sus respectivos valores.
-     */
-    private Map<String, String> toTokenResponse(AuthTokens tokens) {
-        return Map.of(
-                "accessToken", tokens.accessToken(),
-                "refreshToken", tokens.refreshToken()
-        );
+        try {
+            return ResponseEntity.ok(authService.refreshTokens(request.refreshToken()));
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(Map.of("error", e.getMessage()));
+        }
     }
 }
