@@ -13,8 +13,6 @@ import lombok.Setter;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 
-import java.util.Objects;
-
 @Entity
 @Getter
 @Setter
@@ -22,14 +20,14 @@ import java.util.Objects;
 @AllArgsConstructor
 @Table(name = "educacion")
 public class Educacion {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
+
     @Column(name = "institucion", nullable = false, length = 100)
     private String institution;
-    
+
     @Column(name = "titulo", nullable = false, length = 100)
     private String title;
 
@@ -41,25 +39,25 @@ public class Educacion {
 
     @Column(name = "descripcion", length = 500)
     private String description;
-    
+
     @Column(name = "anio_desde", nullable = false)
     private Integer yearFrom;
-    
+
     @Column(name = "anio_hasta", nullable = false)
     private Integer yearTo;
 
     @Column(name = "duracion_semestres", nullable = false)
     private Integer duration;
-    
+
     @Column(name = "logo", length = 255)
     private String image;
-    
+
     @Column(name = "url", length = 255)
     private String url;
 
     @Column(name = "estilos", length = 255)
     private String styles;
-    
+
     @ManyToOne
     @JoinColumn(name = "usuario_id", nullable = false)
     private User usuario;
@@ -84,8 +82,10 @@ public class Educacion {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
         Educacion educacion = (Educacion) o;
         return id != null && id.equals(educacion.id);
     }

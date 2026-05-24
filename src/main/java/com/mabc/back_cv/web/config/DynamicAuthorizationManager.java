@@ -15,17 +15,43 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
 
+/**
+ * Gestor de autorización dinámica que implementa {@link AuthorizationManager}.
+ * Se encarga de verificar si un usuario autenticado tiene permisos para acceder a un recurso (URL)
+ * y realizar una acción específica (método HTTP) según la configuración de permisos
+ * asociada a su rol en la base de datos.
+ */
 @Component
 public class DynamicAuthorizationManager implements AuthorizationManager<RequestAuthorizationContext> {
 
+    /**
+     * Matcher de rutas utilizado para comparar los patrones de URL guardados en los permisos.
+     */
     private static final AntPathMatcher PATH_MATCHER = new AntPathMatcher();
 
+    /**
+     * Repositorio para la consulta de permisos de pantalla.
+     */
     private final PermisoPantallaRepository permisoPantallaRepository;
 
+    /**
+     * Constructor de la clase.
+     *
+     * @param permisoPantallaRepository El repositorio de permisos de pantalla.
+     */
     public DynamicAuthorizationManager(PermisoPantallaRepository permisoPantallaRepository) {
         this.permisoPantallaRepository = permisoPantallaRepository;
     }
 
+    /**
+     * Verifica si el usuario autenticado tiene acceso al contexto de la solicitud HTTP actual.
+     * Excluye de la validación a los endpoints públicos de autenticación (ej. /api/auth/*)
+     * y comprueba los permisos del rol del usuario para el método HTTP y la URI solicitados.
+     *
+     * @param authentication Proveedor del objeto {@link Authentication} del usuario actual.
+     * @param context El contexto de autorización de la solicitud HTTP.
+     * @return Una decisión de autorización {@link AuthorizationDecision} que indica si se permite o no el acceso.
+     */
     @Override
     public AuthorizationDecision check(Supplier<Authentication> authentication, RequestAuthorizationContext context) {
         Authentication auth = authentication.get();

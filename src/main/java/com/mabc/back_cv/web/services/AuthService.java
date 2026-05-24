@@ -11,15 +11,48 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+/**
+ * Servicio encargado de la lógica de negocio asociada a la autenticación de usuarios.
+ * Proporciona métodos para registrar nuevos usuarios, autenticar usuarios existentes
+ * y renovar los tokens utilizando un token de refresco.
+ */
 @Service
 public class AuthService {
 
+    /**
+     * Repositorio para la gestión de usuarios en base de datos.
+     */
     private final UserRepository userRepository;
+
+    /**
+     * Repositorio para la gestión de roles en base de datos.
+     */
     private final RolRepository rolRepository;
+
+    /**
+     * Codificador para encriptar y verificar contraseñas.
+     */
     private final PasswordEncoder passwordEncoder;
+
+    /**
+     * Servicio para la creación y validación de tokens JWT.
+     */
     private final JwtService jwtService;
+
+    /**
+     * Gestor de autenticación de Spring Security.
+     */
     private final AuthenticationManager authenticationManager;
 
+    /**
+     * Constructor de la clase.
+     *
+     * @param userRepository        Repositorio de usuarios.
+     * @param rolRepository         Repositorio de roles.
+     * @param passwordEncoder       Codificador de contraseñas.
+     * @param jwtService            Servicio JWT.
+     * @param authenticationManager Gestor de autenticación.
+     */
     public AuthService(UserRepository userRepository, RolRepository rolRepository, PasswordEncoder passwordEncoder, JwtService jwtService, AuthenticationManager authenticationManager) {
         this.userRepository = userRepository;
         this.rolRepository = rolRepository;
@@ -28,6 +61,14 @@ public class AuthService {
         this.authenticationManager = authenticationManager;
     }
 
+    /**
+     * Registra un nuevo usuario en el sistema con el rol predeterminado 'ROLE_USER'.
+     * Encripta la contraseña antes de guardar el usuario en la base de datos.
+     *
+     * @param request Objeto {@link User} con la información del registro.
+     * @return El par de tokens {@link AuthTokens} generados para el nuevo usuario.
+     * @throws RuntimeException Si el rol predeterminado no se encuentra inicializado en la base de datos.
+     */
     public AuthTokens register(User request) {
         Rol defaultRol = rolRepository.findByNombre("ROLE_USER")
                 .orElseThrow(() -> new RuntimeException("Error: El rol 'ROLE_USER' no está inicializado en la base de datos."));
@@ -49,6 +90,13 @@ public class AuthService {
         return jwtService.generateTokenPair(user);
     }
 
+    /**
+     * Autentica a un usuario utilizando sus credenciales de inicio de sesión.
+     * Llama al gestor de autenticación de Spring Security y, si tiene éxito, genera un nuevo par de tokens.
+     *
+     * @param request Objeto {@link User} que contiene el email y la contraseña.
+     * @return El par de tokens {@link AuthTokens} generados.
+     */
     public AuthTokens authenticate(User request) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
@@ -58,6 +106,13 @@ public class AuthService {
         return jwtService.generateTokenPair(user);
     }
 
+    /**
+     * Renueva el par de tokens utilizando un token de refresco válido.
+     *
+     * @param refreshToken El token de refresco actual.
+     * @return Un nuevo par de tokens {@link AuthTokens}.
+     * @throws BadCredentialsException Si el token es inválido, ha expirado o el usuario asociado no existe.
+     */
     public AuthTokens refreshTokens(String refreshToken) {
         String email = jwtService.extractUsername(refreshToken);
         User user = userRepository.findByEmail(email)
