@@ -3,12 +3,11 @@ package com.mabc.back_cv.web.services;
 import com.mabc.back_cv.web.dto.AuthTokens;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import java.security.Key;
+import javax.crypto.SecretKey;
 import java.util.Date;
 import java.util.function.Function;
 
@@ -146,42 +145,87 @@ public class JwtService {
         return username.equals(userDetails.getUsername()) && !isTokenExpired(token);
     }
 
+    /**
+     * Construye un token JWT con la información del usuario, tipo de token y tiempo de expiración especificados.
+     *
+     * @param userDetails  Detalles del usuario.
+     * @param tokenType    Tipo de token ("access" o "refresh").
+     * @param expirationMs Tiempo de expiración del token en milisegundos.
+     * @return El token JWT generado en formato de cadena compacta.
+     */
     private String buildToken(UserDetails userDetails, String tokenType, long expirationMs) {
         return Jwts.builder()
                 .subject(userDetails.getUsername())
                 .claim(TOKEN_TYPE_CLAIM, tokenType)
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + expirationMs))
-                .signWith(getSigningKey(), SignatureAlgorithm.HS256)
+                .signWith(getSigningKey(), Jwts.SIG.HS256)
                 .compact();
     }
 
+    /**
+     * Extrae el tipo de token (propiedad "type") del token JWT especificado.
+     *
+     * @param token El token JWT.
+     * @return El valor del tipo de token (ej. "access" o "refresh").
+     */
     private String extractTokenType(String token) {
         return extractClaim(token, claims -> claims.get(TOKEN_TYPE_CLAIM, String.class));
     }
 
+    /**
+     * Comprueba si el token JWT ha expirado comparando su fecha de expiración con la fecha y hora actual.
+     *
+     * @param token El token JWT.
+     * @return true si el token ha expirado, false de lo contrario.
+     */
     private boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
     }
 
+    /**
+     * Extrae la fecha de expiración contenida en los claims del token JWT.
+     *
+     * @param token El token JWT.
+     * @return Objeto {@link Date} que representa la fecha de expiración del token.
+     */
     private Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
     }
 
+    /**
+     * Extrae un claim (propiedad) específico del token utilizando una función resolutora.
+     *
+     * @param <T>            El tipo de dato del claim extraído.
+     * @param token          El token JWT.
+     * @param claimsResolver Función encargada de resolver y extraer el claim deseado.
+     * @return El claim extraído con su tipo correspondiente.
+     */
     private <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = extractAllClaims(token);
         return claimsResolver.apply(claims);
     }
 
+    /**
+     * Extrae todos los claims (propiedades) del token JWT tras validar su firma con la clave secreta.
+     *
+     * @param token El token JWT.
+     * @return El objeto {@link Claims} que contiene toda la información del payload del token.
+     */
     private Claims extractAllClaims(String token) {
         return Jwts.parser()
-                .verifyWith((javax.crypto.SecretKey) getSigningKey())
+                .verifyWith(getSigningKey())
                 .build()
                 .parseSignedClaims(token)
                 .getPayload();
     }
 
-    private Key getSigningKey() {
+    /**
+     * Genera la clave de firma simétrica a partir de la clave secreta en formato de texto plano.
+     *
+     * @return Objeto {@link SecretKey} para firmar y validar tokens HMAC.
+     */
+    private SecretKey getSigningKey() {
         return Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
     }
 }
