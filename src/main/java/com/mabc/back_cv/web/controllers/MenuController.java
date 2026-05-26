@@ -1,4 +1,4 @@
-package com.mabc.back_cv.web.controllers.Menus;
+package com.mabc.back_cv.web.controllers;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

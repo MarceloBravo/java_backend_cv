@@ -1,7 +1,7 @@
 package com.mabc.back_cv.menu;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mabc.back_cv.web.controllers.Menus.MenuController;
+import com.mabc.back_cv.web.controllers.MenuController;
 import com.mabc.back_cv.web.dto.MenuDTO;
 import com.mabc.back_cv.web.services.Menu.MenuService;
 import org.junit.jupiter.api.BeforeEach;
@@ -26,7 +26,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 /**
  * Pruebas unitarias para el controlador de menús {@link MenuController}.
- * Utiliza MockMvc en modo standalone para evitar levantar el contexto de seguridad
+ * Utiliza MockMvc en modo standalone para evitar levantar el contexto de
+ * seguridad
  * y centrarse exclusivamente en la verificación de endpoints y sus respuestas.
  */
 @ExtendWith(MockitoExtension.class)
@@ -141,8 +142,8 @@ class MenuControllerTest {
         when(menuService.saveMenu(any(MenuDTO.class))).thenReturn(saved);
 
         mockMvc.perform(post("/menus/save")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(toSave)))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(toSave)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(3)))
                 .andExpect(jsonPath("$.nombre", is("Nuevo")));
@@ -157,8 +158,8 @@ class MenuControllerTest {
         when(menuService.saveMenu(any(MenuDTO.class))).thenThrow(new RuntimeException("Recursividad detectada"));
 
         mockMvc.perform(post("/menus/save")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(toSave)))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(toSave)))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string(""));
 
