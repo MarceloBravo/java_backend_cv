@@ -1,4 +1,4 @@
-package com.mabc.back_cv.web.services;
+package com.mabc.back_cv.web.services.auth;
 
 import com.mabc.back_cv.web.dto.AuthTokens;
 import io.jsonwebtoken.Claims;

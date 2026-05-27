@@ -1,6 +1,6 @@
 package com.mabc.back_cv.web.config;
 
-import com.mabc.back_cv.web.services.JwtService;
+import com.mabc.back_cv.web.services.auth.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

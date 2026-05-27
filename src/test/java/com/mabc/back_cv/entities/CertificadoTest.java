@@ -27,7 +27,7 @@ public class CertificadoTest {
     private Curso curso;
 
     @BeforeEach
-    void setUp() {
+    void setUp(){
         user = new User(1L, "Juan", "Pérez", "juan.perez@example.com", "1234567890", "Calle 123",
                 "Santiago", "español", "1234567890", true, null, new ArrayList<>());
         curso = new Curso(1L, "Java Avanzado", "Curso de Java", "Instituto XYZ", null, null,

@@ -2,7 +2,7 @@ package com.mabc.back_cv.web.controllers.auth;
 
 import com.mabc.back_cv.web.dto.RefreshTokenRequest;
 import com.mabc.back_cv.web.entities.User;
-import com.mabc.back_cv.web.services.AuthService;
+import com.mabc.back_cv.web.services.auth.AuthService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
