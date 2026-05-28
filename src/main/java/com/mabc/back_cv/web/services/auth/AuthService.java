@@ -95,11 +95,11 @@ public class AuthService {
                 .activo(true)
                 .rol(defaultRol)
                 .build();
-        if (user == null) {
+        User savedUser = userRepository.save(user);
+        if (savedUser == null) {
             throw new RuntimeException("Error: No se pudo crear el usuario.");
         }
-        userRepository.save(user);
-        return toTokenResponse(jwtService.generateTokenPair(user));
+        return toTokenResponse(jwtService.generateTokenPair(savedUser));
     }
 
     /**
