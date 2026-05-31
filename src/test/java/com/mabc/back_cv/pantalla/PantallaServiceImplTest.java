@@ -28,7 +28,7 @@ import com.mabc.back_cv.web.dto.PantallaDTO;
 import com.mabc.back_cv.web.entities.Menu;
 import com.mabc.back_cv.web.entities.Pantalla;
 import com.mabc.back_cv.web.repositories.PantallaRepository;
-import com.mabc.back_cv.web.services.pagina.PantallaServiceImpl;
+import com.mabc.back_cv.web.services.pantalla.PantallaServiceImpl;
 
 import org.modelmapper.ModelMapper;
 

@@ -1,4 +1,4 @@
-package com.mabc.back_cv.web.services.pagina;
+package com.mabc.back_cv.web.services.pantalla;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.mabc.back_cv.web.dto.PantallaDTO;
 import com.mabc.back_cv.web.entities.Pantalla;
-import com.mabc.back_cv.web.services.pagina.PantallaService;
+import com.mabc.back_cv.web.services.pantalla.PantallaService;
 import com.mabc.back_cv.web.repositories.PantallaRepository;
 
 

@@ -1,4 +1,4 @@
-package com.mabc.back_cv.web.services.pagina;
+package com.mabc.back_cv.web.services.pantalla;
 
 import java.util.List;
 import org.springframework.data.domain.Page;
