@@ -88,7 +88,7 @@ class DynamicAuthorizationManagerTest {
         when(authentication.isAuthenticated()).thenReturn(true);
         when(authentication.getPrincipal()).thenReturn(user);
         when(request.getRequestURI()).thenReturn("/api/protected");
-        when(permisoPantallaRepository.findAllActiveByRolIdAndMenuUrl(1L, "/api/protected")).thenReturn(List.of());
+        when(permisoPantallaRepository.findAllByRolIdAndMenuUrlAndActive(1L, "/api/protected", true)).thenReturn(List.of());
 
         assertFalse(dynamicAuthorizationManager.check(authenticationSupplier, context).isGranted());
     }
@@ -103,7 +103,7 @@ class DynamicAuthorizationManagerTest {
         when(authentication.getPrincipal()).thenReturn(user);
         when(request.getRequestURI()).thenReturn("/api/recursos");
         when(request.getMethod()).thenReturn("GET");
-        when(permisoPantallaRepository.findAllActiveByRolIdAndMenuUrl(1L, "/api/recursos")).thenReturn(List.of(permiso));
+        when(permisoPantallaRepository.findAllByRolIdAndMenuUrlAndActive(1L, "/api/recursos", true)).thenReturn(List.of(permiso));
 
         assertTrue(dynamicAuthorizationManager.check(authenticationSupplier, context).isGranted());
     }
@@ -118,7 +118,7 @@ class DynamicAuthorizationManagerTest {
         when(authentication.getPrincipal()).thenReturn(user);
         when(request.getRequestURI()).thenReturn("/api/recursos/42");
         when(request.getMethod()).thenReturn("GET");
-        when(permisoPantallaRepository.findAllActiveByRolIdAndMenuUrl(1L, "/api/recursos/42")).thenReturn(List.of(permiso));
+        when(permisoPantallaRepository.findAllByRolIdAndMenuUrlAndActive(1L, "/api/recursos/42", true)).thenReturn(List.of(permiso));
 
         assertTrue(dynamicAuthorizationManager.check(authenticationSupplier, context).isGranted());
     }
@@ -133,7 +133,7 @@ class DynamicAuthorizationManagerTest {
         when(authentication.getPrincipal()).thenReturn(user);
         when(request.getRequestURI()).thenReturn("/api/recursos");
         when(request.getMethod()).thenReturn("POST");
-        when(permisoPantallaRepository.findAllActiveByRolIdAndMenuUrl(1L, "/api/recursos")).thenReturn(List.of(permiso));
+        when(permisoPantallaRepository.findAllByRolIdAndMenuUrlAndActive(1L, "/api/recursos", true)).thenReturn(List.of(permiso));
 
         assertFalse(dynamicAuthorizationManager.check(authenticationSupplier, context).isGranted());
     }
@@ -148,7 +148,7 @@ class DynamicAuthorizationManagerTest {
         when(authentication.getPrincipal()).thenReturn(user);
         when(request.getRequestURI()).thenReturn("/api/recursos");
         when(request.getMethod()).thenReturn("POST");
-        when(permisoPantallaRepository.findAllActiveByRolIdAndMenuUrl(1L, "/api/recursos")).thenReturn(List.of(permiso));
+        when(permisoPantallaRepository.findAllByRolIdAndMenuUrlAndActive(1L, "/api/recursos", true)).thenReturn(List.of(permiso));
 
         assertTrue(dynamicAuthorizationManager.check(authenticationSupplier, context).isGranted());
     }
@@ -163,7 +163,7 @@ class DynamicAuthorizationManagerTest {
         when(authentication.getPrincipal()).thenReturn(user);
         when(request.getRequestURI()).thenReturn("/api/recursos");
         when(request.getMethod()).thenReturn("HEAD");
-        when(permisoPantallaRepository.findAllActiveByRolIdAndMenuUrl(1L, "/api/recursos")).thenReturn(List.of(permiso));
+        when(permisoPantallaRepository.findAllByRolIdAndMenuUrlAndActive(1L, "/api/recursos", true)).thenReturn(List.of(permiso));
 
         assertFalse(dynamicAuthorizationManager.check(authenticationSupplier, context).isGranted());
     }
@@ -178,7 +178,7 @@ class DynamicAuthorizationManagerTest {
         when(authentication.getPrincipal()).thenReturn(user);
         when(request.getRequestURI()).thenReturn("/api/recursos/");
         when(request.getMethod()).thenReturn("GET");
-        when(permisoPantallaRepository.findAllActiveByRolIdAndMenuUrl(1L, "/api/recursos")).thenReturn(List.of(permiso));
+        when(permisoPantallaRepository.findAllByRolIdAndMenuUrlAndActive(1L, "/api/recursos", true)).thenReturn(List.of(permiso));
 
         assertTrue(dynamicAuthorizationManager.check(authenticationSupplier, context).isGranted());
     }
@@ -193,7 +193,7 @@ class DynamicAuthorizationManagerTest {
         when(authentication.getPrincipal()).thenReturn(user);
         when(request.getRequestURI()).thenReturn("/api/recursos/42");
         when(request.getMethod()).thenReturn("PUT");
-        when(permisoPantallaRepository.findAllActiveByRolIdAndMenuUrl(1L, "/api/recursos/42")).thenReturn(List.of(permiso));
+        when(permisoPantallaRepository.findAllByRolIdAndMenuUrlAndActive(1L, "/api/recursos/42", true)).thenReturn(List.of(permiso));
 
         assertTrue(dynamicAuthorizationManager.check(authenticationSupplier, context).isGranted());
     }
@@ -208,7 +208,7 @@ class DynamicAuthorizationManagerTest {
         when(authentication.getPrincipal()).thenReturn(user);
         when(request.getRequestURI()).thenReturn("/api/recursos/42");
         when(request.getMethod()).thenReturn("DELETE");
-        when(permisoPantallaRepository.findAllActiveByRolIdAndMenuUrl(1L, "/api/recursos/42")).thenReturn(List.of(permiso));
+        when(permisoPantallaRepository.findAllByRolIdAndMenuUrlAndActive(1L, "/api/recursos/42", true)).thenReturn(List.of(permiso));
 
         assertTrue(dynamicAuthorizationManager.check(authenticationSupplier, context).isGranted());
     }
@@ -225,7 +225,7 @@ class DynamicAuthorizationManagerTest {
         when(authentication.getPrincipal()).thenReturn(user);
         when(request.getRequestURI()).thenReturn("/api/recursos");
         when(request.getMethod()).thenReturn("GET");
-        when(permisoPantallaRepository.findAllActiveByRolIdAndMenuUrl(1L, "/api/recursos")).thenReturn(List.of(permisoNulo, permisoValido));
+        when(permisoPantallaRepository.findAllByRolIdAndMenuUrlAndActive(1L, "/api/recursos", true)).thenReturn(List.of(permisoNulo, permisoValido));
 
         assertTrue(dynamicAuthorizationManager.check(authenticationSupplier, context).isGranted());
     }

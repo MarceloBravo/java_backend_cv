@@ -91,7 +91,7 @@ public class DynamicAuthorizationManager implements AuthorizationManager<Request
 
     private Optional<PermisoPantalla> findMatchingPermission(Long roleId, String requestUri) {
         String ruta = requestUri.endsWith("/") ? requestUri.substring(0, requestUri.length() - 1) : requestUri;
-        List<PermisoPantalla> permisos = permisoPantallaRepository.findAllActiveByRolIdAndMenuUrl(roleId, ruta);
+        List<PermisoPantalla> permisos = permisoPantallaRepository.findAllByRolIdAndMenuUrlAndActive(roleId, ruta, true);
         return permisos.stream()
                 .filter(pp -> pp.getPantalla() != null)
                 .filter(pp -> PATH_MATCHER.match(pp.getPantalla().getMenu().getUrl(), ruta))
