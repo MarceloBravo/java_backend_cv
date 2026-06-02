@@ -8,8 +8,20 @@ import com.mabc.back_cv.web.entities.Pantalla;
 import org.springframework.stereotype.Component;
 
 @Component
+/**
+ * Utilidad para el mapeo entre entidades y DTOs de permisos de pantalla.
+ * 
+ * Proporciona métodos estáticos para convertir entre objetos PermisoPantalla
+ * y PermisoPantallaDTO.
+ */
 public class PermisoPantallaUtil {
 
+    /**
+     * Convierte una entidad PermisoPantalla a su DTO correspondiente.
+     *
+     * @param permisoPantalla Entidad de permiso de pantalla a convertir.
+     * @return DTO de permiso de pantalla, o null si la entidad es null.
+     */
     public static PermisoPantallaDTO mapToDTO(PermisoPantalla permisoPantalla) {
         if (permisoPantalla == null) {
             return null;
@@ -26,6 +38,12 @@ public class PermisoPantallaUtil {
         return dto;
     }
 
+    /**
+     * Convierte un DTO PermisoPantallaDTO a su entidad correspondiente.
+     *
+     * @param dto DTO de permiso de pantalla a convertir.
+     * @return Entidad de permiso de pantalla, o null si el DTO es null.
+     */
     public static PermisoPantalla mapToEntity(PermisoPantallaDTO dto) {
         if (dto == null) {
             return null;

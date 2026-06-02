@@ -26,6 +26,13 @@ public class PermisoPantallaServiceImpl implements PermisoPantallaService {
     private final RolRepository rolRepository;
     private final PantallaRepository pantallaRepository;
 
+    /**
+     * Constructor para la inyección de dependencias.
+     *
+     * @param permisoPantallaRepository Repositorio de permisos de pantalla.
+     * @param rolRepository Repositorio de roles.
+     * @param pantallaRepository Repositorio de pantallas.
+     */
     public PermisoPantallaServiceImpl(PermisoPantallaRepository permisoPantallaRepository,
                                       RolRepository rolRepository,
                                       PantallaRepository pantallaRepository) {

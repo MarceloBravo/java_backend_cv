@@ -17,17 +17,34 @@ import com.mabc.back_cv.web.dto.PermisoPantallaDTO;
 import com.mabc.back_cv.web.services.permisoPantalla.PermisoPantallaService;
 
 
+/**
+ * Controlador REST para la gestión de permisos de pantalla.
+ * 
+ * Proporciona endpoints para obtener, crear, eliminar y desactivar permisos
+ * de pantalla asociados a roles y pantallas en el sistema.
+ */
 @RestController
 @RequestMapping("/permisos-pantalla")
 public class PermisoPantallaController {
 
     private final PermisoPantallaService permisoPantallaService;
 
+    /**
+     * Constructor para la inyección de dependencias.
+     *
+     * @param permisoPantallaService Servicio de permisos de pantalla.
+     */
     public PermisoPantallaController(PermisoPantallaService permisoPantallaService) {
         this.permisoPantallaService = permisoPantallaService;
     }
 
 
+    /**
+     * Obtiene la lista de permisos de pantalla asociados a un rol específico.
+     *
+     * @param id_rol Identificador del rol.
+     * @return ResponseEntity con la lista de permisos de pantalla (200 OK) o error interno (500).
+     */
     @GetMapping("/rol/{id_rol}")
     public ResponseEntity<List<PermisoPantallaDTO>> obtenerPermisosPantallaPorRol(@PathVariable Long id_rol) {
         try {
@@ -38,6 +55,13 @@ public class PermisoPantallaController {
         }
     }
     
+    /**
+     * Obtiene un permiso de pantalla específico asociado a un rol y una pantalla.
+     *
+     * @param id_rol Identificador del rol.
+     * @param id_pantalla Identificador de la pantalla.
+     * @return ResponseEntity con el permiso encontrado (200 OK), not found (404) si no existe, o error interno (500).
+     */
     @GetMapping("/rol/{id_rol}/pantalla/{id_pantalla}")
     public ResponseEntity<PermisoPantallaDTO> obtenerPermisoPantallaPorRolYPantalla(@PathVariable Long id_rol, @PathVariable Long id_pantalla) {
         try {
@@ -52,6 +76,12 @@ public class PermisoPantallaController {
         }
     }
 
+    /**
+     * Almacena una lista de permisos de pantalla para un rol.
+     *
+     * @param permisosPantallaDTO Lista de DTOs de permisos de pantalla a guardar.
+     * @return ResponseEntity con la cantidad de permisos procesados (200 OK) o error interno (500).
+     */
     @PostMapping("/grabar")
     public ResponseEntity<Integer> grabarPermisosPantallaPorRol(@RequestBody List<PermisoPantallaDTO> permisosPantallaDTO) {
         try {
@@ -62,6 +92,12 @@ public class PermisoPantallaController {
         }
     }
 
+    /**
+     * Elimina todos los permisos de pantalla asociados a un rol específico.
+     *
+     * @param id_rol Identificador del rol.
+     * @return ResponseEntity con mensaje de éxito (200 OK), not found (404) si no hay permisos, o error interno (500).
+     */
     @DeleteMapping("/eliminar/rol/{id_rol}")
     public ResponseEntity<String> eliminarPermisosPantallaPorRolId(@PathVariable Long id_rol) {
         try {
@@ -76,6 +112,12 @@ public class PermisoPantallaController {
         }
     }
 
+    /**
+     * Desactiva todos los permisos de pantalla asociados a un rol específico.
+     *
+     * @param id_rol Identificador del rol.
+     * @return ResponseEntity con mensaje de éxito (200 OK), not found (404) si no hay permisos, o error interno (500).
+     */
     @PutMapping("/desactivar/rol/{id_rol}")
     public ResponseEntity<String> desactivarPermisosPantallaPorRolId(@PathVariable Long id_rol) {
         try {
