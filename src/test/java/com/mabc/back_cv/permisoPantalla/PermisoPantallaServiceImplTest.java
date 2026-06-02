@@ -130,92 +130,9 @@ public class PermisoPantallaServiceImplTest {
         assertEquals(0, resultado.size());
     }
 
-    @Test
-    @DisplayName("Obtener permisos pantalla por pantalla - éxito")
-    public void testObtenerPermisosPantallaPorPantalla_Success() {
-        Long idPantalla = 1L;
-        PermisoPantalla permiso = buildPermisoPantalla(1L, 1L, idPantalla, true);
-        List<PermisoPantalla[]> stubPantallaList = new ArrayList<>();
-        stubPantallaList.add(new PermisoPantalla[] { permiso });
-        when(permisoPantallaRepository.findAllPermisosByPantallaId(idPantalla)).thenReturn(stubPantallaList);
 
-        List<PermisoPantallaDTO> resultado = permisoPantallaService.obtenerPermisosPantallaPorPantalla(idPantalla);
 
-        assertEquals(1, resultado.size());
-        assertEquals(idPantalla, resultado.get(0).getPantalla().getId());
-    }
 
-    @Test
-    @DisplayName("Obtener permisos pantalla por pantalla - error")
-    public void testObtenerPermisosPantallaPorPantalla_Error() {
-        Long idPantalla = 1L;
-        when(permisoPantallaRepository.findAllPermisosByPantallaId(idPantalla))
-            .thenThrow(new RuntimeException("Error al obtener permisos"));
-
-        assertThrows(RuntimeException.class, () -> permisoPantallaService.obtenerPermisosPantallaPorPantalla(idPantalla));
-    }
-
-    @Test
-    @DisplayName("Obtener permisos pantalla por pantalla - pantalla nula")
-    public void testObtenerPermisosPantallaPorPantalla_PantallaNula() {
-        List<PermisoPantallaDTO> resultado = permisoPantallaService.obtenerPermisosPantallaPorPantalla(null);
-
-        assertEquals(0, resultado.size());
-    }
-
-    @Test
-    @DisplayName("Obtener permisos pantalla por pantalla - pantalla inexistente")
-    public void testObtenerPermisosPantallaPorPantalla_PantallaInexistente() {
-        Long idPantalla = 999L;
-        when(permisoPantallaRepository.findAllPermisosByPantallaId(idPantalla)).thenReturn(Collections.<PermisoPantalla[]>emptyList());
-
-        List<PermisoPantallaDTO> resultado = permisoPantallaService.obtenerPermisosPantallaPorPantalla(idPantalla);
-
-        assertEquals(0, resultado.size());
-    }
-
-    @Test
-    @DisplayName("Obtener permiso pantalla por id - éxito")
-    public void testObtenerPermisoPantallaPorId_Success() {
-        Long id = 1L;
-        PermisoPantalla permiso = buildPermisoPantalla(id, 1L, 1L, true);
-        when(permisoPantallaRepository.findById(id)).thenReturn(java.util.Optional.of(permiso));
-
-        PermisoPantallaDTO resultado = permisoPantallaService.obtenerPermisoPantallaPorId(id);
-
-        assertEquals(id, resultado.getId());
-    }
-
-    @Test
-    @DisplayName("Obtener permiso pantalla por id - error")
-    public void testObtenerPermisoPantallaPorId_Error() {
-        Long id = 1L;
-        when(permisoPantallaRepository.findById(id))
-                .thenThrow(new RuntimeException("Error en consulta por id"));
-
-        assertThrows(RuntimeException.class, () -> permisoPantallaService.obtenerPermisoPantallaPorId(id));
-    }
-
-    @Test
-    @DisplayName("Obtener permiso pantalla por id - id inexistente")
-    public void testObtenerPermisoPantallaPorId_Inexistente() {
-        Long id = 999L;
-        when(permisoPantallaRepository.findById(id)).thenReturn(java.util.Optional.empty());
-
-        PermisoPantallaDTO resultado = permisoPantallaService.obtenerPermisoPantallaPorId(id);
-
-        assertNull(resultado);
-    }
-    
-    @Test
-    @DisplayName("Obtener permiso pantalla por id - id nulo")
-    public void testObtenerPermisoPantallaPorId_nulo() {
-        Long id = null;
-
-        PermisoPantallaDTO resultado = permisoPantallaService.obtenerPermisoPantallaPorId(id);
-
-        assertNull(resultado);
-    }
 
     @Test
     @DisplayName("Obtener permiso pantalla por rol y pantalla - éxito")
@@ -297,7 +214,7 @@ public class PermisoPantallaServiceImplTest {
         when(rolRepository.findById(1L)).thenReturn(java.util.Optional.of(dto.getRol()));
         when(pantallaRepository.findById(2L)).thenReturn(java.util.Optional.of(dto.getPantalla()));
 
-        int resultado = permisoPantallaService.grabarPermisosPantalla(List.of(dto));
+        int resultado = permisoPantallaService.grabarPermisosPantallaPorRol(List.of(dto));
 
         assertEquals(1, resultado);
         verify(permisoPantallaRepository, times(1)).save(any(PermisoPantalla.class));
@@ -306,7 +223,7 @@ public class PermisoPantallaServiceImplTest {
     @Test
     @DisplayName("Grabar permisos pantalla - lista nula")
     public void testGrabarPermisosPantalla_NullList() {
-        int resultado = permisoPantallaService.grabarPermisosPantalla(null);
+        int resultado = permisoPantallaService.grabarPermisosPantallaPorRol(null);
 
         assertEquals(0, resultado);
     }
@@ -314,7 +231,7 @@ public class PermisoPantallaServiceImplTest {
     @Test
     @DisplayName("Grabar permisos pantalla - lista vacía")
     public void testGrabarPermisosPantalla_EmptyList() {
-        int resultado = permisoPantallaService.grabarPermisosPantalla(Collections.emptyList());
+        int resultado = permisoPantallaService.grabarPermisosPantallaPorRol(Collections.emptyList());
 
         assertEquals(0, resultado);
     }
@@ -327,7 +244,7 @@ public class PermisoPantallaServiceImplTest {
         dto.setRol(null);
         dto.setPantalla(new Pantalla());
 
-        assertThrows(IllegalArgumentException.class, () -> permisoPantallaService.grabarPermisosPantalla(List.of(dto)));
+        assertThrows(IllegalArgumentException.class, () -> permisoPantallaService.grabarPermisosPantallaPorRol(List.of(dto)));
     }
     
     @Test
@@ -338,7 +255,7 @@ public class PermisoPantallaServiceImplTest {
         dto.setRol(new Rol());
         dto.setPantalla(null);
 
-        assertThrows(IllegalArgumentException.class, () -> permisoPantallaService.grabarPermisosPantalla(List.of(dto)));
+        assertThrows(IllegalArgumentException.class, () -> permisoPantallaService.grabarPermisosPantallaPorRol(List.of(dto)));
     }
     
     @Test
@@ -348,7 +265,7 @@ public class PermisoPantallaServiceImplTest {
         when(rolRepository.findById(1L)).thenReturn(java.util.Optional.of(dto.getRol()));
         when(pantallaRepository.findById(2L)).thenReturn(java.util.Optional.empty());
 
-        assertThrows(IllegalArgumentException.class, () -> permisoPantallaService.grabarPermisosPantalla(List.of(dto)));
+        assertThrows(IllegalArgumentException.class, () -> permisoPantallaService.grabarPermisosPantallaPorRol(List.of(dto)));
     }
     
     @Test
@@ -358,7 +275,7 @@ public class PermisoPantallaServiceImplTest {
         when(rolRepository.findById(1L)).thenReturn(java.util.Optional.empty());
         when(pantallaRepository.findById(2L)).thenReturn(java.util.Optional.of(dto.getPantalla()));
 
-        assertThrows(IllegalArgumentException.class, () -> permisoPantallaService.grabarPermisosPantalla(List.of(dto)));
+        assertThrows(IllegalArgumentException.class, () -> permisoPantallaService.grabarPermisosPantallaPorRol(List.of(dto)));
     }
 
 
@@ -368,105 +285,7 @@ public class PermisoPantallaServiceImplTest {
         List<PermisoPantallaDTO> dtoList = new ArrayList<PermisoPantallaDTO>();
         dtoList.add(null);
 
-        assertThrows(IllegalArgumentException.class, () -> permisoPantallaService.grabarPermisosPantalla(dtoList));
-    }
-
-    @Test
-    @DisplayName("Eliminar permisos pantalla - éxito")
-    public void testEliminarPermisosPantalla_Success() {
-        Long id = 1L;
-        PermisoPantallaDTO dto = buildPermisoPantallaDTO(id, 1L, 2L, true);
-        PermisoPantalla permiso = buildPermisoPantalla(id, 1L, 2L, true);
-        when(permisoPantallaRepository.findById(id)).thenReturn(java.util.Optional.of(permiso));
-
-        int resultado = permisoPantallaService.eliminarPermisosPantalla(List.of(dto));
-
-        assertEquals(1, resultado);
-        verify(permisoPantallaRepository, times(1)).delete(permiso);
-    }
-
-    @Test
-    @DisplayName("Eliminar permisos pantalla - lista nula")
-    public void testEliminarPermisosPantalla_NullList() {
-        int resultado = permisoPantallaService.eliminarPermisosPantalla(null);
-
-        assertEquals(0, resultado);
-    }
-
-    @Test
-    @DisplayName("Eliminar permisos pantalla - lista vacía")
-    public void testEliminarPermisosPantalla_EmptyList() {
-        int resultado = permisoPantallaService.eliminarPermisosPantalla(Collections.emptyList());
-
-        assertEquals(0, resultado);
-    }
-
-    @Test
-    @DisplayName("Eliminar permisos pantalla - error por id inválido")
-    public void testEliminarPermisosPantalla_Error() {
-        PermisoPantallaDTO dto = buildPermisoPantallaDTO(null, 1L, 2L, true);
-
-        assertThrows(IllegalArgumentException.class, () -> permisoPantallaService.eliminarPermisosPantalla(List.of(dto)));
-    }
-
-    @Test
-    @DisplayName("Eliminar permisos pantalla por DTO nulo en la lista")
-    public void testEliminarPermisosPantalla_DTONulo() {
-        List<PermisoPantallaDTO> dtoList = new ArrayList<PermisoPantallaDTO>();
-        dtoList.add(null);
-
-        assertThrows(RuntimeException.class, () -> permisoPantallaService.eliminarPermisosPantalla(dtoList));
-    }
-    
-    @Test
-    @DisplayName("Eliminar permisos pantalla con permiso no encontrado")
-    public void testEliminarPermisosPantalla_PermisoInexistente() {
-        List<PermisoPantallaDTO> dtoList = new ArrayList<PermisoPantallaDTO>();
-        dtoList.add(buildPermisoPantallaDTO(1L, 1L, 999L, true));
-
-        when(permisoPantallaRepository.findById(1L)).thenReturn(java.util.Optional.empty());
-
-        assertThrows(IllegalArgumentException.class, () -> permisoPantallaService.eliminarPermisosPantalla(dtoList));
-    }
-
-    @Test
-    @DisplayName("Eliminar permisos pantalla por id - éxito")
-    public void testEliminarPermisosPantallaPorId_Success() {
-        Long id = 1L;
-        PermisoPantalla permiso = buildPermisoPantalla(id, 1L, 2L, true);
-        when(permisoPantallaRepository.findById(id)).thenReturn(java.util.Optional.of(permiso));
-
-        boolean resultado = permisoPantallaService.eliminarPermisosPantallaPorId(id);
-
-        assertEquals(true, resultado);
-        verify(permisoPantallaRepository, times(1)).delete(permiso);
-    }
-
-    @Test
-    @DisplayName("Eliminar permisos pantalla por id - id inexistente")
-    public void testEliminarPermisosPantallaPorId_Inexistente() {
-        Long id = 999L;
-        when(permisoPantallaRepository.findById(id)).thenReturn(java.util.Optional.empty());
-
-        boolean resultado = permisoPantallaService.eliminarPermisosPantallaPorId(id);
-
-        assertFalse(resultado);
-    }
-
-    @Test
-    @DisplayName("Eliminar permisos pantalla por id - error")
-    public void testEliminarPermisosPantallaPorId_Error() {
-        Long id = 1L;
-        when(permisoPantallaRepository.findById(id)).thenThrow(new RuntimeException("Error al buscar id"));
-
-        assertThrows(RuntimeException.class, () -> permisoPantallaService.eliminarPermisosPantallaPorId(id));
-    }
-
-    @Test
-    @DisplayName("Eliminar permisos pantalla por id - id nulo")
-    public void testEliminarPermisosPantallaPorId_Nulo() {
-        Long id = null;
-        assertFalse(permisoPantallaService.eliminarPermisosPantallaPorId(id));
+        assertThrows(IllegalArgumentException.class, () -> permisoPantallaService.grabarPermisosPantallaPorRol(dtoList));
     }
 
     @Test
@@ -502,132 +321,39 @@ public class PermisoPantallaServiceImplTest {
         assertThrows(RuntimeException.class, () -> permisoPantallaService.eliminarPermisosPantallaPorRolId(idRol));
     }
 
-    @Test
-    @DisplayName("Eliminar permisos pantalla por pantalla - éxito")
-    public void testEliminarPermisosPantallaPorPantallaId_Success() {
-        Long idPantalla = 1L;
-        PermisoPantalla permiso = buildPermisoPantalla(1L, 2L, idPantalla, true);
-        when(permisoPantallaRepository.findByPantallaId(idPantalla)).thenReturn(List.of(permiso));
 
-        boolean resultado = permisoPantallaService.eliminarPermisosPantallaPorPantallaId(idPantalla);
-
-        assertEquals(true, resultado);
-        verify(permisoPantallaRepository, times(1)).deleteAll(List.of(permiso));
-    }
-
-    @Test
-    @DisplayName("Eliminar permisos pantalla por pantalla - id inexistente")
-    public void testEliminarPermisosPantallaPorPantallaId_Inexistente() {
-        Long idPantalla = 999L;
-        when(permisoPantallaRepository.findByPantallaId(idPantalla)).thenReturn(Collections.emptyList());
-
-        boolean resultado = permisoPantallaService.eliminarPermisosPantallaPorPantallaId(idPantalla);
-
-        assertFalse(resultado);
-    }
-
-    @Test
-    @DisplayName("Eliminar permisos pantalla por pantalla - error")
-    public void testEliminarPermisosPantallaPorPantallaId_Error() {
-        Long idPantalla = 1L;
-        when(permisoPantallaRepository.findByPantallaId(idPantalla)).thenThrow(new RuntimeException("Error al eliminar por pantalla"));
-
-        assertThrows(RuntimeException.class, () -> permisoPantallaService.eliminarPermisosPantallaPorPantallaId(idPantalla));
-    }
 
     @Test
     @DisplayName("Desactivar permiso pantalla por id - éxito")
-    public void testDesactivarPermisosPantallaPorId_Success() {
+    public void testdesactivarPermisosPantallaPorRolId_Success() {
         Long id = 1L;
-        when(permisoPantallaRepository.deactivatePermisoPantallaById(id)).thenReturn(1);
+        when(permisoPantallaRepository.deactivatePermisoPantallaByRolId(id)).thenReturn(1);
 
-        boolean resultado = permisoPantallaService.desactivarPermisosPantallaPorId(id);
+        boolean resultado = permisoPantallaService.desactivarPermisosPantallaPorRolId(id);
 
         assertEquals(true, resultado);
     }
 
     @Test
     @DisplayName("Desactivar permiso pantalla por id - id inexistente")
-    public void testDesactivarPermisosPantallaPorId_Inexistente() {
+    public void testdesactivarPermisosPantallaPorRolId_Inexistente() {
         Long id = 999L;
-        when(permisoPantallaRepository.deactivatePermisoPantallaById(id)).thenReturn(0);
+        when(permisoPantallaRepository.deactivatePermisoPantallaByRolId(id)).thenReturn(0);
 
-        boolean resultado = permisoPantallaService.desactivarPermisosPantallaPorId(id);
+        boolean resultado = permisoPantallaService.desactivarPermisosPantallaPorRolId(id);
 
         assertFalse(resultado);
     }
 
     @Test
     @DisplayName("Desactivar permiso pantalla por id - error")
-    public void testDesactivarPermisosPantallaPorId_Error() {
+    public void testdesactivarPermisosPantallaPorRolId_Error() {
         Long id = 1L;
-        when(permisoPantallaRepository.deactivatePermisoPantallaById(id))
+        when(permisoPantallaRepository.deactivatePermisoPantallaByRolId(id))
                 .thenThrow(new RuntimeException("Error al desactivar por id"));
 
-        assertThrows(RuntimeException.class, () -> permisoPantallaService.desactivarPermisosPantallaPorId(id));
+        assertThrows(RuntimeException.class, () -> permisoPantallaService.desactivarPermisosPantallaPorRolId(id));
     }
 
-    @Test
-    @DisplayName("Desactivar permisos pantalla por rol - éxito")
-    public void testDesactivarPermisosPantallaPorRolId_Success() {
-        Long idRol = 1L;
-        when(permisoPantallaRepository.deactivatePermisoPantallaByRolId(idRol)).thenReturn(1);
 
-        boolean resultado = permisoPantallaService.desactivarPermisosPantallaPorRolId(idRol);
-
-        assertEquals(true, resultado);
-    }
-
-    @Test
-    @DisplayName("Desactivar permisos pantalla por rol - id inexistente")
-    public void testDesactivarPermisosPantallaPorRolId_Inexistente() {
-        Long idRol = 999L;
-        when(permisoPantallaRepository.deactivatePermisoPantallaByRolId(idRol)).thenReturn(0);
-
-        boolean resultado = permisoPantallaService.desactivarPermisosPantallaPorRolId(idRol);
-
-        assertFalse(resultado);
-    }
-
-    @Test
-    @DisplayName("Desactivar permisos pantalla por rol - error")
-    public void testDesactivarPermisosPantallaPorRolId_Error() {
-        Long idRol = 1L;
-        when(permisoPantallaRepository.deactivatePermisoPantallaByRolId(idRol))
-                .thenThrow(new RuntimeException("Error al desactivar por rol"));
-
-        assertThrows(RuntimeException.class, () -> permisoPantallaService.desactivarPermisosPantallaPorRolId(idRol));
-    }
-
-    @Test
-    @DisplayName("Desactivar permisos pantalla por pantalla - éxito")
-    public void testDesactivarPermisosPantallaPorPantallaId_Success() {
-        Long idPantalla = 1L;
-        when(permisoPantallaRepository.deactivatePermisoPantallaByPantallaId(idPantalla)).thenReturn(1);
-
-        boolean resultado = permisoPantallaService.desactivarPermisosPantallaPorPantallaId(idPantalla);
-
-        assertEquals(true, resultado);
-    }
-
-    @Test
-    @DisplayName("Desactivar permisos pantalla por pantalla - id inexistente")
-    public void testDesactivarPermisosPantallaPorPantallaId_Inexistente() {
-        Long idPantalla = 999L;
-        when(permisoPantallaRepository.deactivatePermisoPantallaByPantallaId(idPantalla)).thenReturn(0);
-
-        boolean resultado = permisoPantallaService.desactivarPermisosPantallaPorPantallaId(idPantalla);
-
-        assertFalse(resultado);
-    }
-
-    @Test
-    @DisplayName("Desactivar permisos pantalla por pantalla - error")
-    public void testDesactivarPermisosPantallaPorPantallaId_Error() {
-        Long idPantalla = 1L;
-        when(permisoPantallaRepository.deactivatePermisoPantallaByPantallaId(idPantalla))
-                .thenThrow(new RuntimeException("Error al desactivar por pantalla"));
-
-        assertThrows(RuntimeException.class, () -> permisoPantallaService.desactivarPermisosPantallaPorPantallaId(idPantalla));
-    }
 }
