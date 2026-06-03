@@ -5,6 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -29,8 +31,6 @@ import com.mabc.back_cv.web.entities.Menu;
 import com.mabc.back_cv.web.entities.Pantalla;
 import com.mabc.back_cv.web.repositories.PantallaRepository;
 import com.mabc.back_cv.web.services.pantalla.PantallaServiceImpl;
-
-import org.modelmapper.ModelMapper;
 
 import org.modelmapper.ModelMapper;
 
@@ -378,25 +378,21 @@ public class PantallaServiceImplTest {
     @Test
     @DisplayName("Debe eliminar una pantalla por su ID")
     public void testDeletePantalla() {
-        // Configurar el comportamiento del mock del repositorio
-        Pantalla pantalla = new Pantalla(1L, "Pantalla 1",  null, true, true, true, true, true, true);
-        when(pantallaRepository.findById(1L)).thenReturn(Optional.of(pantalla));
-        
         // Llamar al método a probar
         pantallaService.deletePantalla(1L);
 
         // Verificar que se llamó al método delete del repositorio
-        // En este caso, como el método deletePantalla no retorna nada, solo verificamos que no se lance ninguna excepción
+        verify(pantallaRepository, times(1)).deleteById(1L);
     }
 
     @Test
-    @DisplayName("Debe lanzar un error al eliminar una pantalla con un ID inválido")
+    @DisplayName("Debe eliminar una pantalla con un ID inválido sin lanzar excepción")
     public void testDeletePantallaInvalid() {
-        // Configurar el comportamiento del mock del repositorio para cuando el ID no existe
-        when(pantallaRepository.findById(999L)).thenReturn(Optional.empty());
-
-        // Llamar al método a probar y verificar que no lanza excepción (solo retorna sin hacer nada)
+        // Llamar al método a probar
         pantallaService.deletePantalla(999L);
+
+        // Verificar que se intentó eliminar el ID inválido
+        verify(pantallaRepository, times(1)).deleteById(999L);
     }
 
 }

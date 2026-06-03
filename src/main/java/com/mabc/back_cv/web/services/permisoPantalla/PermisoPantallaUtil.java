@@ -2,8 +2,6 @@ package com.mabc.back_cv.web.services.permisoPantalla;
 
 import com.mabc.back_cv.web.dto.PermisoPantallaDTO;
 import com.mabc.back_cv.web.entities.PermisoPantalla;
-import com.mabc.back_cv.web.entities.Rol;
-import com.mabc.back_cv.web.entities.Pantalla;
 
 import org.springframework.stereotype.Component;
 
@@ -49,7 +47,7 @@ public class PermisoPantallaUtil {
             return null;
         }
         PermisoPantalla permisoPantalla = new PermisoPantalla();
-        if(dto.getId() != null) {
+        if (dto.getId() != null) {
             permisoPantalla.setId(dto.getId());
         }
         permisoPantalla.setRol(dto.getRol());
@@ -61,5 +59,5 @@ public class PermisoPantallaUtil {
         permisoPantalla.setActivo(dto.getActivo());
         return permisoPantalla;
     }
-    
+
 }

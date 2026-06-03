@@ -1,5 +1,8 @@
-package com.mabc.back_cv.web.config;
+package com.mabc.back_cv.config;
 
+import com.mabc.back_cv.web.config.DynamicAuthorizationManager;
+import com.mabc.back_cv.web.config.JwtAuthenticationFilter;
+import com.mabc.back_cv.web.config.SecurityConfig;
 import com.mabc.back_cv.web.entities.Rol;
 import com.mabc.back_cv.web.entities.User;
 import com.mabc.back_cv.web.repositories.UserRepository;
@@ -17,7 +20,6 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.DefaultSecurityFilterChain;
-import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.util.Optional;
@@ -104,8 +106,8 @@ class SecurityConfigTest {
         when(userRepository.findByEmail("usuario@example.com")).thenReturn(Optional.of(usuario));
 
         AuthenticationProvider provider = securityConfig.authenticationProvider();
-        UsernamePasswordAuthenticationToken authRequest =
-                new UsernamePasswordAuthenticationToken("usuario@example.com", "passwordValido");
+        UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken("usuario@example.com",
+                "passwordValido");
 
         var authentication = provider.authenticate(authRequest);
 
@@ -128,8 +130,8 @@ class SecurityConfigTest {
         when(userRepository.findByEmail("usuario@example.com")).thenReturn(Optional.of(usuario));
 
         AuthenticationProvider provider = securityConfig.authenticationProvider();
-        UsernamePasswordAuthenticationToken authRequest =
-                new UsernamePasswordAuthenticationToken("usuario@example.com", "passwordIncorrecto");
+        UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken("usuario@example.com",
+                "passwordIncorrecto");
 
         assertThrows(BadCredentialsException.class, () -> provider.authenticate(authRequest));
     }
@@ -152,7 +154,8 @@ class SecurityConfigTest {
         when(httpSecurity.authorizeHttpRequests(any())).thenReturn(httpSecurity);
         when(httpSecurity.sessionManagement(any())).thenReturn(httpSecurity);
         when(httpSecurity.authenticationProvider(any())).thenReturn(httpSecurity);
-        when(httpSecurity.addFilterBefore(eq(jwtAuthFilter), eq(UsernamePasswordAuthenticationFilter.class))).thenReturn(httpSecurity);
+        when(httpSecurity.addFilterBefore(eq(jwtAuthFilter), eq(UsernamePasswordAuthenticationFilter.class)))
+                .thenReturn(httpSecurity);
         when(httpSecurity.build()).thenReturn(filterChain);
 
         assertSame(filterChain,

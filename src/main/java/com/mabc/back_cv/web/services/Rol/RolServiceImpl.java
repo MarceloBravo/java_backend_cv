@@ -79,7 +79,7 @@ public class RolServiceImpl implements RolService {
         if (id == null) {
             throw new IllegalArgumentException("Error: El id no puede ser nulo.");
         }
-        if (rolRepository.findById(id) == null) {
+        if (!rolRepository.findById(id).isPresent()) {
             throw new RuntimeException("Error: El rol no existe.");
         }
         rolRepository.deleteById(id);
