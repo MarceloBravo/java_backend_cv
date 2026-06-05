@@ -378,6 +378,9 @@ public class PantallaServiceImplTest {
     @Test
     @DisplayName("Debe eliminar una pantalla por su ID")
     public void testDeletePantalla() {
+        // Preparar mock para indicar que el ID existe
+        when(pantallaRepository.existsById(1L)).thenReturn(true);
+
         // Llamar al método a probar
         pantallaService.deletePantalla(1L);
 
@@ -388,6 +391,9 @@ public class PantallaServiceImplTest {
     @Test
     @DisplayName("Debe eliminar una pantalla con un ID inválido sin lanzar excepción")
     public void testDeletePantallaInvalid() {
+        // Preparar mock para indicar que el ID (aunque "inválido" en pruebas) existe
+        when(pantallaRepository.existsById(999L)).thenReturn(true);
+
         // Llamar al método a probar
         pantallaService.deletePantalla(999L);
 

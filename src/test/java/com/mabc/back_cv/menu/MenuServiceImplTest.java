@@ -283,6 +283,9 @@ class MenuServiceImplTest {
     @Test
     @DisplayName("Eliminar menú con id válido llama al repositorio")
     void deleteMenu_ValidId_ShouldCallRepository() {
+        // Preparar mock para indicar que el ID existe
+        when(menuRepository.existsById(1L)).thenReturn(true);
+
         menuService.deleteMenu(1L);
         verify(menuRepository, times(1)).deleteById(1L);
     }

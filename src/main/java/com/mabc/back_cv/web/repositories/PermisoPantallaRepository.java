@@ -8,10 +8,13 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import java.util.List;
 
+import org.springframework.stereotype.Repository;
+
 /**
  * Repositorio JPA para acceder a los datos de la entidad {@link PermisoPantalla}.
  * Permite gestionar los permisos asociados a las pantallas y menús del sistema.
  */
+@Repository
 public interface PermisoPantallaRepository extends JpaRepository<PermisoPantalla, Long> {
 
     /**

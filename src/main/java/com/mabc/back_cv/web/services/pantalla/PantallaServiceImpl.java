@@ -74,8 +74,8 @@ public class PantallaServiceImpl implements PantallaService {
 
     @Override
     public void deletePantalla(Long id) {
-        if (id == null) {
-            return;
+        if (id == null || !pantallaRepository.existsById(id)) {
+            throw new IllegalArgumentException("No se encontró una pantalla a eliminar.");
         }
         pantallaRepository.deleteById(id);
     }

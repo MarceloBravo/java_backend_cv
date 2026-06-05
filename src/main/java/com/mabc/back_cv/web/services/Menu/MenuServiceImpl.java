@@ -167,7 +167,7 @@ public class MenuServiceImpl implements MenuService {
      * @param id Identificador único del menú a eliminar.
      */
     public void deleteMenu(Long id) {
-        if (id == null) {
+        if (id == null || !menuRepository.existsById(id)) {
             return;
         }
         menuRepository.deleteById(id);
