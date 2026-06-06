@@ -37,7 +37,8 @@ public class UsuarioController {
      * Obtiene la lista de todos los usuarios con filtro opcional.
      * 
      * @param filter Parámetro opcional para filtrar usuarios por nombre o email
-     * @return ResponseEntity con la lista de UsuarioDTO o error en caso de excepción
+     * @return ResponseEntity con la lista de UsuarioDTO o error en caso de
+     *         excepción
      */
     @GetMapping("/all")
     public ResponseEntity<List<UsuarioDTO>> getAll(
@@ -70,9 +71,10 @@ public class UsuarioController {
      * Obtiene una página de usuarios con filtro, número de página y tamaño.
      * 
      * @param filter Parámetro opcional para filtrar usuarios
-     * @param page Número de página (por defecto 0)
-     * @param size Cantidad de registros por página (por defecto 10)
-     * @return ResponseEntity con una Page de UsuarioDTO o error en caso de excepción
+     * @param page   Número de página (por defecto 0)
+     * @param size   Cantidad de registros por página (por defecto 10)
+     * @return ResponseEntity con una Page de UsuarioDTO o error en caso de
+     *         excepción
      */
     @GetMapping("/page")
     public ResponseEntity<Page<UsuarioDTO>> getAllPage(
@@ -91,7 +93,8 @@ public class UsuarioController {
      * Crea o actualiza un usuario.
      * 
      * @param usuarioDTO Datos del usuario a guardar
-     * @return ResponseEntity con el UsuarioDTO guardado o error en caso de excepción
+     * @return ResponseEntity con el UsuarioDTO guardado o error en caso de
+     *         excepción
      */
     @PostMapping("/save")
     public ResponseEntity<UsuarioDTO> saveUsuario(@RequestBody UsuarioDTO usuarioDTO) {
@@ -107,7 +110,8 @@ public class UsuarioController {
      * Elimina un usuario por su identificador.
      * 
      * @param id Identificador único del usuario a eliminar
-     * @return ResponseEntity con mensaje de confirmación o error en caso de excepción
+     * @return ResponseEntity con mensaje de confirmación o error en caso de
+     *         excepción
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteUsuario(@PathVariable Long id) {
