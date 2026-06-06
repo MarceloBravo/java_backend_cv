@@ -40,10 +40,10 @@ public class Portafolio {
     private String video;
     
     @Column(name = "mouse_move_title", nullable = true, length = 255)
-    private String mouse_move_title;
+    private String mouseMoveTitle;
 
     @Column(name = "mouse_move_description", nullable = true, length = 255)
-    private String mouse_move_description;
+    private String mouseMoveDescription;
 
     @Column(name = "parrafo_inferior", nullable = true, length = 500)
     private String paragraph;
@@ -52,7 +52,6 @@ public class Portafolio {
     private String link;
 
     @OneToMany(mappedBy = "portafolio", cascade = CascadeType.ALL, orphanRemoval = true)
-    @Column(name = "descripcion", nullable = true)
     private List<DescripcionPortafolio> description = new ArrayList<>();
     
     @ManyToOne
@@ -66,8 +65,8 @@ public class Portafolio {
                 ", title='" + title + '\'' +
                 ", image='" + image + '\'' +
                 ", video='" + video + '\'' +
-                ", mouse_move_title='" + mouse_move_title + '\'' +
-                ", mouse_move_description='" + mouse_move_description + '\'' +
+                ", mouseMoveTitle='" + mouseMoveTitle + '\'' +
+                ", mouseMoveDescription='" + mouseMoveDescription + '\'' +
                 ", paragraph='" + paragraph + '\'' +
                 ", link='" + link + '\'' +
                 '}';

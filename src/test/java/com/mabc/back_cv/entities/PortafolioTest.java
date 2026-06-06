@@ -44,8 +44,8 @@ public class PortafolioTest {
             assertEquals("Título 1", portafolio.getTitle());
             assertEquals("Imagen 1", portafolio.getImage());
             assertEquals("Video 1", portafolio.getVideo());
-            assertEquals("Mouse Move Title 1", portafolio.getMouse_move_title());
-            assertEquals("Mouse Move Description 1", portafolio.getMouse_move_description());
+            assertEquals("Mouse Move Title 1", portafolio.getMouseMoveTitle());
+            assertEquals("Mouse Move Description 1", portafolio.getMouseMoveDescription());
             assertEquals("Parrafo Inferior 1", portafolio.getParagraph());
             assertEquals("Link 1", portafolio.getLink());
             assertNotNull(portafolio.getDescription());
@@ -71,8 +71,8 @@ public class PortafolioTest {
             portafolio.setTitle("Título actualizado");
             portafolio.setImage("Imagen actualizada");
             portafolio.setVideo("Video actualizado");
-            portafolio.setMouse_move_title("Mouse Title actualizado");
-            portafolio.setMouse_move_description("Mouse Description actualizado");
+            portafolio.setMouseMoveTitle("Mouse Title actualizado");
+            portafolio.setMouseMoveDescription("Mouse Description actualizado");
             portafolio.setParagraph("Parrafo actualizado");
             portafolio.setLink("Link actualizado");
             portafolio.setUser(user);
@@ -84,8 +84,8 @@ public class PortafolioTest {
             assertEquals("Título actualizado", portafolio.getTitle());
             assertEquals("Imagen actualizada", portafolio.getImage());
             assertEquals("Video actualizado", portafolio.getVideo());
-            assertEquals("Mouse Title actualizado", portafolio.getMouse_move_title());
-            assertEquals("Mouse Description actualizado", portafolio.getMouse_move_description());
+            assertEquals("Mouse Title actualizado", portafolio.getMouseMoveTitle());
+            assertEquals("Mouse Description actualizado", portafolio.getMouseMoveDescription());
             assertEquals("Parrafo actualizado", portafolio.getParagraph());
             assertEquals("Link actualizado", portafolio.getLink());
             assertEquals(user, portafolio.getUser());
@@ -99,8 +99,8 @@ public class PortafolioTest {
             assertEquals("Título 1", portafolio.getTitle());
             assertEquals("Imagen 1", portafolio.getImage());
             assertEquals("Video 1", portafolio.getVideo());
-            assertEquals("Mouse Move Title 1", portafolio.getMouse_move_title());
-            assertEquals("Mouse Move Description 1", portafolio.getMouse_move_description());
+            assertEquals("Mouse Move Title 1", portafolio.getMouseMoveTitle());
+            assertEquals("Mouse Move Description 1", portafolio.getMouseMoveDescription());
             assertEquals("Parrafo Inferior 1", portafolio.getParagraph());
             assertEquals("Link 1", portafolio.getLink());
             assertEquals(user, portafolio.getUser());
@@ -200,7 +200,7 @@ public class PortafolioTest {
         @DisplayName("Debe generar un string del objeto")
         void shouldGenerateString() {
             String expected = "Portafolio{id=1, title='Título 1', image='Imagen 1', video='Video 1', "
-                    + "mouse_move_title='Mouse Move Title 1', mouse_move_description='Mouse Move Description 1', "
+                    + "mouseMoveTitle='Mouse Move Title 1', mouseMoveDescription='Mouse Move Description 1', "
                     + "paragraph='Parrafo Inferior 1', link='Link 1'}";
             assertEquals(expected, portafolio.toString());
         }
