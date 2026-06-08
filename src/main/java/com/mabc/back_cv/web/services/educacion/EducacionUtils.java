@@ -6,6 +6,7 @@ import org.springframework.data.domain.PageRequest;
 
 import com.mabc.back_cv.web.entities.Educacion;
 import com.mabc.back_cv.web.dto.EducacionDTO;
+import com.mabc.back_cv.web.services.usuarios.UsuarioUtils;
 
 @Component
 public class EducacionUtils{
@@ -33,7 +34,7 @@ public class EducacionUtils{
         educacionDTO.setImage(educacion.getImage());
         educacionDTO.setUrl(educacion.getUrl());
         educacionDTO.setStyles(educacion.getStyles());
-        educacionDTO.setUsuario(educacion.getUsuario());
+        educacionDTO.setUsuario(UsuarioUtils.userToDTO(educacion.getUsuario()));
         return educacionDTO;
     }
 
@@ -56,7 +57,7 @@ public class EducacionUtils{
         educacion.setImage(educacionDTO.getImage());
         educacion.setUrl(educacionDTO.getUrl());
         educacion.setStyles(educacionDTO.getStyles());
-        educacion.setUsuario(educacionDTO.getUsuario());
+        educacion.setUsuario(UsuarioUtils.DTOToUser(educacionDTO.getUsuario()));
         return educacion;
     }
 }

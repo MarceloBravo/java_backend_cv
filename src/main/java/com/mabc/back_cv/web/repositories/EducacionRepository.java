@@ -4,17 +4,19 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.repository.query.Param;
 
 import com.mabc.back_cv.web.entities.Educacion;
+import org.springframework.data.jpa.repository.Query;
 
 @Repository
-public class EducacionRepository extends JpaRepository<Educacion, Long>{
+public interface EducacionRepository extends JpaRepository<Educacion, Long>{
 
     @Query(value = "SELECT * FROM educacion WHERE :userId IS NULL OR user_id = :userId", nativeQuery = true)
-    public Page<Educacion> gelAllByUserId(@Param Long userId, @Param Pageable pageable);
+    public Page<Educacion> getAllByUserId(@Param("userId") Long userId, Pageable pageable);
 
     @Query(value = "SELECT * FROM educacion WHERE user_id = :userId", nativeQuery = true)
-    public Page<Educacion> findByUserId(@Param Long userId, @Param Pageable pageable);
+    public Page<Educacion> findByUserId(@Param("userId") Long userId, Pageable pageable);
 
     @Query(value = """
             SELECT * 
@@ -42,6 +44,6 @@ public class EducacionRepository extends JpaRepository<Educacion, Long>{
             )
             AND (:userId IS NULL OR e.user_id = :userId)
             """, nativeQuery = true)
-    public Page<Educacion> findBySearchText(@Param Long userId, @Param String searchText, @Param Pageable pageable);
+    public Page<Educacion> findBySearchText(@Param("userId") Long userId, @Param("searchText") String searchText, Pageable pageable);
 
 }

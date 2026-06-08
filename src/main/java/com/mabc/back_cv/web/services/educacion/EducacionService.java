@@ -14,7 +14,7 @@ public interface EducacionService{
 
     public Page<EducacionDTO> findBySearchText(Long userId, String searchText, Integer page, Integer size);
 
-    public EducacionDTO findByUserId(Long id);
+    public EducacionDTO findById(Long id);
 
     public EducacionDTO save(EducacionDTO educacion);
 

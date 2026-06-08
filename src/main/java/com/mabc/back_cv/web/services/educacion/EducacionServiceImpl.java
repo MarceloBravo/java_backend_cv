@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.PageRequest;
 
 
 import com.mabc.back_cv.web.entities.Educacion;
@@ -15,21 +15,21 @@ import com.mabc.back_cv.web.services.educacion.EducacionUtils;
 
 
 @Service
-public interface EducacionServiceImpl implements EducacionService{
+public class EducacionServiceImpl implements EducacionService{
 
     @Autowired
     private EducacionRepository educacionRepository;
 
     @Override
     public Page<EducacionDTO> findByUserId(Long userId, Integer page, Integer size){
-        Pageable pageable = createPageable(page, size);
+        Pageable pageable = EducacionUtils.createPageable(page, size);
         Page<Educacion> entity = educacionRepository.findByUserId(userId, pageable);
         return entity.map(educacion -> EducacionUtils.entityToDTO(educacion));
     }
 
     @Override
     public Page<EducacionDTO> findBySearchText(Long userId, String searchText, Integer page, Integer size){
-        Pageable pageable = createPageable(page, size);
+        Pageable pageable = EducacionUtils.createPageable(page, size);
         Page<Educacion> entity;
         if(searchText == null){
             entity = educacionRepository.getAllByUserId(userId, pageable);
@@ -50,9 +50,9 @@ public interface EducacionServiceImpl implements EducacionService{
 
     @Override
     public EducacionDTO save(EducacionDTO educacion){
-        Educacion entity = dtoToEntity(educacion);
+        Educacion entity = EducacionUtils.dtoToEntity(educacion);
         if(entity == null){
-            new throw IlegalArgumentException("Datos validos.");
+            throw new IllegalArgumentException("Datos inválidos.");
         }
         entity = educacionRepository.save(entity);
         return EducacionUtils.entityToDTO(entity);
@@ -61,7 +61,7 @@ public interface EducacionServiceImpl implements EducacionService{
     @Override
     public void delete(Long id){
         if(id == null || !educacionRepository.existsById(id)){
-            throw new IlegalArgumentException("Registro no encontrado o inexistente.");
+            throw new IllegalArgumentException("Registro no encontrado o inexistente.");
         }
         educacionRepository.deleteById(id);
     }
