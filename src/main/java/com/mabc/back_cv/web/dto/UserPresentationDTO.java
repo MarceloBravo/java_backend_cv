@@ -2,6 +2,7 @@ package com.mabc.back_cv.web.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,6 +24,6 @@ public class UserPresentationDTO{
     private String parrafo;
 
     @NotNull(message = "El usuario es obligatorio")
-    private UserDTO user;
+    private UsuarioDTO user;
     
 }
