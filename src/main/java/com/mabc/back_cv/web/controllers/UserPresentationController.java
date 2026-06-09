@@ -27,10 +27,10 @@ public class UserPresentationController{
 
     @GetMapping("/all")
     public ResponseEntity<Page<UserPresentationDTO>> getAll(
-        @RequestParam(required = false) String searchText,
-        @RequestParam(required = false) Long userId,
-        @RequestParam(required = false) Integer page,
-        @RequestParam(required = false) Integer size
+        @RequestParam(value = "searchText", defaultValue="") String searchText,
+        @RequestParam(value = "userId", defaultValue="") Long userId,
+        @RequestParam(value = "page", defaultValue="0") Integer page,
+        @RequestParam(value = "size", defaultValue="10") Integer size
     ){
         try{
             Page<UserPresentationDTO> resultado = userPresentationService.getAll(searchText, userId, page, size);
