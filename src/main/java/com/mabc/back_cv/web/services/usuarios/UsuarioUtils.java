@@ -22,6 +22,9 @@ public class UsuarioUtils {
      * @return Entidad User con los datos del DTO
      */
     public static User DTOToUser(UsuarioDTO usuarioDTO) {
+        if(usuarioDTO == null){
+            return null;
+        }
         User user = new User();
         if (usuarioDTO.getId() != null) {
             user.setId(usuarioDTO.getId());

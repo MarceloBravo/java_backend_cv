@@ -2,11 +2,13 @@ package com.mabc.back_cv.web.services.userPresentation;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Component;
 
 import com.mabc.back_cv.web.dto.UserPresentationDTO;
 import com.mabc.back_cv.web.entities.UserPresentation;
 import com.mabc.back_cv.web.services.usuarios.UsuarioUtils;
 
+@Component
 public class UserPresentationUtils{
 
     
@@ -21,7 +23,9 @@ public class UserPresentationUtils{
             return null;
         }
         UserPresentation userPresentation = new UserPresentation();
-        userPresentation.setId(userPresentationDTO.getId());
+        if(userPresentationDTO.getId() != null){
+            userPresentation.setId(userPresentationDTO.getId());
+        }
         userPresentation.setPosicion(userPresentationDTO.getPosicion());
         userPresentation.setParrafo(userPresentationDTO.getParrafo());
         userPresentation.setUser(UsuarioUtils.DTOToUser(userPresentationDTO.getUser()));

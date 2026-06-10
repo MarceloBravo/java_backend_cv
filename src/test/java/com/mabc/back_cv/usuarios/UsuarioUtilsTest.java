@@ -163,7 +163,7 @@ class UsuarioUtilsTest {
         @Test
         @DisplayName("Parámetro nulo: lanza NullPointerException al recibir null")
         void dtoNuloLanzaExcepcion() {
-            assertThrows(NullPointerException.class, () -> UsuarioUtils.DTOToUser(null));
+            assertNull(UsuarioUtils.DTOToUser(null));
         }
     }
 
