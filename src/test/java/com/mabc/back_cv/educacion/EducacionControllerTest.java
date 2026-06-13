@@ -10,7 +10,6 @@ import com.mabc.back_cv.web.services.educacion.EducacionService;
 import com.mabc.back_cv.web.services.usuarios.UsuarioUtils;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -42,8 +41,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.mabc.back_cv.web.controllers.EducacionController;
 
 import org.junit.jupiter.api.DisplayName;
-
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 
 @ExtendWith(MockitoExtension.class)
