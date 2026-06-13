@@ -11,6 +11,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import static org.mockito.Mockito.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -33,6 +34,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+
+import org.junit.jupiter.api.DisplayName;
 
 @ExtendWith(MockitoExtension.class)
 class DescripcionPortafolioControllerTest {
@@ -63,6 +66,20 @@ class DescripcionPortafolioControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(1))
                 .andExpect(jsonPath("$[0].parrafo").value(dto.getParrafo()));
+    }
+
+    
+    @Test
+    @DisplayName("Error: maneja un error cuando el servicio lanza excepción al obtener todos los registros")
+    void errorServicioLanzaExcepcionAlobtenerTosoLosRegistros() throws Exception {
+        doThrow(new RuntimeException("Error al buscar portafolios"))
+        .when(descripcionPortafolioService)
+        .getAll();
+
+        mockMvc.perform(get("/descripcion-portafolio/all"))
+                .andExpect(status().isBadRequest());
+
+        verify(descripcionPortafolioService, times(1)).getAll();
     }
 
     @Test
@@ -100,11 +117,37 @@ class DescripcionPortafolioControllerTest {
     }
 
     @Test
+    @DisplayName("Error: maneja un error cuando el servicio lanza excepción")
+    void errorServicioLanzaExcepcion() throws Exception {
+        doThrow(new RuntimeException("Error al buscar portafolios"))
+        .when(descripcionPortafolioService)
+        .getAll(any(), anyInt(), anyInt());
+
+        mockMvc.perform(get("/descripcion-portafolio/search")
+                .param("terminoBuscado", "abc")
+                .param("page", "0")
+                .param("size", "10"))
+                .andExpect(status().isInternalServerError());
+
+        verify(descripcionPortafolioService, times(1)).getAll(any(), anyInt(), anyInt());
+    }
+
+    @Test
     void shouldReturnNotFoundWhenGetByIdDoesNotExist() throws Exception {
         when(descripcionPortafolioService.getById(anyLong())).thenReturn(null);
 
         mockMvc.perform(get("/descripcion-portafolio/99"))
                 .andExpect(status().isNotFound());
+    }
+    
+    @Test
+    void shouldReturnFoundWhenGetByIdIsValid() throws Exception {
+        DescripcionPortafolioDTO dto = createDto(1L, "texto prueba", 1);
+        when(descripcionPortafolioService.getById(anyLong())).thenReturn(dto);
+
+        mockMvc.perform(get("/descripcion-portafolio/1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(dto.getId()));
     }
 
     @Test
