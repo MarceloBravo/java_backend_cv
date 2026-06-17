@@ -20,6 +20,7 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.util.List;
 import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -32,6 +33,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 import org.junit.jupiter.api.DisplayName;
+import org.springframework.data.domain.PageRequest;
 
 
 
@@ -82,11 +84,12 @@ public class UserPresentationControllerTest{
 
     @Test
     void getAll_conParametrosValidos_retorna200() throws Exception {
-        Page<UserPresentationDTO> paginaMock = new PageImpl<>(new ArrayList<>());
+        List<UserPresentationDTO> list = Arrays.asList(userPresentationDTO);
+        Page<UserPresentationDTO> page = new PageImpl<>(list, PageRequest.of(0, 10), 1);
 
         // Configuramos el mock limpiamente para este escenario
         when(userPresentationService.getAll("párrafo", 1L, 0, 10))
-            .thenReturn(paginaMock);
+            .thenReturn(page);
 
         mockMvc.perform(get("/userPresentation/all")
                         .param("searchText", "párrafo")
@@ -94,8 +97,9 @@ public class UserPresentationControllerTest{
                         .param("page", "0")
                         .param("size", "10")
                 )
-                .andDo(print());
-                //.andExpect(status().isOk());
+                .andExpect(status().isOk());
+                
+        verify(userPresentationService, times(1)).getAll("párrafo", 1L, 0, 10);
     }
 
     @Test

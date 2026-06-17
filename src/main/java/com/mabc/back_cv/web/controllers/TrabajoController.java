@@ -16,6 +16,7 @@ import com.mabc.back_cv.web.services.trabajo.TrabajoService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import jakarta.validation.Valid;
 
 import java.util.List;
 
@@ -32,6 +33,9 @@ public class TrabajoController{
         @RequestParam(value = "userId", defaultValue="") Long userId
     ){
         try{
+            if(userId == null){
+                return ResponseEntity.badRequest().build();
+            }
             List<TrabajoDTO> resultado = trabajoService.getAll(userId, searchText);
             return ResponseEntity.ok(resultado);
         }catch(Exception e){
@@ -47,6 +51,9 @@ public class TrabajoController{
         @RequestParam(value = "size", defaultValue="10") Integer size
     ){
         try{
+            if(userId == null){
+                return ResponseEntity.badRequest().build();
+            }
             Page<TrabajoDTO> resultado = trabajoService.getAll(userId, searchText, page, size);
             return ResponseEntity.ok(resultado);
         }catch(Exception e){
@@ -68,7 +75,7 @@ public class TrabajoController{
     }
 
     @PostMapping("/save")
-    public ResponseEntity<TrabajoDTO> save(@RequestBody TrabajoDTO trabajoRequestDTO){
+    public ResponseEntity<TrabajoDTO> save(@RequestBody @Valid TrabajoDTO trabajoRequestDTO){
         try{
             TrabajoDTO trabajoDTO = trabajoService.save(trabajoRequestDTO);
             return ResponseEntity.ok(trabajoDTO);
