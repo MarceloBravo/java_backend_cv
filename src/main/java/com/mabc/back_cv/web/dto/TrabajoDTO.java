@@ -17,7 +17,7 @@ import java.util.ArrayList;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserPresentationDTO{
+public class TrabajoDTO{
 
     private Long id;
 

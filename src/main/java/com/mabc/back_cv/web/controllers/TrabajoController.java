@@ -29,10 +29,10 @@ public class TrabajoController{
     @GetMapping("/all")
     public ResponseEntity<List<TrabajoDTO>> getAll(
         @RequestParam(value = "searchText", defaultValue="") String searchText,
-        @RequestParam(value = "userId", defaultValue="") Long userId,
+        @RequestParam(value = "userId", defaultValue="") Long userId
     ){
         try{
-            Page<TrabajoDTO> resultado = trabajoService.getAll(userId, searchText);
+            List<TrabajoDTO> resultado = trabajoService.getAll(userId, searchText);
             return ResponseEntity.ok(resultado);
         }catch(Exception e){
             return ResponseEntity.status(500).build();

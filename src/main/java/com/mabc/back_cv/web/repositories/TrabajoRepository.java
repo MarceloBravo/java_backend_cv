@@ -1,6 +1,5 @@
 package com.mabc.back_cv.web.repositories;
 
-import com.mabc.back_cv.web.entities.Tecnologia;
 import com.mabc.back_cv.web.entities.Trabajo;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Page;
@@ -33,7 +32,7 @@ public interface TrabajoRepository extends JpaRepository<Trabajo, Long>{
             )
             AND (:userId IS NULL OR t.user_id = :userId)
     """, nativeQuery = true)
-    Page<Tecnologia> findAllPage(@Param("userId") Long userId, @Param("searchText") String searchText, Pageable pageable);
+    List<Trabajo> findAllList(@Param("userId") Long userId, @Param("searchText") String searchText);
 
     @Query(value = """
         SELECT * FROM Trabajo t 
@@ -52,7 +51,7 @@ public interface TrabajoRepository extends JpaRepository<Trabajo, Long>{
             OR LOWER(te.logo_svg) LIKE LOWER(CONCAT('%', :searchText, '%'))
         ))
         """, nativeQuery = true)
-    Page<Tecnologia> findAllPage(@Param("userId") Long userId, @Param("searchText") String searchText, Pageable pageable);
+    Page<Trabajo> findAllPage(@Param("userId") Long userId, @Param("searchText") String searchText, Pageable pageable);
 
     
 }

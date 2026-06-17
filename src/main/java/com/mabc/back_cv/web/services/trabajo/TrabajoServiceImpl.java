@@ -13,9 +13,15 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 import org.springframework.data.domain.Pageable;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.mabc.back_cv.web.services.trabajo.TrabajoService;
+import com.mabc.back_cv.web.services.trabajo.TrabajoUtils;
+import com.mabc.back_cv.web.dto.TrabajoDTO;
+import com.mabc.back_cv.web.entities.Trabajo;
 
 @Service
-public class TrabajoService implements TrabajoService {
+public class TrabajoServiceImpl implements TrabajoService {
 
     @Autowired
     private TrabajoRepository repository;
@@ -32,8 +38,7 @@ public class TrabajoService implements TrabajoService {
     }
 
     @Override
-    public Page<TrabajoDTO> getAll(Long userId, S
-    .tring searchText, Integer page, Integer size) {
+    public Page<TrabajoDTO> getAll(Long userId, String searchText, Integer page, Integer size) {
         Pageable pageable = TrabajoUtils.createPageable(page, size);
         if (searchText == null) {
             searchText = "";

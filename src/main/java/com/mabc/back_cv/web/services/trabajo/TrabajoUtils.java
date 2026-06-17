@@ -13,6 +13,8 @@ import com.mabc.back_cv.web.entities.Trabajo;
 
 import org.springframework.data.domain.PageRequest;
 
+import com.mabc.back_cv.web.services.usuarios.UsuarioUtils;
+
 
 @Component
 public class TrabajoUtils{
@@ -29,13 +31,13 @@ public class TrabajoUtils{
         }
         TrabajoDTO dto = new TrabajoDTO();
         dto.setId(entity.getId());
-        dto.setUserId(entity.getUserId());
+        dto.setUser(UsuarioUtils.userToDTO(entity.getUser()));
         dto.setCompany(entity.getCompany());
         dto.setPosition(entity.getPosition());
         dto.setDescription(entity.getDescription());
         dto.setStartDate(entity.getStartDate());
         dto.setEndDate(entity.getEndDate());
-        dto.setActual(entity.getActual());
+        dto.setCurrent(entity.getCurrent());
         return dto;
     }
 
@@ -47,13 +49,13 @@ public class TrabajoUtils{
         if(dto.getId() != null){
             entity.setId(dto.getId());
         }
-        entity.setUserId(dto.getUserId());
+        entity.setUser(UsuarioUtils.DTOToUser(dto.getUser()));
         entity.setCompany(dto.getCompany());
         entity.setPosition(dto.getPosition());
         entity.setDescription(dto.getDescription());
         entity.setStartDate(dto.getStartDate());
         entity.setEndDate(dto.getEndDate());
-        entity.setActual(dto.getActual());
+        entity.setCurrent(dto.getCurrent());
         return entity;
     }
 
