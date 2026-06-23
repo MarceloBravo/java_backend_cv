@@ -19,7 +19,7 @@ public class ContenidoCursoController{
     @Autowired
     private ContenidoCursoService service;
 
-    @GetMapping("/all")
+    @GetMapping("/list")
     public ResponseEntity<List<ContenidoCursoDTO>> getPage(
         @RequestParam(required = false) String searchText,
         @RequestParam(required = false) Boolean activo
