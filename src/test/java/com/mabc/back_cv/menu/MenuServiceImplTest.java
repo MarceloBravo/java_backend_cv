@@ -291,6 +291,15 @@ class MenuServiceImplTest {
     }
 
     @Test
+    @DisplayName("Intenta eliminar un menú inexistente")
+    void deleteMenu_nonExistsId_noShouldCallRepository() {
+        when(menuRepository.existsById(1L)).thenReturn(false);
+
+        menuService.deleteMenu(1L);
+        verify(menuRepository, times(0)).deleteById(1L);
+    }
+
+    @Test
     @DisplayName("Prevención de ciclos recursivos en saveMenu")
     void saveMenu_PreventRecursiveCycle_ShouldThrowException() {
         MenuDTO dto = new MenuDTO(1L, "Recursivo", "/rec", "icon", 1, 2L, true, null);

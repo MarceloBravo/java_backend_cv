@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -389,16 +390,23 @@ public class PantallaServiceImplTest {
     }
 
     @Test
-    @DisplayName("Debe eliminar una pantalla con un ID inválido sin lanzar excepción")
+    @DisplayName("Debe eliminar una pantalla con un ID inválido lanzando una excepción")
     public void testDeletePantallaInvalid() {
-        // Preparar mock para indicar que el ID (aunque "inválido" en pruebas) existe
-        when(pantallaRepository.existsById(999L)).thenReturn(true);
+        when(pantallaRepository.existsById(999L)).thenReturn(false);
 
-        // Llamar al método a probar
-        pantallaService.deletePantalla(999L);
+        assertThrows(IllegalArgumentException.class, () -> pantallaService.deletePantalla(999L));
 
-        // Verificar que se intentó eliminar el ID inválido
-        verify(pantallaRepository, times(1)).deleteById(999L);
+        verify(pantallaRepository, times(0)).deleteById(999L);
+    }
+
+    
+    @Test
+    @DisplayName("Intenta eliminar una Pantalla con id nulo")
+    public void deletePantall_whitIdNull_returnError(){
+        
+        assertThrows(IllegalArgumentException.class, () -> pantallaService.deletePantalla(null));
+
+        verifyNoInteractions(pantallaRepository);
     }
 
 }

@@ -35,9 +35,9 @@ public class RolServiceImpl implements RolService {
         Page<Rol> rolPage;
 
         if (nombre == null || nombre.trim().isEmpty()) {
-            rolPage = rolRepository.searchByNombreAndEstado(nombre, activo, pageable);
-        } else {
             rolPage = rolRepository.findAll(pageable);
+        } else {
+            rolPage = rolRepository.searchByNombreAndEstado(nombre, activo, pageable);
         }
 
         return rolPage.map(rol -> rolUtils.mapToRolDTO(rol));

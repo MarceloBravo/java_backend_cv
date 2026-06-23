@@ -39,6 +39,22 @@ class MenuMapperTest {
     }
 
     @Test
+    void convertToMenuEntityWhitNoId_ShouldMapAllFields() {
+        MenuDTO dto = new MenuDTO(null, "Inicio", "/home", "home-icon", 1, 2L, true, null);
+
+        Menu entity = menuMapper.convertToMenuEntity(dto);
+
+        assertNotNull(entity);
+        assertNull(entity.getId());
+        assertEquals("Inicio", entity.getNombre());
+        assertEquals("/home", entity.getUrl());
+        assertEquals("home-icon", entity.getIcono());
+        assertEquals(1, entity.getOrden());
+        assertEquals(2L, entity.getMenu_padre_id());
+        assertTrue(entity.getActivo());
+    }
+
+    @Test
     void convertToDTO_ShouldMapAllFields() {
         Menu entity = new Menu(1L, "Inicio", "/home", "home-icon", 1, 2L, true);
 

@@ -20,6 +20,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -148,26 +149,26 @@ class RolServiceImplTest {
     // -------------------------------------------------------------------------
 
     @Test
-    void searchBy_EmptyNombre_ShouldUsSearchByNombreAndEstado() {
+    void searchBy_WhitNombre_ShouldUsSearchByNombreAndEstado() {
         Rol rol = new Rol(1L, "ADMIN", true, null);
         RolDTO rolDTO = new RolDTO(1L, "ADMIN", true);
         Pageable pageable = PageRequest.of(0, 10);
         Page<Rol> rolPage = new PageImpl<>(List.of(rol), pageable, 1);
 
         when(rolUtils.createPageable(0, 10)).thenReturn(pageable);
-        when(rolRepository.searchByNombreAndEstado("", true, pageable)).thenReturn(rolPage);
+        when(rolRepository.searchByNombreAndEstado("ADMIN", true, pageable)).thenReturn(rolPage);
         when(rolUtils.mapToRolDTO(rol)).thenReturn(rolDTO);
 
-        Page<RolDTO> result = rolService.searchBy("", true, 0, 10);
+        Page<RolDTO> result = rolService.searchBy("ADMIN", true, 0, 10);
 
         assertNotNull(result);
         assertEquals(1, result.getTotalElements());
-        verify(rolRepository, times(1)).searchByNombreAndEstado("", true, pageable);
+        verify(rolRepository, times(1)).searchByNombreAndEstado("ADMIN", true, pageable);
         verify(rolRepository, never()).findAll(any(Pageable.class));
     }
 
     @Test
-    void searchBy_WithNombre_ShouldUseFindAll() {
+    void searchBy_WithNombreNull_ShouldUseFindAll() {
         Rol rol = new Rol(1L, "ADMIN", true, null);
         RolDTO rolDTO = new RolDTO(1L, "ADMIN", true);
         Pageable pageable = PageRequest.of(0, 10);
@@ -177,7 +178,26 @@ class RolServiceImplTest {
         when(rolRepository.findAll(pageable)).thenReturn(rolPage);
         when(rolUtils.mapToRolDTO(rol)).thenReturn(rolDTO);
 
-        Page<RolDTO> result = rolService.searchBy("ADMIN", true, 0, 10);
+        Page<RolDTO> result = rolService.searchBy(null, true, 0, 10);
+
+        assertNotNull(result);
+        assertEquals(1, result.getTotalElements());
+        verify(rolRepository, times(1)).findAll(pageable);
+        verify(rolRepository, never()).searchByNombreAndEstado(any(), any(), any());
+    }
+
+    @Test
+    void searchBy_WithNombreEmpty_ShouldUseFindAll() {
+        Rol rol = new Rol(1L, "ADMIN", true, null);
+        RolDTO rolDTO = new RolDTO(1L, "ADMIN", true);
+        Pageable pageable = PageRequest.of(0, 10);
+        Page<Rol> rolPage = new PageImpl<>(List.of(rol), pageable, 1);
+
+        when(rolUtils.createPageable(0, 10)).thenReturn(pageable);
+        when(rolRepository.findAll(pageable)).thenReturn(rolPage);
+        when(rolUtils.mapToRolDTO(rol)).thenReturn(rolDTO);
+
+        Page<RolDTO> result = rolService.searchBy("", true, 0, 10);
 
         assertNotNull(result);
         assertEquals(1, result.getTotalElements());
@@ -243,5 +263,15 @@ class RolServiceImplTest {
         rolService.delete(1L);
 
         verify(rolRepository, times(1)).deleteById(1L);
+    }
+
+    
+    @Test
+    void testRolWithIdInvalid_returnException() {
+        when(rolRepository.findById(999L)).thenReturn(Optional.empty());
+
+        assertThrows(RuntimeException.class, () -> rolService.delete(999L));
+
+        verify(rolRepository, times(0)).deleteById(999L);
     }
 }
