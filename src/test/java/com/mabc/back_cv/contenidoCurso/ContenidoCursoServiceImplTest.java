@@ -27,7 +27,7 @@ import static org.mockito.Mockito.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
@@ -36,6 +36,8 @@ import static org.mockito.Mockito.verify;
 import org.junit.jupiter.api.DisplayName;
 
 import org.modelmapper.ModelMapper;
+
+import com.mabc.back_cv.common.Utils;
 
 @ExtendWith(MockitoExtension.class)
 public class ContenidoCursoServiceImplTest{
@@ -46,6 +48,9 @@ public class ContenidoCursoServiceImplTest{
     @Mock
     private ModelMapper modelMapper;
 
+    @Mock
+    private Utils utils;
+
     @InjectMocks
     private ContenidoCursoServiceImpl service;
 
@@ -55,6 +60,7 @@ public class ContenidoCursoServiceImplTest{
     private ContenidoCursoDTO contenidoCursoDTO1;
     private ContenidoCursoDTO contenidoCursoDTO2;
     private ContenidoCursoDTO contenidoCursoDTO3;
+    private Pageable pageable;
 
     @BeforeEach
     void Setup(){
@@ -67,6 +73,8 @@ public class ContenidoCursoServiceImplTest{
         contenidoCursoDTO1 = new ContenidoCursoDTO(1L, "Curso 1", "Contenido de ejemplo del curso 1", true);
         contenidoCursoDTO2 = new ContenidoCursoDTO(2L, "Curso 2", "Contenido de ejemplo del curso 2", true);
         contenidoCursoDTO3 = new ContenidoCursoDTO(3L, "Curso 3", "Contenido de ejemplo del curso 3", false);
+
+        pageable = PageRequest.of(0, 10);
     }
 
     private ContenidoCursoDTO entityToDTO(ContenidoCurso entity){
@@ -184,7 +192,7 @@ public class ContenidoCursoServiceImplTest{
     @Test
     @DisplayName("Obtiene una página de los Contenidos de un Curso con éxito con todos los parámetros correctos")
     void getPageOfContenidoCurso_whitAllCorrectParameters_returnPageOfContenidoCurso(){
-        Pageable pageable = PageRequest.of(0, 10);
+        when(utils.createPageable(0,10)).thenReturn(pageable);
         when(repository.findAllPage("Curso", true, pageable)).thenReturn(new PageImpl<>(Arrays.asList(contenidoCurso1, contenidoCurso2), pageable, 2));
         
         when(modelMapper.map(any(), eq(ContenidoCursoDTO.class))).thenAnswer(invocation -> {
@@ -204,7 +212,7 @@ public class ContenidoCursoServiceImplTest{
     @Test
     @DisplayName("Obtiene una página de los Contenidos de un Curso con éxito sin el parámetro searchText")
     void getPageOfContenidoCurso_whitSearchTextIsNull_returnPageOfContenidoCurso(){
-        Pageable pageable = PageRequest.of(0, 10);
+        when(utils.createPageable(0,10)).thenReturn(pageable);
         when(repository.findAllPage(null, true, pageable)).thenReturn(new PageImpl<>(Arrays.asList(contenidoCurso1, contenidoCurso2), pageable, 2));
         
         when(modelMapper.map(any(), eq(ContenidoCursoDTO.class))).thenAnswer(invocation -> {            
@@ -224,7 +232,7 @@ public class ContenidoCursoServiceImplTest{
     @Test
     @DisplayName("Obtiene una página de los Contenidos de un Curso con éxito sin el parámetro activo")
     void getPageOfContenidoCurso_whitActivoIsNull_returnPageOfContenidoCurso(){
-        Pageable pageable = PageRequest.of(0, 10);
+        when(utils.createPageable(0,10)).thenReturn(pageable);
         when(repository.findAllPage("Curso", null, pageable)).thenReturn(new PageImpl<>(Arrays.asList(contenidoCurso1, contenidoCurso2, contenidoCurso3), pageable, 3));
         
         when(modelMapper.map(any(), eq(ContenidoCursoDTO.class))).thenAnswer(invocation -> {            
@@ -245,7 +253,7 @@ public class ContenidoCursoServiceImplTest{
     @Test
     @DisplayName("Obtiene una página de los Contenidos de un Curso con éxito con el parámetro activo = Falso")
     void getPageOfContenidoCurso_whitActivoIsFalse_returnPageOfContenidoCurso(){
-        Pageable pageable = PageRequest.of(0, 10);
+        when(utils.createPageable(0,10)).thenReturn(pageable);
         when(repository.findAllPage("Curso", false, pageable)).thenReturn(new PageImpl<>(Arrays.asList(contenidoCurso3), pageable, 1));
         
         when(modelMapper.map(any(), eq(ContenidoCursoDTO.class))).thenAnswer(invocation -> {            
@@ -264,7 +272,7 @@ public class ContenidoCursoServiceImplTest{
     @Test
     @DisplayName("Obtiene una página de los Contenidos de un Curso con éxito con el parámetro size nulo")
     void getPageOfContenidoCurso_whitSizeIsNull_returnPageOfContenidoCurso(){
-        Pageable pageable = PageRequest.of(0, 10);
+        when(utils.createPageable(0,null)).thenReturn(pageable);
         when(repository.findAllPage("Curso", true, pageable)).thenReturn(new PageImpl<>(Arrays.asList(contenidoCurso1, contenidoCurso2), pageable, 2));
         
         when(modelMapper.map(any(), eq(ContenidoCursoDTO.class))).thenAnswer(invocation -> {            
@@ -284,7 +292,7 @@ public class ContenidoCursoServiceImplTest{
     @Test
     @DisplayName("Obtiene una página de los Contenidos de un Curso con éxito con el parámetro page nulo")
     void getPageOfContenidoCurso_whitPageIsNull_returnPageOfContenidoCurso(){
-        Pageable pageable = PageRequest.of(0, 10);
+        when(utils.createPageable(null, 10)).thenReturn(pageable);
         when(repository.findAllPage("Curso", true, pageable)).thenReturn(new PageImpl<>(Arrays.asList(contenidoCurso1, contenidoCurso2), pageable, 2));
         
         when(modelMapper.map(any(), eq(ContenidoCursoDTO.class))).thenAnswer(invocation -> {            
@@ -304,7 +312,7 @@ public class ContenidoCursoServiceImplTest{
     @Test
     @DisplayName("Obtiene una página de los Contenidos de un Curso con todos sus parámetros nulos")
     void getPageOfContenidoCurso_whitAllParametersAreNull_returnPageOfContenidoCurso(){
-        Pageable pageable = PageRequest.of(0, 10);
+        when(utils.createPageable(null,null)).thenReturn(pageable);
         when(repository.findAllPage(null, null, pageable)).thenReturn(new PageImpl<>(Arrays.asList(contenidoCurso1, contenidoCurso2, contenidoCurso3), pageable, 3));
         
         when(modelMapper.map(any(), eq(ContenidoCursoDTO.class))).thenAnswer(invocation -> {            
@@ -325,7 +333,7 @@ public class ContenidoCursoServiceImplTest{
     @Test
     @DisplayName("Obtiene una página de los Contenidos de un Curso con éxito con el parámetro page negativo")
     void getPageOfContenidoCurso_whitPageIsNegative_returnPageOfContenidoCurso(){
-        Pageable pageable = PageRequest.of(0, 10);
+        when(utils.createPageable(-10,10)).thenReturn(pageable);
         when(repository.findAllPage("Curso", true, pageable)).thenReturn(new PageImpl<>(Arrays.asList(contenidoCurso1, contenidoCurso2), pageable, 2));
         
         when(modelMapper.map(any(), eq(ContenidoCursoDTO.class))).thenAnswer(invocation -> {            
@@ -345,7 +353,7 @@ public class ContenidoCursoServiceImplTest{
     @Test
     @DisplayName("Obtiene una página de los Contenidos de un Curso con éxito con el parámetro size negativo")
     void getPageOfContenidoCurso_whitSizeIsNegative_returnPageOfContenidoCurso(){
-        Pageable pageable = PageRequest.of(0, 10);
+        when(utils.createPageable(0,-10)).thenReturn(pageable);
         when(repository.findAllPage("Curso", true, pageable)).thenReturn(new PageImpl<>(Arrays.asList(contenidoCurso1, contenidoCurso2), pageable, 2));
         
         when(modelMapper.map(any(), eq(ContenidoCursoDTO.class))).thenAnswer(invocation -> {            

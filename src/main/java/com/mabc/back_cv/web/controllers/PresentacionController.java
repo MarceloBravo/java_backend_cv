@@ -55,8 +55,8 @@ public class PresentacionController {
     public ResponseEntity<Page<PresentacionDTO>> getAll(
             @RequestParam(value = "parrafo", required = false) String parrafo,
             @RequestParam(value = "userId", required = false) Long userId,
-            @RequestParam(value = "page", required = false) Long page,
-            @RequestParam(value = "size", required = false) Long size) {
+            @RequestParam(value = "page", required = false) Integer page,
+            @RequestParam(value = "size", required = false) Integer size) {
         try {
             Page<PresentacionDTO> presentaciones;
             if (parrafo != null && userId != null) {

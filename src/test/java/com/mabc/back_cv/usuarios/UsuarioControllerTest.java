@@ -90,13 +90,13 @@ public class UsuarioControllerTest {
     @Test
     @DisplayName("getAllPage devuelve página de usuarios cuando el servicio responde correctamente")
     void getAllPage_success_returnsOk() {
-        when(usuariosService.getAllUsuariosPage(null, 0L, 10L)).thenReturn(usuarioPage);
+        when(usuariosService.getAllUsuariosPage(null, 0, 10)).thenReturn(usuarioPage);
 
-        ResponseEntity<Page<UsuarioDTO>> response = usuarioController.getAllPage(null, 0L, 10L);
+        ResponseEntity<Page<UsuarioDTO>> response = usuarioController.getAllPage(null, 0, 10);
 
         assertThat(response.getStatusCodeValue()).isEqualTo(200);
         assertThat(response.getBody()).isEqualTo(usuarioPage);
-        verify(usuariosService).getAllUsuariosPage(null, 0L, 10L);
+        verify(usuariosService).getAllUsuariosPage(null, 0, 10);
     }
 
     @Test
@@ -149,10 +149,10 @@ public class UsuarioControllerTest {
     @Test
     @DisplayName("getAllPage devuelve bad request cuando los parámetros de paginación son inválidos")
     void getAllPage_invalidPagination_returnsBadRequest() {
-        when(usuariosService.getAllUsuariosPage(eq("filter"), eq(-1L), eq(10L)))
+        when(usuariosService.getAllUsuariosPage(eq("filter"), eq(-1), eq(10)))
                 .thenThrow(new IllegalArgumentException("Página inválida"));
 
-        ResponseEntity<Page<UsuarioDTO>> response = usuarioController.getAllPage("filter", -1L, 10L);
+        ResponseEntity<Page<UsuarioDTO>> response = usuarioController.getAllPage("filter", -1, 10);
 
         assertThat(response.getStatusCodeValue()).isEqualTo(400);
         assertThat(response.getBody()).isNull();

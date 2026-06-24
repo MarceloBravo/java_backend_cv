@@ -31,6 +31,12 @@ import com.mabc.back_cv.web.repositories.PermisoPantallaRepository;
 import com.mabc.back_cv.web.repositories.RolRepository;
 import com.mabc.back_cv.web.services.permisoPantalla.PermisoPantallaServiceImpl;
 
+import com.mabc.back_cv.common.Utils;
+
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Pageable;
+
 @ExtendWith(MockitoExtension.class)
 @DisplayName("Pruebas unitarias para PermisoPantallaServiceImpl")
 public class PermisoPantallaServiceImplTest {
@@ -43,9 +49,19 @@ public class PermisoPantallaServiceImplTest {
 
     @Mock
     private PantallaRepository pantallaRepository;
+    
+    @Mock
+    private Utils utils;
+
 
     @InjectMocks
     private PermisoPantallaServiceImpl permisoPantallaService;
+
+    private Pageable pageable;
+
+    private void createPageable(Integer page, Integer size, String sortBy){
+        pageable = PageRequest.of(page, size, Sort.by(sortBy));
+    }
 
     private PermisoPantalla buildPermisoPantalla(Long id, Long rolId, Long pantallaId, Boolean activo) {
         Rol rol = new Rol();

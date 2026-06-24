@@ -21,7 +21,7 @@ public interface PresentacionService {
      * @param size cantidad de elementos por página; se usa {@code 10} si es {@code null} o negativo.
      * @return página de {@link PresentacionDTO} con los resultados encontrados.
      */
-    public Page<PresentacionDTO> getPresentaciones(Long page, Long size);
+    public Page<PresentacionDTO> getPresentaciones(Integer page, Integer size);
 
     /**
      * Recupera las presentaciones cuyo párrafo contenga el texto indicado (búsqueda insensible
@@ -32,7 +32,7 @@ public interface PresentacionService {
      * @param size    cantidad de elementos por página; se usa {@code 10} si es {@code null} o negativo.
      * @return página de {@link PresentacionDTO} que coinciden con el filtro de texto.
      */
-    public Page<PresentacionDTO> getPresentaciones(String parrafo, Long page, Long size);
+    public Page<PresentacionDTO> getPresentaciones(String parrafo, Integer page, Integer size);
 
     /**
      * Recupera las presentaciones de un usuario específico cuyo párrafo contenga el texto indicado
@@ -44,7 +44,7 @@ public interface PresentacionService {
      * @param size    cantidad de elementos por página; se usa {@code 10} si es {@code null} o negativo.
      * @return página de {@link PresentacionDTO} que coinciden con ambos filtros.
      */
-    public Page<PresentacionDTO> getPresentaciones(Long userId, String parrafo, Long page, Long size);
+    public Page<PresentacionDTO> getPresentaciones(Long userId, String parrafo, Integer page, Integer size);
 
     /**
      * Obtiene la presentación asociada al usuario indicado.

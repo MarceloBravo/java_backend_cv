@@ -20,7 +20,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
@@ -58,7 +58,7 @@ class PresentacionControllerTest {
         PresentacionDTO dto = new PresentacionDTO(1L, "Párrafo de prueba", null);
         Page<PresentacionDTO> page = new PageImpl<>(List.of(dto), PageRequest.of(0, 10), 1);
 
-        when(presentacionService.getPresentaciones(0L, 10L)).thenReturn(page);
+        when(presentacionService.getPresentaciones(0, 10)).thenReturn(page);
 
         mockMvc.perform(get("/api/presentacion/all")
                         .param("page", "0")
@@ -67,7 +67,7 @@ class PresentacionControllerTest {
                 .andExpect(jsonPath("$.content[0].id").value(1))
                 .andExpect(jsonPath("$.content[0].parrafo").value("Párrafo de prueba"));
 
-        verify(presentacionService, times(1)).getPresentaciones(0L, 10L);
+        verify(presentacionService, times(1)).getPresentaciones(0, 10);
     }
 
     @Test
@@ -75,7 +75,7 @@ class PresentacionControllerTest {
         PresentacionDTO dto = new PresentacionDTO(2L, "Filtro texto", null);
         Page<PresentacionDTO> page = new PageImpl<>(List.of(dto), PageRequest.of(0, 10), 1);
 
-        when(presentacionService.getPresentaciones(eq("filtro"), anyLong(), anyLong())).thenReturn(page);
+        when(presentacionService.getPresentaciones(eq("filtro"), anyInt(), anyInt())).thenReturn(page);
 
         mockMvc.perform(get("/api/presentacion/all")
                         .param("parrafo", "filtro")
@@ -85,7 +85,7 @@ class PresentacionControllerTest {
                 .andExpect(jsonPath("$.content[0].id").value(2))
                 .andExpect(jsonPath("$.content[0].parrafo").value("Filtro texto"));
 
-        verify(presentacionService, times(1)).getPresentaciones(eq("filtro"), anyLong(), anyLong());
+        verify(presentacionService, times(1)).getPresentaciones(eq("filtro"), anyInt(), anyInt());
     }
 
     @Test
@@ -93,7 +93,7 @@ class PresentacionControllerTest {
         PresentacionDTO dto = new PresentacionDTO(3L, "Usuario y filtro", null);
         Page<PresentacionDTO> page = new PageImpl<>(List.of(dto), PageRequest.of(0, 10), 1);
 
-        when(presentacionService.getPresentaciones(eq(1L), eq("usuario"), anyLong(), anyLong())).thenReturn(page);
+        when(presentacionService.getPresentaciones(eq(1L), eq("usuario"), anyInt(), anyInt())).thenReturn(page);
 
         mockMvc.perform(get("/api/presentacion/all")
                         .param("parrafo", "usuario")
@@ -104,19 +104,19 @@ class PresentacionControllerTest {
                 .andExpect(jsonPath("$.content[0].id").value(3))
                 .andExpect(jsonPath("$.content[0].parrafo").value("Usuario y filtro"));
 
-        verify(presentacionService, times(1)).getPresentaciones(eq(1L), eq("usuario"), anyLong(), anyLong());
+        verify(presentacionService, times(1)).getPresentaciones(eq(1L), eq("usuario"), anyInt(), anyInt());
     }
 
     @Test
     void getAll_WhenServiceThrowsException_ShouldReturnBadRequest() throws Exception {
-        when(presentacionService.getPresentaciones(anyLong(), anyLong())).thenThrow(new RuntimeException("Error interno"));
+        when(presentacionService.getPresentaciones(anyInt(), anyInt())).thenThrow(new RuntimeException("Error interno"));
 
         mockMvc.perform(get("/api/presentacion/all")
                         .param("page", "0")
                         .param("size", "10"))
                 .andExpect(status().isBadRequest());
 
-        verify(presentacionService, times(1)).getPresentaciones(anyLong(), anyLong());
+        verify(presentacionService, times(1)).getPresentaciones(anyInt(), anyInt());
     }
 
     @Test

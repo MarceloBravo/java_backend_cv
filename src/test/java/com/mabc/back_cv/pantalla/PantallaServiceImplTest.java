@@ -26,6 +26,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Pageable;
 
 import com.mabc.back_cv.web.dto.PantallaDTO;
 import com.mabc.back_cv.web.entities.Menu;
@@ -34,6 +35,10 @@ import com.mabc.back_cv.web.repositories.PantallaRepository;
 import com.mabc.back_cv.web.services.pantalla.PantallaServiceImpl;
 
 import org.modelmapper.ModelMapper;
+
+import com.mabc.back_cv.common.Utils;
+
+import org.springframework.data.domain.Sort;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -46,15 +51,23 @@ public class PantallaServiceImplTest {
     @Mock
     private ModelMapper modelMapper;
 
+    @Mock
+    private Utils utils;
+
+
     @InjectMocks
     private PantallaServiceImpl pantallaService;
 
     private Menu menu;
+    private Pageable pageable;
 
     @BeforeEach
     public void setUp() {
         menu = new Menu(1L, "Menu 1", null, null, null,null, true);
-        // Configuración inicial antes de cada prueba, si es necesario
+    }
+
+    private void createPageable(Integer page, Integer size, String sortBy){
+        pageable = PageRequest.of(page, size, Sort.by(sortBy));
     }
 
     @Test
@@ -95,6 +108,8 @@ public class PantallaServiceImplTest {
         assertEquals(0, resultado.size());
     }
 
+    
+
     @Test
     @DisplayName("Debería retornar una página de PantallaDTO al buscar pantallas con criterios de búsqueda")
     public void testSearchPantallas() {
@@ -103,8 +118,10 @@ public class PantallaServiceImplTest {
             new Pantalla(1L, "Pantalla 1",  menu, true, true, true, true, true, true),
             new Pantalla(2L, "Pantalla 2",  menu, true, true, true, true, true, true)
         );
-        Page<Pantalla> pageResult = new PageImpl<>(pantallasMock);
-        when(pantallaRepository.searchByNombrePantallaUrlArchivoOrMenu("Pantalla", true, PageRequest.of(0, 10, Sort.by("id"))))
+        createPageable(0, 10, "id");
+        when(utils.createPageable(0, 10, "id")).thenReturn(pageable);
+        Page<Pantalla> pageResult = new PageImpl<>(pantallasMock, pageable, 2);
+        when(pantallaRepository.searchByNombrePantallaUrlArchivoOrMenu("Pantalla", true, pageable))
             .thenReturn(pageResult);
         
         PantallaDTO dto1 = new PantallaDTO(1L, "Pantalla 1",  menu, true, true, true, true, true, true);
@@ -125,8 +142,10 @@ public class PantallaServiceImplTest {
     @DisplayName("Debe retornar una página vacía al no encontrar pantallas con los criterios de búsqueda")
     public void testSearchPantallasVacio() {
         // Configurar el comportamiento del mock del repositorio
-        Page<Pantalla> pageResult = new PageImpl<>(new ArrayList<>());
-        when(pantallaRepository.searchByNombrePantallaUrlArchivoOrMenu("NoExiste", true, PageRequest.of(0, 10, Sort.by("nombre"))))
+        createPageable(0, 10, "id");
+        when(utils.createPageable(0, 10, "nombre")).thenReturn(pageable);
+        Page<Pantalla> pageResult = new PageImpl<>(new ArrayList<>(), pageable, 0);
+        when(pantallaRepository.searchByNombrePantallaUrlArchivoOrMenu("NoExiste", true, pageable))
             .thenReturn(pageResult);
 
         // Llamar al método a probar
@@ -139,12 +158,9 @@ public class PantallaServiceImplTest {
     @Test
     @DisplayName("Debería retornar una página vacía al buscar pantallas con criterios de búsqueda inválidos")
     public void testSearchPantallasInvalidos() {
-        // Configurar el comportamiento del mock del repositorio para cuando se llama con parámetros válidos pero sin resultados
-        /*
-        Page<Pantalla> pageResult = new PageImpl<>(new ArrayList<>());
-        when(pantallaRepository.searchByNombrePantallaUrlArchivoOrMenu(null, true, PageRequest.of(0, 10, Sort.by("nombre"))))
-            .thenReturn(pageResult);
-        */
+        createPageable(0, 10, "id");
+        
+        Page<Pantalla> pageResult = new PageImpl<>(new ArrayList<>(), pageable, 0);
 
         // Llamar al método a probar (no debería lanzar excepción, solo devuelve página vacía)
         Page<PantallaDTO> resultado = pantallaService.searchPantallas(null, true, 0, 10, "nombre");
@@ -165,8 +181,10 @@ public class PantallaServiceImplTest {
             new Pantalla(1L, "Pantalla 1",  menu, true, true, true, true, true, true),
             new Pantalla(2L, "Pantalla 2",  menu, true, true, true, true, true, true)
         );
-        Page<Pantalla> pageResult = new PageImpl<>(pantallasMock);
-        when(pantallaRepository.searchByNombrePantallaUrlArchivoOrMenu("Pantalla", true, PageRequest.of(0, 10, Sort.by("id"))))
+        createPageable(0, 10, "id");
+        when(utils.createPageable(null, null, "id")).thenReturn(pageable);
+        Page<Pantalla> pageResult = new PageImpl<>(pantallasMock, pageable, 2);
+        when(pantallaRepository.searchByNombrePantallaUrlArchivoOrMenu("Pantalla", true, pageable))
             .thenReturn(pageResult);
         
         PantallaDTO dto1 = new PantallaDTO(1L, "Pantalla 1",  menu, true, true, true, true, true, true);
@@ -180,18 +198,21 @@ public class PantallaServiceImplTest {
         assertEquals(2, resultado1.getContent().size());
         assertEquals("Pantalla 1", resultado1.getContent().get(0).getNombre());
 
+        when(utils.createPageable(null, 10, "id")).thenReturn(pageable);
         Page<PantallaDTO> resultado2 = pantallaService.searchPantallas("Pantalla", true, null, 10, "");
 
         // Verificar el resultado
         assertEquals(2, resultado2.getContent().size());
         assertEquals("Pantalla 1", resultado2.getContent().get(0).getNombre());
 
+        when(utils.createPageable(-10, 0, "id")).thenReturn(pageable);
         Page<PantallaDTO> resultado3 = pantallaService.searchPantallas("Pantalla", true, -10, 0, "");
 
         // Verificar el resultado
         assertEquals(2, resultado3.getContent().size());
         assertEquals("Pantalla 1", resultado3.getContent().get(0).getNombre());
 
+        when(utils.createPageable(0, null, "id")).thenReturn(pageable);
         Page<PantallaDTO> resultado4 = pantallaService.searchPantallas("Pantalla", true, 0, null, "   ");
 
         // Verificar el resultado
@@ -207,8 +228,10 @@ public class PantallaServiceImplTest {
             new Pantalla(1L, "Pantalla 1",  menu, true, true, true, true, true, true),
             new Pantalla(2L, "Pantalla 2",  menu, true, true, true, true, true, true)
         );
+        createPageable(0, 10, "id");
+        when(utils.createPageable(0, 10, "id")).thenReturn(pageable);
         Page<Pantalla> pageResult = new PageImpl<>(pantallasMock);
-        when(pantallaRepository.searchByNombrePantallaUrlArchivoOrMenu("Pantalla", true, PageRequest.of(0, 10, Sort.by("id"))))
+        when(pantallaRepository.searchByNombrePantallaUrlArchivoOrMenu("Pantalla", true, pageable))
             .thenReturn(pageResult);
         
         PantallaDTO dto1 = new PantallaDTO(1L, "Pantalla 1",  menu, true, true, true, true, true, true);
@@ -232,8 +255,10 @@ public class PantallaServiceImplTest {
             new Pantalla(1L, "Pantalla 1",  menu, true, true, true, true, true, true),
             new Pantalla(2L, "Pantalla 2",  menu, true, true, true, true, true, true)
         );
+        createPageable(0, 10, "id");
+        when(utils.createPageable(0, 10, "id")).thenReturn(pageable);
         Page<Pantalla> pageResult = new PageImpl<>(pantallasMock);
-        when(pantallaRepository.searchByNombrePantallaUrlArchivoOrMenu("Pantalla", true, PageRequest.of(0, 10, Sort.by("id"))))
+        when(pantallaRepository.searchByNombrePantallaUrlArchivoOrMenu("Pantalla", true, pageable))
             .thenReturn(pageResult);
         
         PantallaDTO dto1 = new PantallaDTO(1L, "Pantalla 1",  menu, true, true, true, true, true, true);

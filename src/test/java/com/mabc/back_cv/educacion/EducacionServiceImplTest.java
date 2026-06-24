@@ -31,11 +31,17 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.*;
 
+import com.mabc.back_cv.common.Utils;
+
 @ExtendWith(MockitoExtension.class)
 class EducacionServiceImplTest {
 
     @Mock
     private EducacionRepository educacionRepository;
+    
+    @Mock
+    private Utils utils;
+
 
     @InjectMocks
     private EducacionServiceImpl educacionService;
@@ -91,6 +97,7 @@ class EducacionServiceImplTest {
 
         List<Educacion> educacionList = Arrays.asList(educacion);
         educacionPage = new PageImpl<>(educacionList);
+        
         pageable = PageRequest.of(0, 10);
     }
 
@@ -98,8 +105,9 @@ class EducacionServiceImplTest {
 
     @Test
     void findByUserId_conParametrosValidos_retornaPaginaCorrecta() {
+        when(utils.createPageable(0, 10)).thenReturn(pageable);
         when(educacionRepository.findByUserId(anyLong(), any())).thenReturn(educacionPage);
-
+        
         Page<EducacionDTO> resultado = educacionService.findByUserId(1L, 0, 10);
 
         assertNotNull(resultado);
@@ -110,6 +118,7 @@ class EducacionServiceImplTest {
 
     @Test
     void findByUserId_conPageNull_retornaPaginaConDefaults() {
+        when(utils.createPageable(null, null)).thenReturn(pageable);
         when(educacionRepository.findByUserId(anyLong(), any())).thenReturn(educacionPage);
 
         Page<EducacionDTO> resultado = educacionService.findByUserId(1L, null, null);
@@ -120,6 +129,7 @@ class EducacionServiceImplTest {
 
     @Test
     void findByUserId_conPageNegativo_retornaPaginaConDefaults() {
+        when(utils.createPageable(-1, 10)).thenReturn(pageable);
         when(educacionRepository.findByUserId(anyLong(), any())).thenReturn(educacionPage);
 
         Page<EducacionDTO> resultado = educacionService.findByUserId(1L, -1, 10);
@@ -130,6 +140,7 @@ class EducacionServiceImplTest {
 
     @Test
     void findByUserId_conSizeNull_retornaPaginaConDefaults() {
+        when(utils.createPageable(0, null)).thenReturn(pageable);
         when(educacionRepository.findByUserId(anyLong(), any())).thenReturn(educacionPage);
 
         Page<EducacionDTO> resultado = educacionService.findByUserId(1L, 0, null);
@@ -140,6 +151,7 @@ class EducacionServiceImplTest {
 
     @Test
     void findByUserId_conSizeCero_retornaPaginaConDefaults() {
+        when(utils.createPageable(0, 0)).thenReturn(pageable);
         when(educacionRepository.findByUserId(anyLong(), any())).thenReturn(educacionPage);
 
         Page<EducacionDTO> resultado = educacionService.findByUserId(1L, 0, 0);
@@ -151,6 +163,7 @@ class EducacionServiceImplTest {
     @Test
     void findByUserId_conPaginaVacia_retornaPaginaVacia() {
         Page<Educacion> paginaVacia = new PageImpl<>(Arrays.asList());
+        when(utils.createPageable(0, 10)).thenReturn(pageable);
         when(educacionRepository.findByUserId(anyLong(), any())).thenReturn(paginaVacia);
 
         Page<EducacionDTO> resultado = educacionService.findByUserId(1L, 0, 10);
@@ -164,6 +177,7 @@ class EducacionServiceImplTest {
 
     @Test
     void findBySearchText_conSearchTextNull_retornaTodosLosRegistros() {
+        when(utils.createPageable(0, 10)).thenReturn(pageable);
         when(educacionRepository.getAllByUserId(eq(1L), any())).thenReturn(educacionPage);
 
         Page<EducacionDTO> resultado = educacionService.findBySearchText(1L, null, 0, 10);
@@ -176,6 +190,7 @@ class EducacionServiceImplTest {
 
     @Test
     void findBySearchText_conSearchTextValido_retornaResultadosFiltrados() {
+        when(utils.createPageable(0, 10)).thenReturn(pageable);
         when(educacionRepository.findBySearchText(eq(1L), eq("Ingeniería"), any())).thenReturn(educacionPage);
 
         Page<EducacionDTO> resultado = educacionService.findBySearchText(1L, "Ingeniería", 0, 10);
@@ -188,6 +203,7 @@ class EducacionServiceImplTest {
 
     @Test
     void findBySearchText_conSearchTextVacio_retornaTodosLosRegistros() {
+        when(utils.createPageable(0, 10)).thenReturn(pageable);
         when(educacionRepository.findBySearchText(eq(1L), eq(""), any())).thenReturn(educacionPage);
 
         Page<EducacionDTO> resultado = educacionService.findBySearchText(1L, "", 0, 10);
@@ -198,6 +214,7 @@ class EducacionServiceImplTest {
 
     @Test
     void findBySearchText_conUserIdNull_retornaTodosLosRegistros() {
+        when(utils.createPageable(0, 10)).thenReturn(pageable);
         when(educacionRepository.getAllByUserId(isNull(), any())).thenReturn(educacionPage);
 
         Page<EducacionDTO> resultado = educacionService.findBySearchText(null, null, 0, 10);
@@ -208,6 +225,7 @@ class EducacionServiceImplTest {
 
     @Test
     void findBySearchText_conPaginacionValida_retornaPaginaCorrecta() {
+        when(utils.createPageable(2, 20)).thenReturn(pageable);
         when(educacionRepository.findBySearchText(eq(1L), eq("test"), any())).thenReturn(educacionPage);
 
         Page<EducacionDTO> resultado = educacionService.findBySearchText(1L, "test", 2, 20);

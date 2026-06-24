@@ -66,7 +66,7 @@ class UsuariosServiceTest {
         }
 
         @Override
-        public Page<UsuarioDTO> getAllUsuariosPage(String filter, Long page, Long size) {
+        public Page<UsuarioDTO> getAllUsuariosPage(String filter, Integer page, Integer size) {
             if (page != null && page < 0) throw new IllegalArgumentException("page inválida");
             return Page.empty();
         }
@@ -133,7 +133,7 @@ class UsuariosServiceTest {
         @Test
         @DisplayName("Contrato: retorna Page no nulo con parámetros válidos")
         void retornaPaginaNoNula() {
-            Page<UsuarioDTO> result = stub.getAllUsuariosPage("Carlos", 0L, 10L);
+            Page<UsuarioDTO> result = stub.getAllUsuariosPage("Carlos", 0, 10);
             assertNotNull(result);
         }
 
@@ -147,7 +147,7 @@ class UsuariosServiceTest {
         @DisplayName("Contrato: puede rechazar page negativa")
         void rechazaPageNegativa() {
             assertThrows(IllegalArgumentException.class,
-                    () -> stub.getAllUsuariosPage("Carlos", -1L, 10L));
+                    () -> stub.getAllUsuariosPage("Carlos", -1, 10));
         }
     }
 

@@ -24,6 +24,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doNothing;
@@ -32,28 +33,37 @@ import static org.mockito.Mockito.mockStatic;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.mabc.back_cv.common.Utils;
+
 @ExtendWith(MockitoExtension.class)
 class DescripcionPortafolioServiceImplTest {
 
     @Mock
     private DescripcionPortafolioRepository descripcionPortafolioRepository;
 
+    @Mock
+    private Utils utils;
+
     @InjectMocks
     private DescripcionPortafolioServiceImpl descripcionPortafolioService;
 
     private Portafolio portafolio;
+    private Pageable pageable;
 
     @BeforeEach
     void setUp() {
         portafolio = new Portafolio();
         portafolio.setId(1L);
         portafolio.setTitle("Portfolio prueba");
+
+        pageable = PageRequest.of(0, 10);
     }
 
     @Test
     void shouldReturnAllDescriptionsWhenSearchTermIsNull() {
         DescripcionPortafolio entity = createEntity(1L, "texto prueba", 1);
-        Page<DescripcionPortafolio> page = new PageImpl<>(List.of(entity), PageRequest.of(0, 10), 1);
+        Page<DescripcionPortafolio> page = new PageImpl<>(List.of(entity), pageable, 1);
+        when(utils.createPageable(0, 10)).thenReturn(pageable);
         when(descripcionPortafolioRepository.findAll(any(Pageable.class))).thenReturn(page);
 
         var result = descripcionPortafolioService.getAll(null, 0, 10);
@@ -66,7 +76,8 @@ class DescripcionPortafolioServiceImplTest {
     @Test
     void shouldReturnAllDescriptionsWhenSearchTermIsEmpty() {
         DescripcionPortafolio entity = createEntity(10L, "texto vacio", 1);
-        Page<DescripcionPortafolio> page = new PageImpl<>(List.of(entity), PageRequest.of(0, 10), 1);
+        Page<DescripcionPortafolio> page = new PageImpl<>(List.of(entity), pageable, 1);
+        when(utils.createPageable(0, 10)).thenReturn(pageable);
         when(descripcionPortafolioRepository.findAll(any(Pageable.class))).thenReturn(page);
 
         var result = descripcionPortafolioService.getAll("", 0, 10);
@@ -109,7 +120,8 @@ class DescripcionPortafolioServiceImplTest {
     @Test
     void shouldReturnPagedResultsWhenSearchTermIsProvided() {
         DescripcionPortafolio entity = createEntity(2L, "texto buscado", 2);
-        Page<DescripcionPortafolio> page = new PageImpl<>(List.of(entity), PageRequest.of(0, 5), 1);
+        when(utils.createPageable(0, 5)).thenReturn(pageable);
+        Page<DescripcionPortafolio> page = new PageImpl<>(List.of(entity), pageable, 1);
         when(descripcionPortafolioRepository.findByParrafoContainingIgnoreCase(anyString(), any(Pageable.class)))
                 .thenReturn(page);
 

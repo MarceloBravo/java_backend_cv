@@ -13,15 +13,19 @@ import com.mabc.back_cv.web.dto.PantallaDTO;
 import com.mabc.back_cv.web.entities.Pantalla;
 import com.mabc.back_cv.web.repositories.PantallaRepository;
 
+import com.mabc.back_cv.common.Utils;
+
 @Service
 public class PantallaServiceImpl implements PantallaService {
 
     private final PantallaRepository pantallaRepository;
     private final ModelMapper modelMapper;
+    private final Utils utils;
 
-    public PantallaServiceImpl(PantallaRepository pantallaRepository, ModelMapper modelMapper) {
+    public PantallaServiceImpl(PantallaRepository pantallaRepository, ModelMapper modelMapper, Utils utils) {
         this.pantallaRepository = pantallaRepository;
         this.modelMapper = modelMapper;
+        this.utils = utils;
     }
 
     @Override
@@ -40,15 +44,15 @@ public class PantallaServiceImpl implements PantallaService {
         if (terminoBuscado == null || terminoBuscado.trim().isEmpty())
             return Page.empty();
 
-        page = (page == null || page < 0) ? 0 : page;
-        size = (size == null || size <= 0) ? 10 : size;
-
         if (sortBy == null || sortBy.trim().isEmpty())
             sortBy = "id";
 
-        Pageable pageRequest = PageRequest.of(page, size, Sort.by(sortBy));
+        Pageable pageable = utils.createPageable(page, size, sortBy);        
         Page<Pantalla> pantallaPage = pantallaRepository.searchByNombrePantallaUrlArchivoOrMenu(terminoBuscado, estado,
-                pageRequest);
+                pageable);
+        if(pantallaPage == null){
+            return Page.empty();
+        }
         Page<PantallaDTO> pantallaDTOPage = pantallaPage.map(p -> modelMapper.map(p, PantallaDTO.class));
         return pantallaDTOPage;
     }

@@ -15,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.mabc.back_cv.web.services.tecnologia.TecnologiaUtils;
 
+import com.mabc.back_cv.common.Utils;
+
 
 @Service
 public class TecnologiaServiceImpl implements TecnologiaService{
@@ -22,8 +24,11 @@ public class TecnologiaServiceImpl implements TecnologiaService{
     @Autowired
     private TecnologiaRepository repository;
 
-    public Page<TecnologiaDTO> findAll(String searchText, Integer size, Integer page){
-        Pageable pageable = TecnologiaUtils.createPageable(page, size);
+    @Autowired
+    private Utils utils;
+
+    public Page<TecnologiaDTO> findAll(String searchText, Integer page, Integer size){
+        Pageable pageable = utils.createPageable(page, size);
         if(searchText == null){
             searchText = "";
         }

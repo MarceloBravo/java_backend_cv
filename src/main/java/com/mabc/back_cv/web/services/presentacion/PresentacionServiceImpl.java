@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 import static com.mabc.back_cv.web.services.presentacion.PresentacionUtils.dtoToEntity;
 import static com.mabc.back_cv.web.services.presentacion.PresentacionUtils.entityToDTO;
 
+import com.mabc.back_cv.common.Utils;
+
 /**
  * Implementación de {@link PresentacionService} que gestiona las operaciones
  * de negocio relacionadas con las presentaciones del CV.
@@ -29,6 +31,9 @@ public class PresentacionServiceImpl implements PresentacionService {
     /** Repositorio JPA para el acceso a datos de {@link Presentacion}. */
     @Autowired
     private PresentacionRepository presentacionRepository;
+    
+    @Autowired
+    private Utils utils;
 
     /**
      * {@inheritDoc}
@@ -37,10 +42,9 @@ public class PresentacionServiceImpl implements PresentacionService {
      * si son {@code null} o negativos, se utilizan {@code 0} y {@code 10} respectivamente.</p>
      */
     @Override
-    public Page<PresentacionDTO> getPresentaciones(Long page, Long size) {
-        page = (page == null || page < 0) ? 0L : page;
-        size = (size == null || size < 0) ? 10L : size;
-        Page<Presentacion> presentaciones = presentacionRepository.findAll(PageRequest.of(page.intValue(), size.intValue()));
+    public Page<PresentacionDTO> getPresentaciones(Integer page, Integer size) {
+        Pageable pageable = utils.createPageable(page, size);
+        Page<Presentacion> presentaciones = presentacionRepository.findAll(pageable);
         return presentaciones.map(PresentacionUtils::entityToDTO);
     }
 
@@ -52,10 +56,8 @@ public class PresentacionServiceImpl implements PresentacionService {
      * automáticamente si son {@code null} o negativos.</p>
      */
     @Override
-    public Page<PresentacionDTO> getPresentaciones(String parrafo, Long page, Long size){
-        page = (page == null || page < 0) ? 0L : page;
-        size = (size == null || size < 0) ? 10L : size;
-        Pageable pageable = PageRequest.of(page.intValue(), size.intValue());
+    public Page<PresentacionDTO> getPresentaciones(String parrafo, Integer page, Integer size){
+        Pageable pageable = utils.createPageable(page, size);
         Page<Presentacion> presentaciones = presentacionRepository.findByParrafoContainingIgnoreCase(parrafo, pageable);
         return presentaciones.map(PresentacionUtils::entityToDTO);
     }
@@ -68,10 +70,8 @@ public class PresentacionServiceImpl implements PresentacionService {
      * se normalizan automáticamente si son {@code null} o negativos.</p>
      */
     @Override
-    public Page<PresentacionDTO> getPresentaciones(Long userId, String parrafo, Long page, Long size){
-        page = (page == null || page < 0) ? 0L : page;
-        size = (size == null || size < 0) ? 10L : size;
-        Pageable pageable = PageRequest.of(page.intValue(), size.intValue());
+    public Page<PresentacionDTO> getPresentaciones(Long userId, String parrafo, Integer page, Integer size){
+        Pageable pageable = utils.createPageable(page, size);
         Page<Presentacion> presentaciones = presentacionRepository.findByUserIdAndParrafoContainingIgnoreCase(userId, parrafo, pageable);
         return presentaciones.map(PresentacionUtils::entityToDTO);
     }

@@ -25,6 +25,10 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+import com.mabc.back_cv.common.Utils;
+
+import org.junit.jupiter.api.BeforeEach;
+
 /**
  * Pruebas unitarias para la implementación del servicio {@link RolServiceImpl}.
  * Valida la lógica de negocio del servicio, incluyendo búsqueda por id,
@@ -40,8 +44,19 @@ class RolServiceImplTest {
     @Mock
     private RolUtils rolUtils;
 
+    @Mock
+    private Utils utils;
+
     @InjectMocks
     private RolServiceImpl rolService;
+
+    private Pageable pageable;
+
+    @BeforeEach
+    void Setup(){
+        pageable = PageRequest.of(0, 10);
+    }
+
 
     // -------------------------------------------------------------------------
     // findById
@@ -109,10 +124,10 @@ class RolServiceImplTest {
     void getAllPaged_ShouldReturnPageOfRolDTOs() {
         Rol rol = new Rol(1L, "ADMIN", true, null);
         RolDTO rolDTO = new RolDTO(1L, "ADMIN", true);
-        Pageable pageable = PageRequest.of(0, 10);
+        
         Page<Rol> rolPage = new PageImpl<>(List.of(rol), pageable, 1);
 
-        when(rolUtils.createPageable(0, 10)).thenReturn(pageable);
+        when(utils.createPageable(0, 10)).thenReturn(pageable);
         when(rolRepository.findAll(pageable)).thenReturn(rolPage);
         when(rolUtils.mapToRolDTO(rol)).thenReturn(rolDTO);
 
@@ -121,7 +136,7 @@ class RolServiceImplTest {
         assertNotNull(result);
         assertEquals(1, result.getTotalElements());
         assertEquals("ADMIN", result.getContent().get(0).getNombre());
-        verify(rolUtils, times(1)).createPageable(0, 10);
+        verify(utils, times(1)).createPageable(0, 10);
         verify(rolRepository, times(1)).findAll(pageable);
     }
 
@@ -152,10 +167,9 @@ class RolServiceImplTest {
     void searchBy_WhitNombre_ShouldUsSearchByNombreAndEstado() {
         Rol rol = new Rol(1L, "ADMIN", true, null);
         RolDTO rolDTO = new RolDTO(1L, "ADMIN", true);
-        Pageable pageable = PageRequest.of(0, 10);
         Page<Rol> rolPage = new PageImpl<>(List.of(rol), pageable, 1);
 
-        when(rolUtils.createPageable(0, 10)).thenReturn(pageable);
+        when(utils.createPageable(0, 10)).thenReturn(pageable);
         when(rolRepository.searchByNombreAndEstado("ADMIN", true, pageable)).thenReturn(rolPage);
         when(rolUtils.mapToRolDTO(rol)).thenReturn(rolDTO);
 
@@ -171,10 +185,9 @@ class RolServiceImplTest {
     void searchBy_WithNombreNull_ShouldUseFindAll() {
         Rol rol = new Rol(1L, "ADMIN", true, null);
         RolDTO rolDTO = new RolDTO(1L, "ADMIN", true);
-        Pageable pageable = PageRequest.of(0, 10);
         Page<Rol> rolPage = new PageImpl<>(List.of(rol), pageable, 1);
 
-        when(rolUtils.createPageable(0, 10)).thenReturn(pageable);
+        when(utils.createPageable(0, 10)).thenReturn(pageable);
         when(rolRepository.findAll(pageable)).thenReturn(rolPage);
         when(rolUtils.mapToRolDTO(rol)).thenReturn(rolDTO);
 
@@ -193,7 +206,7 @@ class RolServiceImplTest {
         Pageable pageable = PageRequest.of(0, 10);
         Page<Rol> rolPage = new PageImpl<>(List.of(rol), pageable, 1);
 
-        when(rolUtils.createPageable(0, 10)).thenReturn(pageable);
+        when(utils.createPageable(0, 10)).thenReturn(pageable);
         when(rolRepository.findAll(pageable)).thenReturn(rolPage);
         when(rolUtils.mapToRolDTO(rol)).thenReturn(rolDTO);
 
@@ -253,7 +266,7 @@ class RolServiceImplTest {
                 () -> rolService.delete(null));
 
         assertEquals("Error: El id no puede ser nulo.", exception.getMessage());
-        verify(rolRepository, never()).deleteById(anyLong());
+        verify(rolRepository, never()).deleteById(anyInt());
     }
 
     @Test

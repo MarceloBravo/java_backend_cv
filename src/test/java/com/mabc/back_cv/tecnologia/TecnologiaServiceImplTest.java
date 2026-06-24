@@ -31,7 +31,7 @@ import static org.mockito.Mockito.*;
 import com.mabc.back_cv.web.enums.TipoTecnologiaEnum;
 
 import org.junit.jupiter.api.BeforeEach;
-
+import com.mabc.back_cv.common.Utils;
 
 @ExtendWith(MockitoExtension.class)
 class TecnologiaServiceImplTest{
@@ -42,6 +42,9 @@ class TecnologiaServiceImplTest{
     @Mock
     private TecnologiaRepository repository;
 
+    @Mock
+    private Utils utils;
+
     @InjectMocks
     private TecnologiaServiceImpl service;
 
@@ -49,6 +52,8 @@ class TecnologiaServiceImplTest{
     private TecnologiaDTO tecnologiaDTO2;
     private Tecnologia tecnologia1;
     private Tecnologia tecnologia2;
+
+    private Pageable pageable;
 
 
     @BeforeEach
@@ -60,6 +65,8 @@ class TecnologiaServiceImplTest{
         
         tecnologia1 = new Tecnologia(1L, "Java", TipoTecnologiaEnum.LENGUAJE, "/ruta/imagen/java.png", "<svg javascript></svg>");
         tecnologia2 = new Tecnologia(2L, "JavaScript", TipoTecnologiaEnum.LENGUAJE, "/ruta/imagen/javascript.png", "<svg javascript></svg>");
+
+        pageable = PageRequest.of(0, 10);
     }
 
 
@@ -69,7 +76,7 @@ class TecnologiaServiceImplTest{
     @Test
     @DisplayName("Obtiene una página de las tecnologias con éxito con todos los parámetros correctos")
     void getPageOfTecnologias_whitAllCorrectParameters_returnPageOfTecnologias(){
-        Pageable pageable = PageRequest.of(0, 10);
+        when(utils.createPageable(0, 10)).thenReturn(pageable);
         when(repository.findAllPage("Java", pageable)).thenReturn(new PageImpl<>(Arrays.asList(tecnologia1, tecnologia2), pageable, 2));
 
         Page<TecnologiaDTO> result = service.findAll("Java", 0, 10);
@@ -84,7 +91,7 @@ class TecnologiaServiceImplTest{
     @Test
     @DisplayName("Obtiene una página de las tecnologias con éxito sólo con el texto de búsqueda")
     void getPageOfTecnologias_whitSearchTextParameterOnly_returnPageOfTecnologias(){
-        Pageable pageable = PageRequest.of(0, 10);
+        when(utils.createPageable(null, null)).thenReturn(pageable);
         when(repository.findAllPage("Java", pageable)).thenReturn(new PageImpl<>(Arrays.asList(tecnologia1, tecnologia2), pageable, 2));
 
         Page<TecnologiaDTO> result = service.findAll("Java", null, null);
@@ -99,7 +106,7 @@ class TecnologiaServiceImplTest{
     @Test
     @DisplayName("Obtiene una página de las tecnologias con éxito con parámetros nulos")
     void getPageOfTecnologias_whitNullParameters_returnPageOfTecnologias(){
-        Pageable pageable = PageRequest.of(0, 10);
+        when(utils.createPageable(null, null)).thenReturn(pageable);
         when(repository.findAllPage("", pageable)).thenReturn(new PageImpl<>(Arrays.asList(tecnologia1, tecnologia2), pageable, 2));
 
         Page<TecnologiaDTO> result = service.findAll(null, null, null);
@@ -115,7 +122,7 @@ class TecnologiaServiceImplTest{
     @Test
     @DisplayName("Obtiene una página de las tecnologias con éxito con parámetros de busqueda correcto y paginacion no válidos")
     void getPageOfTecnologias_whithSearchTextAndInvalidPaginationParameters_returnPageOfTecnologias(){
-        Pageable pageable = PageRequest.of(0, 10);
+        when(utils.createPageable(-1, -20)).thenReturn(pageable);
         when(repository.findAllPage("script", pageable)).thenReturn(new PageImpl<>(Arrays.asList(tecnologia2), pageable, 1));
 
         Page<TecnologiaDTO> result = service.findAll("script", -1, -20);
@@ -129,7 +136,7 @@ class TecnologiaServiceImplTest{
     @Test
     @DisplayName("Obtiene una página en blanco de las tecnologias con éxito con parámetros correctos")
     void getPageOfTecnologias_whithAllCorrectParameters_returnEmptyPage(){
-        Pageable pageable = PageRequest.of(0, 10);
+        when(utils.createPageable(0, 10)).thenReturn(pageable);
         when(repository.findAllPage("PHP", pageable)).thenReturn(new PageImpl<>(Arrays.asList(), pageable, 0));
 
         Page<TecnologiaDTO> result = service.findAll("PHP", 0, 10);

@@ -49,6 +49,7 @@ import com.mabc.back_cv.web.services.userPresentation.UserPresentationServiceImp
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import com.mabc.back_cv.common.Utils;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("UserPresentationServiceImpl Test")
@@ -60,6 +61,8 @@ public class UserPresentationServiceImplTest{
     @Mock
     private UserPresentationUtils userPresentationUtils;
 
+    @Mock
+    private Utils utils;
 
     @InjectMocks
     private UserPresentationServiceImpl userPresentationServiceImpl;
@@ -70,6 +73,7 @@ public class UserPresentationServiceImplTest{
     private UsuarioDTO usuarioDTO;
     private User user;
     private Page<UserPresentationDTO> userPresentationPage;
+    private Pageable pageable;
 
     @BeforeEach
     void setUp() {
@@ -98,6 +102,8 @@ public class UserPresentationServiceImplTest{
             userPresentationDTO.getParrafo(),
             user
         );
+
+        pageable = PageRequest.of(0, 10);
     }
 
 
@@ -107,7 +113,7 @@ public class UserPresentationServiceImplTest{
     @Test
     void obtieneTodosLosUserPresentation_conParametrosValidos_retornaPageable() throws Exception {
         userPresentationDTO.setUser(usuarioDTO);
-        Pageable pageable = PageRequest.of(0, 10);
+        when(utils.createPageable(0, 10)).thenReturn(pageable);
         Page<UserPresentation> userPresentationPage = new PageImpl<>(List.of(userPresentation), pageable, 1);
 
         when(userPresentationRepository.findAll("párrafo", 1L, pageable)).thenReturn(userPresentationPage);
@@ -126,7 +132,7 @@ public class UserPresentationServiceImplTest{
     
     @Test
     void obtieneUnaListaVaciaDeUserPresentation_conParametrosValidos_retornaPageableVacia() throws Exception {
-        Pageable pageable = PageRequest.of(0, 10);
+        when(utils.createPageable(0, 10)).thenReturn(pageable);
         Page<UserPresentation> userPresentationPage = new PageImpl<>(List.of(), pageable, 0);
 
         when(userPresentationRepository.findAll("párrafo", 1L, pageable)).thenReturn(userPresentationPage);
@@ -146,27 +152,16 @@ public class UserPresentationServiceImplTest{
 
     @Test
     void getAll_cuandouserPresentationDTOPageEsNull_retornaPageEmpty() {
-        Pageable pageable = PageRequest.of(0, 10);
+        when(utils.createPageable(null, 10)).thenReturn(pageable);
         
-        // 1. Creamos un Mock de la interfaz Page en lugar de una instancia real
         Page<UserPresentation> userPresentationPageMock = mock(Page.class);
+        
+        when(userPresentationRepository.findAll("párrafo", 1L, pageable)).thenReturn(userPresentationPageMock);
+        
+        Page<UserPresentationDTO> result = userPresentationServiceImpl.getAll("párrafo", 1L, null, 10);
 
-        try (MockedStatic<UserPresentationUtils> utilities = mockStatic(UserPresentationUtils.class)) {
-            utilities.when(() -> UserPresentationUtils.createPageable(0, 10)).thenReturn(pageable);
-            
-            // 2. El repositorio devuelve nuestro mock
-            when(userPresentationRepository.findAll("párrafo", 1L, pageable)).thenReturn(userPresentationPageMock);
-            
-            // 3. Forzamos a que el método .map() del mock devuelva estrictamente NULL
-            when(userPresentationPageMock.map(any())).thenReturn(null);
-
-            // Ejecución
-            Page<UserPresentationDTO> result = userPresentationServiceImpl.getAll("párrafo", 1L, 0, 10);
-
-            // 4. Aserción de cobertura: Validamos que se activó el ternario y devolvió Page.empty()
-            assertNotNull(result);
-            assertEquals(Page.empty(), result); // Verifica que sea exactamente la misma instancia vacía de Spring
-        }
+        assertNotNull(result);
+        assertEquals(Page.empty(), result); // Verifica que sea exactamente la misma instancia vacía de Spring
     }
 
 

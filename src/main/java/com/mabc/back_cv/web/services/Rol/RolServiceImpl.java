@@ -11,14 +11,18 @@ import com.mabc.back_cv.web.dto.RolDTO;
 import com.mabc.back_cv.web.entities.Rol;
 import com.mabc.back_cv.web.repositories.RolRepository;
 
+import com.mabc.back_cv.common.Utils;
+
 @Service
 public class RolServiceImpl implements RolService {
+    private Utils utils;
     private final RolRepository rolRepository;
     private final RolUtils rolUtils;
 
-    public RolServiceImpl(RolRepository rolRepository, RolUtils rolUtils) {
+    public RolServiceImpl(RolRepository rolRepository, RolUtils rolUtils, Utils utils) {
         this.rolRepository = rolRepository;
         this.rolUtils = rolUtils;
+        this.utils = utils;
     }
 
     @Override
@@ -31,7 +35,7 @@ public class RolServiceImpl implements RolService {
 
     @Override
     public Page<RolDTO> searchBy(String nombre, Boolean activo, int page, int rows) {
-        Pageable pageable = rolUtils.createPageable(page, rows);
+        Pageable pageable = utils.createPageable(page, rows);
         Page<Rol> rolPage;
 
         if (nombre == null || nombre.trim().isEmpty()) {
@@ -53,7 +57,7 @@ public class RolServiceImpl implements RolService {
 
     @Override
     public Page<RolDTO> getAll(int page, int rows) {
-        Pageable pageable = rolUtils.createPageable(page, rows);
+        Pageable pageable = utils.createPageable(page, rows);
         Page<Rol> rolPage = rolRepository.findAll(pageable);
         return rolPage.map(rol -> rolUtils.mapToRolDTO(rol));
     }

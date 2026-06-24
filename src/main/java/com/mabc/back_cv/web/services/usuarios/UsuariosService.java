@@ -30,7 +30,7 @@ public interface UsuariosService {
      * @param size Cantidad de registros por página
      * @return Page de UsuarioDTO
      */
-    Page<UsuarioDTO> getAllUsuariosPage(String filter, Long page, Long size);
+    Page<UsuarioDTO> getAllUsuariosPage(String filter, Integer page, Integer size);
 
     /**
      * Obtiene un usuario por su identificador.

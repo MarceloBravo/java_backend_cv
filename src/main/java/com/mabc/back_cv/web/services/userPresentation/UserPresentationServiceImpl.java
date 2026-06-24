@@ -10,15 +10,20 @@ import com.mabc.back_cv.web.repositories.UserPresentationRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.mabc.back_cv.common.Utils;
+
 @Service
 public class UserPresentationServiceImpl implements UserPresentationService{
 
     @Autowired
     private UserPresentationRepository userPresentationRepository;
+    
+    @Autowired
+    private Utils utils;
 
     @Override
     public Page<UserPresentationDTO> getAll(String searchText, Long userId,Integer page, Integer size){
-        Pageable pageable = UserPresentationUtils.createPageable(page, size);
+        Pageable pageable = utils.createPageable(page, size);
         Page<UserPresentation> userPresentationPage = userPresentationRepository.findAll(searchText, userId, pageable);
         Page<UserPresentationDTO> userPresentationDTOPage =userPresentationPage.map(userPresentation -> UserPresentationUtils.entityToDTO(userPresentation));
         return userPresentationDTOPage == null ? Page.empty() : userPresentationDTOPage;

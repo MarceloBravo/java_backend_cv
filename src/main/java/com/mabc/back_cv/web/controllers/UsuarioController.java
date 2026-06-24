@@ -79,8 +79,8 @@ public class UsuarioController {
     @GetMapping("/page")
     public ResponseEntity<Page<UsuarioDTO>> getAllPage(
             @RequestParam(required = false) String filter,
-            @RequestParam(required = false) Long page,
-            @RequestParam(required = false) Long size) {
+            @RequestParam(required = false) Integer page,
+            @RequestParam(required = false) Integer size) {
         try {
             Page<UsuarioDTO> pageUsuario = usuarioService.getAllUsuariosPage(filter, page, size);
             return ResponseEntity.ok(pageUsuario);

@@ -20,11 +20,16 @@ import com.mabc.back_cv.web.services.trabajo.TrabajoUtils;
 import com.mabc.back_cv.web.dto.TrabajoDTO;
 import com.mabc.back_cv.web.entities.Trabajo;
 
+import com.mabc.back_cv.common.Utils;
+
 @Service
 public class TrabajoServiceImpl implements TrabajoService {
 
     @Autowired
     private TrabajoRepository repository;
+    
+    @Autowired
+    private Utils utils;
 
     @Override
     public List<TrabajoDTO> getAll(Long userId, String searchText) {
@@ -39,7 +44,7 @@ public class TrabajoServiceImpl implements TrabajoService {
 
     @Override
     public Page<TrabajoDTO> getAll(Long userId, String searchText, Integer page, Integer size) {
-        Pageable pageable = TrabajoUtils.createPageable(page, size);
+        Pageable pageable = utils.createPageable(page, size);
         if (searchText == null) {
             searchText = "";
         }

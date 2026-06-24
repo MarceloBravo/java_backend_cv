@@ -13,23 +13,28 @@ import com.mabc.back_cv.web.repositories.EducacionRepository;
 
 import com.mabc.back_cv.web.services.educacion.EducacionUtils;
 
+import com.mabc.back_cv.common.Utils;
+
 
 @Service
 public class EducacionServiceImpl implements EducacionService{
 
     @Autowired
     private EducacionRepository educacionRepository;
+    
+    @Autowired
+    private Utils utils;
 
     @Override
     public Page<EducacionDTO> findByUserId(Long userId, Integer page, Integer size){
-        Pageable pageable = EducacionUtils.createPageable(page, size);
+        Pageable pageable = utils.createPageable(page, size);
         Page<Educacion> entity = educacionRepository.findByUserId(userId, pageable);
         return entity.map(educacion -> EducacionUtils.entityToDTO(educacion));
     }
 
     @Override
     public Page<EducacionDTO> findBySearchText(Long userId, String searchText, Integer page, Integer size){
-        Pageable pageable = EducacionUtils.createPageable(page, size);
+        Pageable pageable = utils.createPageable(page, size);
         Page<Educacion> entity;
         if(searchText == null){
             entity = educacionRepository.getAllByUserId(userId, pageable);

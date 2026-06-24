@@ -22,6 +22,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+import com.mabc.back_cv.common.Utils;
+
 
 /**
  * Pruebas unitarias para la implementación del servicio {@link MenuServiceImpl}.
@@ -36,6 +38,10 @@ class MenuServiceImplTest {
 
     @Mock
     private MenuMapper menuMapper;
+    
+    @Mock
+    private Utils utils;
+
 
     @InjectMocks
     private MenuServiceImpl menuService;

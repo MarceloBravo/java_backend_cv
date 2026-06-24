@@ -13,11 +13,16 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import com.mabc.back_cv.common.Utils;
+
 @Service
 public class DescripcionPortafolioServiceImpl implements DescripcionPortafolioService {
 
     @Autowired
     private DescripcionPortafolioRepository descripcionPortafolioRepository;
+
+    @Autowired
+    private Utils utils;
 
     @Override
     public Page<DescripcionPortafolioDTO> getAll(String terminoBuscado, Integer page, Integer size) {
@@ -35,14 +40,14 @@ public class DescripcionPortafolioServiceImpl implements DescripcionPortafolioSe
     }
 
     private Page<DescripcionPortafolioDTO> getAll(Integer page, Integer size) {
-        Pageable pageable = DescripcionPortafolioUtils.createPageable(page, size);
+        Pageable pageable = utils.createPageable(page, size);
         Page<DescripcionPortafolio> entities = descripcionPortafolioRepository.findAll(pageable);
         return entities.map(DescripcionPortafolioUtils::entityToDTO);
 
     }
 
     private Page<DescripcionPortafolioDTO> searchByParrafo(String terminoBuscado, Integer page, Integer size) {
-        Pageable pageable = DescripcionPortafolioUtils.createPageable(page, size);
+        Pageable pageable = utils.createPageable(page, size);
         Page<DescripcionPortafolio> entities = descripcionPortafolioRepository
                 .findByParrafoContainingIgnoreCase(terminoBuscado, pageable);
         return entities.map(DescripcionPortafolioUtils::entityToDTO);

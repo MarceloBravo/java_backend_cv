@@ -8,7 +8,7 @@ import com.mabc.back_cv.web.dto.TecnologiaDTO;
 
 public interface TecnologiaService {
 
-    Page<TecnologiaDTO> findAll(String searchText, Integer size, Integer page);
+    Page<TecnologiaDTO> findAll(String searchText, Integer page, Integer size);
     
     List<TecnologiaDTO> findAll(String searchText);
 

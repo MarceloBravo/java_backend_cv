@@ -15,6 +15,8 @@ import com.mabc.back_cv.web.entities.User;
 import java.util.stream.Collectors;
 import java.util.List;
 
+import com.mabc.back_cv.common.Utils;
+
 /**
  * Implementación del servicio de usuario.
  * Proporciona la lógica de negocio para las operaciones CRUD de usuarios.
@@ -30,6 +32,9 @@ public class UsuariosServiceImpl implements UsuariosService {
 
     @Autowired
     private RolRepository rolRepository;
+    
+    @Autowired
+    private Utils utils;
 
     /**
      * Obtiene la lista de todos los usuarios aplicando un filtro opcional.
@@ -52,17 +57,9 @@ public class UsuariosServiceImpl implements UsuariosService {
      * @return Page de UsuarioDTO
      */
     @Override
-    public Page<UsuarioDTO> getAllUsuariosPage(String filter, Long page, Long size) {
-        page = page == null ? 0 : page;
-        size = size == null ? 10 : size;
-        filter = (filter == null || filter.isEmpty()) ? null : filter;
-        if (page < 0) {
-            page = 0L;
-        }
-        if (size <= 0) {
-            size = 10L;
-        }
-        Pageable pageable = PageRequest.of(page.intValue(), size.intValue());
+    public Page<UsuarioDTO> getAllUsuariosPage(String filter, Integer page, Integer size) {
+        filter = (filter == null || filter.isEmpty()) ? null : filter;        
+        Pageable pageable = utils.createPageable(page, size);
         Page<User> userPage = userRepository.findByFilter(filter, pageable);
         return userPage.map(user -> UsuarioUtils.userToDTO(user));
     }

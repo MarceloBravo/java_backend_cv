@@ -8,6 +8,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.mabc.back_cv.common.Utils;
+
 /**
  * Implementación del servicio de portafolio que maneja la lógica de negocio
  * relacionada con los portafolios de los usuarios.
@@ -18,6 +20,9 @@ public class PortafolioServiceImpl implements PortafolioService {
 
     @Autowired
     private PortafolioRepository portafolioRepository;
+    
+    @Autowired
+    private Utils utils;
 
     /**
      * Obtiene un portafolio por su ID.
@@ -47,7 +52,7 @@ public class PortafolioServiceImpl implements PortafolioService {
      */
     @Override
     public Page<PortafolioDTO> getPage(Long userId, String searchText, Integer page, Integer size) {
-        Pageable pageable = PortafolioUtils.createPageable(page, size);
+        Pageable pageable = utils.createPageable(page, size);
         return portafolioRepository.findBySearchText(userId, searchText, pageable).map(PortafolioUtils::convertToDTO);
     }
 

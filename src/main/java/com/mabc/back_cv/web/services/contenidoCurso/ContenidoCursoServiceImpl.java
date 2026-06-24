@@ -17,11 +17,17 @@ import org.modelmapper.ModelMapper;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.mabc.back_cv.common.Utils;
+
 @Service
 public class ContenidoCursoServiceImpl implements ContenidoCursoService{
 
     @Autowired
     private ContenidoCursoRepository repository;
+
+    @Autowired
+    private Utils utils;
+
     private ModelMapper modelMapper;
 
     public List<ContenidoCursoDTO> findAllList(String searchText, Boolean activo){
@@ -33,7 +39,7 @@ public class ContenidoCursoServiceImpl implements ContenidoCursoService{
     }
 
     public Page<ContenidoCursoDTO> findAllPage(String searchText, Integer page, Integer size, Boolean activo){
-        Pageable pageable = createPageable(page, size);
+        Pageable pageable = utils.createPageable(page, size);
         Page<ContenidoCurso> entities = this.repository.findAllPage(searchText, activo, pageable);
         return entities.map(entity -> modelMapper.map(entity, ContenidoCursoDTO.class));
     }
@@ -60,12 +66,6 @@ public class ContenidoCursoServiceImpl implements ContenidoCursoService{
             throw new IllegalArgumentException("Registro no encontrado o inexistente.");
         }
         repository.deleteById(id);
-    }
-
-    public static Pageable createPageable(Integer page, Integer size){
-        page = (page == null || page < 0) ? 0 : page;
-        size = (size == null || size < 1) ? 10 : size;
-        return PageRequest.of(page, size);
     }
 
 }
