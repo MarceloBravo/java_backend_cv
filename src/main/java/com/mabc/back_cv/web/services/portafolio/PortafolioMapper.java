@@ -18,23 +18,7 @@ import org.springframework.stereotype.Component;
  * - Convertir un DTO PortafolioDTO a una entidad Portafolio.
  */
 @Component
-public class PortafolioUtils {
-
-    /**
-     * Crea un objeto Pageable a partir de los parámetros de página y tamaño. Si los
-     * parámetros son null o inválidos, se asignan valores predeterminados (página 0
-     * y tamaño 10).
-     * 
-     * @param page número de página para la paginación (opcional).
-     * @param size tamaño de la página para la paginación (opcional).
-     * @return Pageable correspondiente a los parámetros proporcionados.
-     * @throws IllegalArgumentException si los parámetros son inválidos.
-     */
-    public static Pageable createPageable(Integer page, Integer size) {
-        page = (page == null || page < 0) ? 0 : page;
-        size = (size == null || size <= 0) ? 10 : size;
-        return PageRequest.of(page, size);
-    }
+public class PortafolioMapper {
 
     /**
      * Convierte una entidad Portafolio a un DTO PortafolioDTO.

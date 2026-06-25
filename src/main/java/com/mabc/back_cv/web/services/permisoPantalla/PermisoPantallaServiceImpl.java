@@ -56,7 +56,7 @@ public class PermisoPantallaServiceImpl implements PermisoPantallaService {
         List<PermisoPantalla[]> permisoPantalla = permisoPantallaRepository.findAllPermisosByRolId(id_rol);
         List<PermisoPantallaDTO> permisosDTO = permisoPantalla
                 .stream()
-                .map(pp -> PermisoPantallaUtil.mapToDTO(pp[0]))
+                .map(pp -> PermisoPantallaMapper.mapToDTO(pp[0]))
                 .toList();
 
         return permisosDTO;
@@ -85,7 +85,7 @@ public class PermisoPantallaServiceImpl implements PermisoPantallaService {
             return null;
         }
 
-        return PermisoPantallaUtil.mapToDTO(permisosPantalla.get(0));
+        return PermisoPantallaMapper.mapToDTO(permisosPantalla.get(0));
     }
 
     /**
@@ -125,7 +125,7 @@ public class PermisoPantallaServiceImpl implements PermisoPantallaService {
             throw new IllegalArgumentException("El rol o la pantalla no existen");
         }
 
-        PermisoPantalla permisoPantalla = PermisoPantallaUtil.mapToEntity(dto);
+        PermisoPantalla permisoPantalla = PermisoPantallaMapper.mapToEntity(dto);
         permisoPantallaRepository.save(permisoPantalla);
     }
 

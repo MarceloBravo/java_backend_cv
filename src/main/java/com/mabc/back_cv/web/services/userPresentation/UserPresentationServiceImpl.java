@@ -18,14 +18,12 @@ public class UserPresentationServiceImpl implements UserPresentationService{
     @Autowired
     private UserPresentationRepository userPresentationRepository;
     
-    @Autowired
-    private Utils utils;
 
     @Override
     public Page<UserPresentationDTO> getAll(String searchText, Long userId,Integer page, Integer size){
-        Pageable pageable = utils.createPageable(page, size);
+        Pageable pageable = Utils.createPageable(page, size);
         Page<UserPresentation> userPresentationPage = userPresentationRepository.findAll(searchText, userId, pageable);
-        Page<UserPresentationDTO> userPresentationDTOPage =userPresentationPage.map(userPresentation -> UserPresentationUtils.entityToDTO(userPresentation));
+        Page<UserPresentationDTO> userPresentationDTOPage =userPresentationPage.map(userPresentation -> UserPresentationMapper.entityToDTO(userPresentation));
         return userPresentationDTOPage == null ? Page.empty() : userPresentationDTOPage;
     }
 
@@ -35,17 +33,17 @@ public class UserPresentationServiceImpl implements UserPresentationService{
             return null;
         }
         UserPresentation entity = userPresentationRepository.findById(id).orElse(null);
-        return UserPresentationUtils.entityToDTO(entity);
+        return UserPresentationMapper.entityToDTO(entity);
     }
 
     @Override
     public UserPresentationDTO save(UserPresentationDTO userPresentation){
-        UserPresentation entity = UserPresentationUtils.dtoToEntity(userPresentation);
+        UserPresentation entity = UserPresentationMapper.dtoToEntity(userPresentation);
         if(entity == null){
             return null;
         }
         UserPresentation savedEntity = userPresentationRepository.save(entity);
-        return UserPresentationUtils.entityToDTO(savedEntity);   
+        return UserPresentationMapper.entityToDTO(savedEntity);   
     }
 
     @Override

@@ -13,25 +13,19 @@ import com.mabc.back_cv.web.entities.Trabajo;
 
 import org.springframework.data.domain.PageRequest;
 
-import com.mabc.back_cv.web.services.usuarios.UsuarioUtils;
+import com.mabc.back_cv.web.services.usuarios.UsuarioMapper;
 
 
 @Component
-public class TrabajoUtils{
-
-    public static Pageable createPageable(Integer page, Integer size){
-        page = (page == null || page < 0) ? 0 : page;
-        size = (size == null || size < 1) ? 10 : size;
-        return PageRequest.of(page, size);
-    }
-
+public class TrabajoMapper{
+    
     public static TrabajoDTO entityToDTO(Trabajo entity){
         if(entity == null){
             return null;
         }
         TrabajoDTO dto = new TrabajoDTO();
         dto.setId(entity.getId());
-        dto.setUser(UsuarioUtils.userToDTO(entity.getUser()));
+        dto.setUser(UsuarioMapper.userToDTO(entity.getUser()));
         dto.setCompany(entity.getCompany());
         dto.setPosition(entity.getPosition());
         dto.setDescription(entity.getDescription());
@@ -49,7 +43,7 @@ public class TrabajoUtils{
         if(dto.getId() != null){
             entity.setId(dto.getId());
         }
-        entity.setUser(UsuarioUtils.DTOToUser(dto.getUser()));
+        entity.setUser(UsuarioMapper.DTOToUser(dto.getUser()));
         entity.setCompany(dto.getCompany());
         entity.setPosition(dto.getPosition());
         entity.setDescription(dto.getDescription());

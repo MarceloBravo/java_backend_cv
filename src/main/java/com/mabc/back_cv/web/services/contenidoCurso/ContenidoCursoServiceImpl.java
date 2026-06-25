@@ -25,8 +25,6 @@ public class ContenidoCursoServiceImpl implements ContenidoCursoService{
     @Autowired
     private ContenidoCursoRepository repository;
 
-    @Autowired
-    private Utils utils;
 
     private ModelMapper modelMapper;
 
@@ -39,7 +37,7 @@ public class ContenidoCursoServiceImpl implements ContenidoCursoService{
     }
 
     public Page<ContenidoCursoDTO> findAllPage(String searchText, Integer page, Integer size, Boolean activo){
-        Pageable pageable = utils.createPageable(page, size);
+        Pageable pageable = Utils.createPageable(page, size);
         Page<ContenidoCurso> entities = this.repository.findAllPage(searchText, activo, pageable);
         return entities.map(entity -> modelMapper.map(entity, ContenidoCursoDTO.class));
     }

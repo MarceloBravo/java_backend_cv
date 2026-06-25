@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
  * @author mabc
  */
 @Component
-public class PresentacionUtils {
+public class PresentacionMapper {
 
     /**
      * Sanea el texto del párrafo eliminando espacios en blanco innecesarios.

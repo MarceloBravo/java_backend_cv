@@ -21,8 +21,6 @@ public class PortafolioServiceImpl implements PortafolioService {
     @Autowired
     private PortafolioRepository portafolioRepository;
     
-    @Autowired
-    private Utils utils;
 
     /**
      * Obtiene un portafolio por su ID.
@@ -36,7 +34,7 @@ public class PortafolioServiceImpl implements PortafolioService {
         if (id == null) {
             return null;
         }
-        return PortafolioUtils.convertToDTO(portafolioRepository.findById(id).orElse(null));
+        return PortafolioMapper.convertToDTO(portafolioRepository.findById(id).orElse(null));
     }
 
     /**
@@ -52,8 +50,8 @@ public class PortafolioServiceImpl implements PortafolioService {
      */
     @Override
     public Page<PortafolioDTO> getPage(Long userId, String searchText, Integer page, Integer size) {
-        Pageable pageable = utils.createPageable(page, size);
-        return portafolioRepository.findBySearchText(userId, searchText, pageable).map(PortafolioUtils::convertToDTO);
+        Pageable pageable = Utils.createPageable(page, size);
+        return portafolioRepository.findBySearchText(userId, searchText, pageable).map(PortafolioMapper::convertToDTO);
     }
 
     /**
@@ -67,7 +65,7 @@ public class PortafolioServiceImpl implements PortafolioService {
         if (userId == null) {
             return null;
         }
-        return PortafolioUtils.convertToDTO(portafolioRepository.findByUserId(userId));
+        return PortafolioMapper.convertToDTO(portafolioRepository.findByUserId(userId));
     }
 
     /**
@@ -80,12 +78,12 @@ public class PortafolioServiceImpl implements PortafolioService {
      */
     @Override
     public PortafolioDTO savePortafolio(PortafolioDTO portafolio) {
-        Portafolio portafolioEntity = PortafolioUtils.convertToEntity(portafolio);
+        Portafolio portafolioEntity = PortafolioMapper.convertToEntity(portafolio);
         if (portafolioEntity == null || portafolioEntity.getUser() == null) {
             throw new IllegalArgumentException("Datos no válidos para guardar el portafolio.");
         }
         Portafolio savedPortafolio = portafolioRepository.save(portafolioEntity);
-        return PortafolioUtils.convertToDTO(savedPortafolio);
+        return PortafolioMapper.convertToDTO(savedPortafolio);
     }
 
     /**

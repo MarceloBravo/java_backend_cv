@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
  * Proporciona métodos estáticos para convertir entre objetos PermisoPantalla
  * y PermisoPantallaDTO.
  */
-public class PermisoPantallaUtil {
+public class PermisoPantallaMapper {
 
     /**
      * Convierte una entidad PermisoPantalla a su DTO correspondiente.

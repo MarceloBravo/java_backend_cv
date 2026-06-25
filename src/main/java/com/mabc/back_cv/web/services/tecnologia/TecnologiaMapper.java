@@ -8,13 +8,7 @@ import com.mabc.back_cv.web.entities.Tecnologia;
 
 
 @Component
-public class TecnologiaUtils{
-
-    public static Pageable createPageable(Integer page, Integer size){
-        page = (page == null || page < 0) ? 0 : page;
-        size = (size == null || size < 1) ? 10 : size;
-        return Pageable.ofSize(size);
-    }
+public class TecnologiaMapper{
 
     public static TecnologiaDTO entityToDTO(Tecnologia entity){
         if(entity == null){

@@ -20,12 +20,10 @@ public class PantallaServiceImpl implements PantallaService {
 
     private final PantallaRepository pantallaRepository;
     private final ModelMapper modelMapper;
-    private final Utils utils;
 
-    public PantallaServiceImpl(PantallaRepository pantallaRepository, ModelMapper modelMapper, Utils utils) {
+    public PantallaServiceImpl(PantallaRepository pantallaRepository, ModelMapper modelMapper) {
         this.pantallaRepository = pantallaRepository;
         this.modelMapper = modelMapper;
-        this.utils = utils;
     }
 
     @Override
@@ -47,12 +45,9 @@ public class PantallaServiceImpl implements PantallaService {
         if (sortBy == null || sortBy.trim().isEmpty())
             sortBy = "id";
 
-        Pageable pageable = utils.createPageable(page, size, sortBy);        
+        Pageable pageable = Utils.createPageable(page, size, sortBy);        
         Page<Pantalla> pantallaPage = pantallaRepository.searchByNombrePantallaUrlArchivoOrMenu(terminoBuscado, estado,
                 pageable);
-        if(pantallaPage == null){
-            return Page.empty();
-        }
         Page<PantallaDTO> pantallaDTOPage = pantallaPage.map(p -> modelMapper.map(p, PantallaDTO.class));
         return pantallaDTOPage;
     }

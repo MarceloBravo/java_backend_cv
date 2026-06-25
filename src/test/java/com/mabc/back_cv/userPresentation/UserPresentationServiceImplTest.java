@@ -44,12 +44,10 @@ import org.junit.jupiter.api.DisplayName;
 import com.mabc.back_cv.web.repositories.UserPresentationRepository;
 import com.mabc.back_cv.web.entities.UserPresentation;
 import com.mabc.back_cv.web.entities.User;
-import com.mabc.back_cv.web.services.userPresentation.UserPresentationUtils;
+import com.mabc.back_cv.web.services.userPresentation.UserPresentationMapper;
 import com.mabc.back_cv.web.services.userPresentation.UserPresentationServiceImpl;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
-
-import com.mabc.back_cv.common.Utils;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("UserPresentationServiceImpl Test")
@@ -59,10 +57,7 @@ public class UserPresentationServiceImplTest{
     private UserPresentationRepository userPresentationRepository;
 
     @Mock
-    private UserPresentationUtils userPresentationUtils;
-
-    @Mock
-    private Utils utils;
+    private UserPresentationMapper UserPresentationMapper;
 
     @InjectMocks
     private UserPresentationServiceImpl userPresentationServiceImpl;
@@ -113,7 +108,6 @@ public class UserPresentationServiceImplTest{
     @Test
     void obtieneTodosLosUserPresentation_conParametrosValidos_retornaPageable() throws Exception {
         userPresentationDTO.setUser(usuarioDTO);
-        when(utils.createPageable(0, 10)).thenReturn(pageable);
         Page<UserPresentation> userPresentationPage = new PageImpl<>(List.of(userPresentation), pageable, 1);
 
         when(userPresentationRepository.findAll("párrafo", 1L, pageable)).thenReturn(userPresentationPage);
@@ -132,7 +126,6 @@ public class UserPresentationServiceImplTest{
     
     @Test
     void obtieneUnaListaVaciaDeUserPresentation_conParametrosValidos_retornaPageableVacia() throws Exception {
-        when(utils.createPageable(0, 10)).thenReturn(pageable);
         Page<UserPresentation> userPresentationPage = new PageImpl<>(List.of(), pageable, 0);
 
         when(userPresentationRepository.findAll("párrafo", 1L, pageable)).thenReturn(userPresentationPage);
@@ -152,7 +145,6 @@ public class UserPresentationServiceImplTest{
 
     @Test
     void getAll_cuandouserPresentationDTOPageEsNull_retornaPageEmpty() {
-        when(utils.createPageable(null, 10)).thenReturn(pageable);
         
         Page<UserPresentation> userPresentationPageMock = mock(Page.class);
         

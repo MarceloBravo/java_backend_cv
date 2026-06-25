@@ -6,16 +6,10 @@ import org.springframework.data.domain.PageRequest;
 
 import com.mabc.back_cv.web.entities.Educacion;
 import com.mabc.back_cv.web.dto.EducacionDTO;
-import com.mabc.back_cv.web.services.usuarios.UsuarioUtils;
+import com.mabc.back_cv.web.services.usuarios.UsuarioMapper;
 
 @Component
-public class EducacionUtils{
-
-    public static Pageable createPageable(Integer page, Integer size){
-        page = (page == null || page < 0) ? 0 : page;
-        size = (size == null || size < 1) ? 10 : size;
-        return PageRequest.of(page, size);
-    }
+public class EducacionMapper{
 
     public static EducacionDTO entityToDTO(Educacion educacion){
         if(educacion == null){
@@ -34,7 +28,7 @@ public class EducacionUtils{
         educacionDTO.setImage(educacion.getImage());
         educacionDTO.setUrl(educacion.getUrl());
         educacionDTO.setStyles(educacion.getStyles());
-        educacionDTO.setUsuario(UsuarioUtils.userToDTO(educacion.getUsuario()));
+        educacionDTO.setUsuario(UsuarioMapper.userToDTO(educacion.getUsuario()));
         return educacionDTO;
     }
 
@@ -57,7 +51,7 @@ public class EducacionUtils{
         educacion.setImage(educacionDTO.getImage());
         educacion.setUrl(educacionDTO.getUrl());
         educacion.setStyles(educacionDTO.getStyles());
-        educacion.setUsuario(UsuarioUtils.DTOToUser(educacionDTO.getUsuario()));
+        educacion.setUsuario(UsuarioMapper.DTOToUser(educacionDTO.getUsuario()));
         return educacion;
     }
 }

@@ -13,7 +13,7 @@ import com.mabc.back_cv.web.repositories.TecnologiaRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.mabc.back_cv.web.services.tecnologia.TecnologiaUtils;
+import com.mabc.back_cv.web.services.tecnologia.TecnologiaMapper;
 
 import com.mabc.back_cv.common.Utils;
 
@@ -24,16 +24,14 @@ public class TecnologiaServiceImpl implements TecnologiaService{
     @Autowired
     private TecnologiaRepository repository;
 
-    @Autowired
-    private Utils utils;
 
     public Page<TecnologiaDTO> findAll(String searchText, Integer page, Integer size){
-        Pageable pageable = utils.createPageable(page, size);
+        Pageable pageable = Utils.createPageable(page, size);
         if(searchText == null){
             searchText = "";
         }
         Page<Tecnologia> pageTecnologia = repository.findAllPage(searchText, pageable);
-        return pageTecnologia.map(TecnologiaUtils::entityToDTO);
+        return pageTecnologia.map(TecnologiaMapper::entityToDTO);
     }
     
     public List<TecnologiaDTO> findAll(String searchText){
@@ -43,7 +41,7 @@ public class TecnologiaServiceImpl implements TecnologiaService{
         List<Tecnologia> listTecnologia = repository.findAllList(searchText);
         return listTecnologia
                 .stream()
-                .map(TecnologiaUtils::entityToDTO)
+                .map(TecnologiaMapper::entityToDTO)
                 .collect(Collectors.toList());
     }
 
@@ -52,16 +50,16 @@ public class TecnologiaServiceImpl implements TecnologiaService{
             return null;
         }
         Tecnologia entity = repository.findById(id).orElse(null);
-        return TecnologiaUtils.entityToDTO(entity); 
+        return TecnologiaMapper.entityToDTO(entity); 
     }
 
     public TecnologiaDTO save(TecnologiaDTO tecnologiaDTO){
-        Tecnologia entity = TecnologiaUtils.dtoToEntity(tecnologiaDTO);
+        Tecnologia entity = TecnologiaMapper.dtoToEntity(tecnologiaDTO);
         if(tecnologiaDTO == null){
             throw new IllegalArgumentException("Datos no válidos para guardar el registro.");
         }
         entity = repository.save(entity);
-        return TecnologiaUtils.entityToDTO(entity); 
+        return TecnologiaMapper.entityToDTO(entity); 
     }
 
     public void deleteById(Long id){

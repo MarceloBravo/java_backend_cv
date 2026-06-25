@@ -33,8 +33,6 @@ public class UsuariosServiceImpl implements UsuariosService {
     @Autowired
     private RolRepository rolRepository;
     
-    @Autowired
-    private Utils utils;
 
     /**
      * Obtiene la lista de todos los usuarios aplicando un filtro opcional.
@@ -45,7 +43,7 @@ public class UsuariosServiceImpl implements UsuariosService {
     @Override
     public List<UsuarioDTO> getAllUsuarios(String filter) {
         List<User> userList = userRepository.findAllFilteres(filter, true);
-        return userList.stream().map(user -> UsuarioUtils.userToDTO(user)).collect(Collectors.toList());
+        return userList.stream().map(user -> UsuarioMapper.userToDTO(user)).collect(Collectors.toList());
     }
 
     /**
@@ -59,9 +57,9 @@ public class UsuariosServiceImpl implements UsuariosService {
     @Override
     public Page<UsuarioDTO> getAllUsuariosPage(String filter, Integer page, Integer size) {
         filter = (filter == null || filter.isEmpty()) ? null : filter;        
-        Pageable pageable = utils.createPageable(page, size);
+        Pageable pageable = Utils.createPageable(page, size);
         Page<User> userPage = userRepository.findByFilter(filter, pageable);
-        return userPage.map(user -> UsuarioUtils.userToDTO(user));
+        return userPage.map(user -> UsuarioMapper.userToDTO(user));
     }
 
     /**
@@ -75,7 +73,7 @@ public class UsuariosServiceImpl implements UsuariosService {
         if (id == null) {
             return null;
         }
-        return userRepository.findById(id).map(user -> UsuarioUtils.userToDTO(user)).orElse(null);
+        return userRepository.findById(id).map(user -> UsuarioMapper.userToDTO(user)).orElse(null);
     }
 
     /**
@@ -91,12 +89,12 @@ public class UsuariosServiceImpl implements UsuariosService {
         if (usuarioDTO.getRol().getId() != null && rolRepository.findById(usuarioDTO.getRol().getId()).isEmpty()) {
             throw new RuntimeException("Rol no encontrado");
         }
-        User user = UsuarioUtils.DTOToUser(usuarioDTO);
+        User user = UsuarioMapper.DTOToUser(usuarioDTO);
         if (user.getId() != null) {
             throw new RuntimeException("Error: El usuario no existe.");
         }
         User userSaved = userRepository.save(user);
-        return UsuarioUtils.userToDTO(userSaved);
+        return UsuarioMapper.userToDTO(userSaved);
     }
 
     /**

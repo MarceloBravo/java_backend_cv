@@ -36,8 +36,6 @@ import com.mabc.back_cv.web.services.pantalla.PantallaServiceImpl;
 
 import org.modelmapper.ModelMapper;
 
-import com.mabc.back_cv.common.Utils;
-
 import org.springframework.data.domain.Sort;
 
 
@@ -50,10 +48,6 @@ public class PantallaServiceImplTest {
 
     @Mock
     private ModelMapper modelMapper;
-
-    @Mock
-    private Utils utils;
-
 
     @InjectMocks
     private PantallaServiceImpl pantallaService;
@@ -119,7 +113,6 @@ public class PantallaServiceImplTest {
             new Pantalla(2L, "Pantalla 2",  menu, true, true, true, true, true, true)
         );
         createPageable(0, 10, "id");
-        when(utils.createPageable(0, 10, "id")).thenReturn(pageable);
         Page<Pantalla> pageResult = new PageImpl<>(pantallasMock, pageable, 2);
         when(pantallaRepository.searchByNombrePantallaUrlArchivoOrMenu("Pantalla", true, pageable))
             .thenReturn(pageResult);
@@ -142,8 +135,7 @@ public class PantallaServiceImplTest {
     @DisplayName("Debe retornar una página vacía al no encontrar pantallas con los criterios de búsqueda")
     public void testSearchPantallasVacio() {
         // Configurar el comportamiento del mock del repositorio
-        createPageable(0, 10, "id");
-        when(utils.createPageable(0, 10, "nombre")).thenReturn(pageable);
+        createPageable(0, 10, "nombre");
         Page<Pantalla> pageResult = new PageImpl<>(new ArrayList<>(), pageable, 0);
         when(pantallaRepository.searchByNombrePantallaUrlArchivoOrMenu("NoExiste", true, pageable))
             .thenReturn(pageResult);
@@ -182,7 +174,6 @@ public class PantallaServiceImplTest {
             new Pantalla(2L, "Pantalla 2",  menu, true, true, true, true, true, true)
         );
         createPageable(0, 10, "id");
-        when(utils.createPageable(null, null, "id")).thenReturn(pageable);
         Page<Pantalla> pageResult = new PageImpl<>(pantallasMock, pageable, 2);
         when(pantallaRepository.searchByNombrePantallaUrlArchivoOrMenu("Pantalla", true, pageable))
             .thenReturn(pageResult);
@@ -198,21 +189,18 @@ public class PantallaServiceImplTest {
         assertEquals(2, resultado1.getContent().size());
         assertEquals("Pantalla 1", resultado1.getContent().get(0).getNombre());
 
-        when(utils.createPageable(null, 10, "id")).thenReturn(pageable);
         Page<PantallaDTO> resultado2 = pantallaService.searchPantallas("Pantalla", true, null, 10, "");
 
         // Verificar el resultado
         assertEquals(2, resultado2.getContent().size());
         assertEquals("Pantalla 1", resultado2.getContent().get(0).getNombre());
 
-        when(utils.createPageable(-10, 0, "id")).thenReturn(pageable);
         Page<PantallaDTO> resultado3 = pantallaService.searchPantallas("Pantalla", true, -10, 0, "");
 
         // Verificar el resultado
         assertEquals(2, resultado3.getContent().size());
         assertEquals("Pantalla 1", resultado3.getContent().get(0).getNombre());
 
-        when(utils.createPageable(0, null, "id")).thenReturn(pageable);
         Page<PantallaDTO> resultado4 = pantallaService.searchPantallas("Pantalla", true, 0, null, "   ");
 
         // Verificar el resultado
@@ -229,7 +217,6 @@ public class PantallaServiceImplTest {
             new Pantalla(2L, "Pantalla 2",  menu, true, true, true, true, true, true)
         );
         createPageable(0, 10, "id");
-        when(utils.createPageable(0, 10, "id")).thenReturn(pageable);
         Page<Pantalla> pageResult = new PageImpl<>(pantallasMock);
         when(pantallaRepository.searchByNombrePantallaUrlArchivoOrMenu("Pantalla", true, pageable))
             .thenReturn(pageResult);
@@ -256,7 +243,6 @@ public class PantallaServiceImplTest {
             new Pantalla(2L, "Pantalla 2",  menu, true, true, true, true, true, true)
         );
         createPageable(0, 10, "id");
-        when(utils.createPageable(0, 10, "id")).thenReturn(pageable);
         Page<Pantalla> pageResult = new PageImpl<>(pantallasMock);
         when(pantallaRepository.searchByNombrePantallaUrlArchivoOrMenu("Pantalla", true, pageable))
             .thenReturn(pageResult);

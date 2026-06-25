@@ -4,7 +4,7 @@ import com.mabc.back_cv.web.dto.TrabajoDTO;
 import com.mabc.back_cv.web.entities.Trabajo;
 import com.mabc.back_cv.web.repositories.TrabajoRepository;
 import com.mabc.back_cv.web.services.trabajo.TrabajoServiceImpl;
-import com.mabc.back_cv.web.services.trabajo.TrabajoUtils;
+import com.mabc.back_cv.web.services.trabajo.TrabajoMapper;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -39,16 +39,11 @@ import com.mabc.back_cv.web.dto.UsuarioDTO;
 import com.mabc.back_cv.web.entities.Trabajo;
 import com.mabc.back_cv.web.entities.User;
 
-import com.mabc.back_cv.common.Utils;
-
 @ExtendWith(MockitoExtension.class)
 public class TrabajoServiceImplTest{
 
     @Mock
     private TrabajoRepository repository;
-
-    @Mock
-    private Utils utils;
 
     @InjectMocks
     private TrabajoServiceImpl service;
@@ -172,7 +167,6 @@ public class TrabajoServiceImplTest{
     @Test
     @DisplayName("Obtiene una página de los trabajos con éxito con todos los parámetros correctos")
     void getPageOfTrabajos_whitParameters_returnPageOfTrabajos(){
-        when(utils.createPageable(0, 10)).thenReturn(pageable);
         when(repository.findAllPage(1L, "trabajo", pageable)).thenReturn(new PageImpl<>(Arrays.asList(trabajo1, trabajo2), pageable, 2));
 
         Page<TrabajoDTO> result = service.getAll(1L, "trabajo", 0, 10);
@@ -187,7 +181,6 @@ public class TrabajoServiceImplTest{
     @Test
     @DisplayName("Obtiene una pagina de los trabajos con éxito con el parámetro searchText nulo")
     void getPageOfTrabajos_whitNullSearchTextParameters_returnPageOfTrabajos(){
-        when(utils.createPageable(0, 10)).thenReturn(pageable);
         when(repository.findAllPage(1L, "", pageable)).thenReturn(new PageImpl<>(Arrays.asList(trabajo1, trabajo2), pageable, 2));
 
         Page<TrabajoDTO> result = service.getAll(1L, null, 0, 10);
@@ -202,7 +195,6 @@ public class TrabajoServiceImplTest{
     @Test
     @DisplayName("Obtiene una lista de los trabajos con éxito con todos los parámetro nulos")
     void getPageOfTrabajos_whitNullParameters_returnPageOfTrabajos(){
-        when(utils.createPageable(null, null)).thenReturn(pageable);
         when(repository.findAllPage(null, "", pageable)).thenReturn(new PageImpl<>(Arrays.asList(trabajo1, trabajo2), pageable, 2));
 
         Page<TrabajoDTO> result = service.getAll(null, null, null, null);
@@ -217,7 +209,6 @@ public class TrabajoServiceImplTest{
     @Test
     @DisplayName("Obtiene una lista de los trabajos con éxito con el parámetro size nulo")
     void getPageOfTrabajos_whitSizeParamIsNull_returnPageOfTrabajos(){
-        when(utils.createPageable(0, null)).thenReturn(pageable);
         when(repository.findAllPage(1L, "trabajo", pageable)).thenReturn(new PageImpl<>(Arrays.asList(trabajo1, trabajo2), pageable, 2));
 
         Page<TrabajoDTO> result = service.getAll(1L, "trabajo", 0, null);
@@ -232,7 +223,6 @@ public class TrabajoServiceImplTest{
     @Test
     @DisplayName("Obtiene una lista de los trabajos con éxito con el parámetro page nulo")
     void getPageOfTrabajos_whitPageParamIsNull_returnPageOfTrabajos(){
-        when(utils.createPageable(null, 10)).thenReturn(pageable);
         when(repository.findAllPage(1L, "trabajo", pageable)).thenReturn(new PageImpl<>(Arrays.asList(trabajo1, trabajo2), pageable, 2));
 
         Page<TrabajoDTO> result = service.getAll(1L, "trabajo", null, 10);
@@ -248,7 +238,6 @@ public class TrabajoServiceImplTest{
     @Test
     @DisplayName("Obtiene una lista de los trabajos con éxito con los parámetros page y size nulos")
     void getPageOfTrabajos_whitPageAndSizeParamsAreNull_returnPageOfTrabajos(){
-        when(utils.createPageable(null, null)).thenReturn(pageable);
         when(repository.findAllPage(1L, "trabajo", pageable)).thenReturn(new PageImpl<>(Arrays.asList(trabajo1, trabajo2), pageable, 2));
 
         Page<TrabajoDTO> result = service.getAll(1L, "trabajo", null, null);
@@ -263,7 +252,6 @@ public class TrabajoServiceImplTest{
     @Test
     @DisplayName("Obtiene una página vaia de los trabajos con éxito con todos los parámetros correctos")
     void getPageOfTrabajos_whitParameters_returnEmptyPageOfTrabajos(){
-        when(utils.createPageable(0, 10)).thenReturn(pageable);
         when(repository.findAllPage(1L, "trabajo", pageable)).thenReturn(new PageImpl<>(Arrays.asList(), pageable, 0));
 
         Page<TrabajoDTO> result = service.getAll(1L, "trabajo", 0, 10);

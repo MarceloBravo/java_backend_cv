@@ -4,11 +4,11 @@ import com.mabc.back_cv.web.dto.PresentacionDTO;
 import com.mabc.back_cv.web.entities.Presentacion;
 import org.junit.jupiter.api.Test;
 
-import static com.mabc.back_cv.web.services.presentacion.PresentacionUtils.dtoToEntity;
-import static com.mabc.back_cv.web.services.presentacion.PresentacionUtils.entityToDTO;
+import static com.mabc.back_cv.web.services.presentacion.PresentacionMapper.dtoToEntity;
+import static com.mabc.back_cv.web.services.presentacion.PresentacionMapper.entityToDTO;
 import static org.junit.jupiter.api.Assertions.*;
 
-class PresentacionUtilsTest {
+class PresentacionMapperTest {
 
     @Test
     void entityToDTO_WithValidEntity_ReturnsDTO() {

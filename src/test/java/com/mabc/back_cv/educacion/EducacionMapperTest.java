@@ -3,7 +3,7 @@ package com.mabc.back_cv.educacion;
 import com.mabc.back_cv.web.dto.EducacionDTO;
 import com.mabc.back_cv.web.dto.UsuarioDTO;
 import com.mabc.back_cv.web.entities.Educacion;
-import com.mabc.back_cv.web.services.educacion.EducacionUtils;
+import com.mabc.back_cv.web.services.educacion.EducacionMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.PageRequest;
@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import com.mabc.back_cv.web.entities.User;
 import com.mabc.back_cv.web.entities.Rol;
 
-class EducacionUtilsTest {
+class EducacionMapperTest {
 
     private Educacion educacion;
     private EducacionDTO educacionDTO;
@@ -82,85 +82,11 @@ class EducacionUtilsTest {
         educacionDTO.setUsuario(usuario);
     }
 
-    // Tests para createPageable
-
-    @Test
-    void createPageable_conParametrosValidos_retornaPageableCorrecto() {
-        Pageable pageable = EducacionUtils.createPageable(0, 10);
-        
-        assertNotNull(pageable);
-        assertEquals(0, pageable.getPageNumber());
-        assertEquals(10, pageable.getPageSize());
-    }
-
-    @Test
-    void createPageable_conPageNull_retornaPageDefault() {
-        Pageable pageable = EducacionUtils.createPageable(null, 10);
-        
-        assertNotNull(pageable);
-        assertEquals(0, pageable.getPageNumber());
-        assertEquals(10, pageable.getPageSize());
-    }
-
-    @Test
-    void createPageable_conPageNegativo_retornaPageDefault() {
-        Pageable pageable = EducacionUtils.createPageable(-5, 10);
-        
-        assertNotNull(pageable);
-        assertEquals(0, pageable.getPageNumber());
-        assertEquals(10, pageable.getPageSize());
-    }
-
-    @Test
-    void createPageable_conSizeNull_retornaSizeDefault() {
-        Pageable pageable = EducacionUtils.createPageable(0, null);
-        
-        assertNotNull(pageable);
-        assertEquals(0, pageable.getPageNumber());
-        assertEquals(10, pageable.getPageSize());
-    }
-
-    @Test
-    void createPageable_conSizeCero_retornaSizeDefault() {
-        Pageable pageable = EducacionUtils.createPageable(0, 0);
-        
-        assertNotNull(pageable);
-        assertEquals(0, pageable.getPageNumber());
-        assertEquals(10, pageable.getPageSize());
-    }
-
-    @Test
-    void createPageable_conSizeNegativo_retornaSizeDefault() {
-        Pageable pageable = EducacionUtils.createPageable(0, -5);
-        
-        assertNotNull(pageable);
-        assertEquals(0, pageable.getPageNumber());
-        assertEquals(10, pageable.getPageSize());
-    }
-
-    @Test
-    void createPageable_conAmbosParametrosNull_retornaDefaults() {
-        Pageable pageable = EducacionUtils.createPageable(null, null);
-        
-        assertNotNull(pageable);
-        assertEquals(0, pageable.getPageNumber());
-        assertEquals(10, pageable.getPageSize());
-    }
-
-    @Test
-    void createPageable_conPageMayorAZero_retornaPageCorrecto() {
-        Pageable pageable = EducacionUtils.createPageable(5, 20);
-        
-        assertNotNull(pageable);
-        assertEquals(5, pageable.getPageNumber());
-        assertEquals(20, pageable.getPageSize());
-    }
-
     // Tests para entityToDTO
 
     @Test
     void entityToDTO_conEducacionValida_retornaDTOCorrecto() {
-        EducacionDTO resultado = EducacionUtils.entityToDTO(educacion);
+        EducacionDTO resultado = EducacionMapper.entityToDTO(educacion);
         
         assertNotNull(resultado);
         assertEquals(educacion.getId(), resultado.getId());
@@ -181,7 +107,7 @@ class EducacionUtilsTest {
 
     @Test
     void entityToDTO_conEducacionNull_retornaNull() {
-        EducacionDTO resultado = EducacionUtils.entityToDTO(null);
+        EducacionDTO resultado = EducacionMapper.entityToDTO(null);
         
         assertNull(resultado);
     }
@@ -195,7 +121,7 @@ class EducacionUtilsTest {
         educacion.setUrl(null);
         educacion.setStyles(null);
         
-        EducacionDTO resultado = EducacionUtils.entityToDTO(educacion);
+        EducacionDTO resultado = EducacionMapper.entityToDTO(educacion);
         
         assertNotNull(resultado);
         assertNull(resultado.getInstitution());
@@ -210,7 +136,7 @@ class EducacionUtilsTest {
 
     @Test
     void dtoToEntity_conDTOValido_retornaEntityCorrecto() {
-        Educacion resultado = EducacionUtils.dtoToEntity(educacionDTO);
+        Educacion resultado = EducacionMapper.dtoToEntity(educacionDTO);
         
         assertNotNull(resultado);
         assertEquals(educacionDTO.getId(), resultado.getId());
@@ -231,7 +157,7 @@ class EducacionUtilsTest {
 
     @Test
     void dtoToEntity_conDTONull_retornaNull() {
-        Educacion resultado = EducacionUtils.dtoToEntity(null);
+        Educacion resultado = EducacionMapper.dtoToEntity(null);
         
         assertNull(resultado);
     }
@@ -240,7 +166,7 @@ class EducacionUtilsTest {
     void dtoToEntity_conDTOConIdNull_retornaEntitySinId() {
         educacionDTO.setId(null);
         
-        Educacion resultado = EducacionUtils.dtoToEntity(educacionDTO);
+        Educacion resultado = EducacionMapper.dtoToEntity(educacionDTO);
         
         assertNotNull(resultado);
         assertNull(resultado.getId());
@@ -255,7 +181,7 @@ class EducacionUtilsTest {
         educacionDTO.setUrl(null);
         educacionDTO.setStyles(null);
         
-        Educacion resultado = EducacionUtils.dtoToEntity(educacionDTO);
+        Educacion resultado = EducacionMapper.dtoToEntity(educacionDTO);
         
         assertNotNull(resultado);
         assertNull(resultado.getInstitution());
@@ -270,7 +196,7 @@ class EducacionUtilsTest {
     void dtoToEntity_conDTOConIdNoNull_retornaEntityConId() {
         educacionDTO.setId(5L);
         
-        Educacion resultado = EducacionUtils.dtoToEntity(educacionDTO);
+        Educacion resultado = EducacionMapper.dtoToEntity(educacionDTO);
         
         assertNotNull(resultado);
         assertEquals(5L, resultado.getId());

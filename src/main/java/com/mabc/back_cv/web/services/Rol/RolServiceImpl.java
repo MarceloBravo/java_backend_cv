@@ -15,14 +15,12 @@ import com.mabc.back_cv.common.Utils;
 
 @Service
 public class RolServiceImpl implements RolService {
-    private Utils utils;
     private final RolRepository rolRepository;
-    private final RolUtils rolUtils;
+    private final RolMapper RolMapper;
 
-    public RolServiceImpl(RolRepository rolRepository, RolUtils rolUtils, Utils utils) {
+    public RolServiceImpl(RolRepository rolRepository, RolMapper RolMapper) {
         this.rolRepository = rolRepository;
-        this.rolUtils = rolUtils;
-        this.utils = utils;
+        this.RolMapper = RolMapper;
     }
 
     @Override
@@ -35,7 +33,7 @@ public class RolServiceImpl implements RolService {
 
     @Override
     public Page<RolDTO> searchBy(String nombre, Boolean activo, int page, int rows) {
-        Pageable pageable = utils.createPageable(page, rows);
+        Pageable pageable = Utils.createPageable(page, rows);
         Page<Rol> rolPage;
 
         if (nombre == null || nombre.trim().isEmpty()) {
@@ -44,7 +42,7 @@ public class RolServiceImpl implements RolService {
             rolPage = rolRepository.searchByNombreAndEstado(nombre, activo, pageable);
         }
 
-        return rolPage.map(rol -> rolUtils.mapToRolDTO(rol));
+        return rolPage.map(rol -> RolMapper.mapToRolDTO(rol));
     }
 
     @Override
@@ -57,25 +55,25 @@ public class RolServiceImpl implements RolService {
 
     @Override
     public Page<RolDTO> getAll(int page, int rows) {
-        Pageable pageable = utils.createPageable(page, rows);
+        Pageable pageable = Utils.createPageable(page, rows);
         Page<Rol> rolPage = rolRepository.findAll(pageable);
-        return rolPage.map(rol -> rolUtils.mapToRolDTO(rol));
+        return rolPage.map(rol -> RolMapper.mapToRolDTO(rol));
     }
 
     @Override
     public List<RolDTO> getActiveRoles() {
         List<Rol> rolPage = rolRepository.findByActiveState();
-        return rolPage.stream().map(rol -> rolUtils.mapToRolDTO(rol)).collect(Collectors.toList());
+        return rolPage.stream().map(rol -> RolMapper.mapToRolDTO(rol)).collect(Collectors.toList());
     }
 
     @Override
     public RolDTO save(RolDTO rolDto) {
-        Rol rol = rolUtils.mapToRol(rolDto);
+        Rol rol = RolMapper.mapToRol(rolDto);
         if (rol == null) {
             return null;
         }
         Rol savedRol = rolRepository.save(rol);
-        return rolUtils.mapToRolDTO(savedRol);
+        return RolMapper.mapToRolDTO(savedRol);
     }
 
     @Override

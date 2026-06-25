@@ -2,7 +2,7 @@ package com.mabc.back_cv.Rol;
 
 import com.mabc.back_cv.web.dto.RolDTO;
 import com.mabc.back_cv.web.entities.Rol;
-import com.mabc.back_cv.web.services.Rol.RolUtils;
+import com.mabc.back_cv.web.services.Rol.RolMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.Pageable;
@@ -10,57 +10,17 @@ import org.springframework.data.domain.Pageable;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Pruebas unitarias para la clase utilitaria {@link RolUtils}.
+ * Pruebas unitarias para la clase utilitaria {@link RolMapper}.
  * Verifica la creación de paginación y los mapeos entre {@link RolDTO}
  * y la entidad {@link Rol} en ambas direcciones.
  */
-class RolUtilsTest {
+class RolMapperTest {
 
-    private RolUtils rolUtils;
+    private RolMapper RolMapper;
 
     @BeforeEach
     void setUp() {
-        rolUtils = new RolUtils();
-    }
-
-    // -------------------------------------------------------------------------
-    // createPageable
-    // -------------------------------------------------------------------------
-
-    @Test
-    void createPageable_ValidParams_ShouldReturnPageable() {
-        Pageable pageable = rolUtils.createPageable(2, 5);
-
-        assertNotNull(pageable);
-        assertEquals(2, pageable.getPageNumber());
-        assertEquals(5, pageable.getPageSize());
-    }
-
-    @Test
-    void createPageable_NegativePage_ShouldDefaultToZero() {
-        Pageable pageable = rolUtils.createPageable(-1, 10);
-
-        assertNotNull(pageable);
-        assertEquals(0, pageable.getPageNumber());
-        assertEquals(10, pageable.getPageSize());
-    }
-
-    @Test
-    void createPageable_ZeroRows_ShouldDefaultToTen() {
-        Pageable pageable = rolUtils.createPageable(0, 0);
-
-        assertNotNull(pageable);
-        assertEquals(0, pageable.getPageNumber());
-        assertEquals(10, pageable.getPageSize());
-    }
-
-    @Test
-    void createPageable_NegativeRows_ShouldDefaultToTen() {
-        Pageable pageable = rolUtils.createPageable(1, -5);
-
-        assertNotNull(pageable);
-        assertEquals(1, pageable.getPageNumber());
-        assertEquals(10, pageable.getPageSize());
+        RolMapper = new RolMapper();
     }
 
     // -------------------------------------------------------------------------
@@ -71,7 +31,7 @@ class RolUtilsTest {
     void mapToRol_ValidDTO_ShouldMapAllFields() {
         RolDTO dto = new RolDTO(1L, "ADMIN", true);
 
-        Rol rol = rolUtils.mapToRol(dto);
+        Rol rol = RolMapper.mapToRol(dto);
 
         assertNotNull(rol);
         assertEquals(1L, rol.getId());
@@ -81,7 +41,7 @@ class RolUtilsTest {
 
     @Test
     void mapToRol_NullDTO_ShouldReturnNull() {
-        Rol rol = rolUtils.mapToRol(null);
+        Rol rol = RolMapper.mapToRol(null);
 
         assertNull(rol);
     }
@@ -90,7 +50,7 @@ class RolUtilsTest {
     void mapToRol_NullNombre_ShouldReturnNull() {
         RolDTO dto = new RolDTO(1L, null, true);
 
-        Rol rol = rolUtils.mapToRol(dto);
+        Rol rol = RolMapper.mapToRol(dto);
 
         assertNull(rol);
     }
@@ -99,7 +59,7 @@ class RolUtilsTest {
     void mapToRol_EmptyNombre_ShouldReturnNull() {
         RolDTO dto = new RolDTO(1L, "", true);
 
-        Rol rol = rolUtils.mapToRol(dto);
+        Rol rol = RolMapper.mapToRol(dto);
 
         assertNull(rol);
     }
@@ -112,7 +72,7 @@ class RolUtilsTest {
     void mapToRolDTO_ValidRol_ShouldMapAllFields() {
         Rol rol = new Rol(1L, "USER", true, null);
 
-        RolDTO dto = rolUtils.mapToRolDTO(rol);
+        RolDTO dto = RolMapper.mapToRolDTO(rol);
 
         assertNotNull(dto);
         assertEquals(1L, dto.getId());
@@ -124,7 +84,7 @@ class RolUtilsTest {
     void mapToRolDTO_InactiveRol_ShouldMapActivoAsFalse() {
         Rol rol = new Rol(2L, "VIEWER", false, null);
 
-        RolDTO dto = rolUtils.mapToRolDTO(rol);
+        RolDTO dto = RolMapper.mapToRolDTO(rol);
 
         assertNotNull(dto);
         assertEquals(2L, dto.getId());

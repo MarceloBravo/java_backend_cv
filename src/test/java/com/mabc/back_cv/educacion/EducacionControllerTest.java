@@ -7,7 +7,7 @@ import com.mabc.back_cv.web.dto.EducacionDTO;
 import com.mabc.back_cv.web.entities.Rol;
 import com.mabc.back_cv.web.entities.User;
 import com.mabc.back_cv.web.services.educacion.EducacionService;
-import com.mabc.back_cv.web.services.usuarios.UsuarioUtils;
+import com.mabc.back_cv.web.services.usuarios.UsuarioMapper;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -394,7 +394,7 @@ class EducacionControllerTest {
         educacionGuardada.setYearFrom(2018);
         educacionGuardada.setYearTo(2023);
         educacionGuardada.setDuration(10);
-        educacionGuardada.setUsuario(UsuarioUtils.userToDTO(usuario));
+        educacionGuardada.setUsuario(UsuarioMapper.userToDTO(usuario));
 
         when(educacionService.save(any(EducacionDTO.class))).thenReturn(educacionGuardada);
 
@@ -410,7 +410,7 @@ class EducacionControllerTest {
         EducacionDTO dtoIncompleto = new EducacionDTO();
         dtoIncompleto.setInstitution(null);
         dtoIncompleto.setTitle(null);
-        dtoIncompleto.setUsuario(UsuarioUtils.userToDTO(usuario));
+        dtoIncompleto.setUsuario(UsuarioMapper.userToDTO(usuario));
 
         when(educacionService.save(any(EducacionDTO.class)))
                 .thenThrow(new IllegalArgumentException("Datos inválidos."));

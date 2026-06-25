@@ -26,8 +26,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
-import com.mabc.back_cv.common.Utils;
-
 @ExtendWith(MockitoExtension.class)
 @DisplayName("Pruebas unitarias de UsuariosServiceImpl")
 class UsuariosServiceImplTest {
@@ -37,9 +35,6 @@ class UsuariosServiceImplTest {
 
     @Mock
     private RolRepository rolRepository;
-
-    @Mock
-    private Utils utils;
 
     @InjectMocks
     private UsuariosServiceImpl service;
@@ -141,7 +136,6 @@ class UsuariosServiceImplTest {
         @Test
         @DisplayName("Éxito: retorna página con parámetros válidos")
         void exitoConParametrosValidos() {
-            when(utils.createPageable(0, 10)).thenReturn(pageable);
             Page<User> pageUser = new PageImpl<>(List.of(userBase), pageable, 1);
             when(userRepository.findByFilter(eq("Juan"), any(Pageable.class))).thenReturn(pageUser);
 
@@ -155,7 +149,6 @@ class UsuariosServiceImplTest {
         @Test
         @DisplayName("Éxito: retorna página vacía cuando no hay resultados")
         void exitoConPaginaVacia() {
-            when(utils.createPageable(0, 10)).thenReturn(pageable);
             Page<User> pageVacia = new PageImpl<>(List.of(), pageable, 0);
             when(userRepository.findByFilter(eq("sinresultado"), any(Pageable.class))).thenReturn(pageVacia);
 
@@ -168,7 +161,6 @@ class UsuariosServiceImplTest {
         @Test
         @DisplayName("Parámetros nulos: page y size null deben usar valores por defecto (0 y 10)")
         void pageYSizeNulos() {
-            when(utils.createPageable(null, null)).thenReturn(pageable);
             Page<User> pageUser = new PageImpl<>(List.of(userBase), pageable, 1);
             when(userRepository.findByFilter(isNull(), any(Pageable.class))).thenReturn(pageUser);
 
@@ -182,7 +174,6 @@ class UsuariosServiceImplTest {
         @Test
         @DisplayName("Parámetros inválidos: page negativo debe corregirse a 0")
         void pageNegativa() {
-            when(utils.createPageable(-5, 10)).thenReturn(pageable);
             Page<User> pageUser = new PageImpl<>(List.of(userBase), pageable, 1);
             when(userRepository.findByFilter(any(), any(Pageable.class))).thenReturn(pageUser);
 
@@ -195,7 +186,6 @@ class UsuariosServiceImplTest {
         @Test
         @DisplayName("Parámetros inválidos: size <= 0 debe corregirse a 10")
         void sizeCero() {
-            when(utils.createPageable(0, 0)).thenReturn(pageable);
             Page<User> pageUser = new PageImpl<>(List.of(userBase), pageable, 1);
             when(userRepository.findByFilter(any(), any(Pageable.class))).thenReturn(pageUser);
 
@@ -208,7 +198,6 @@ class UsuariosServiceImplTest {
         @Test
         @DisplayName("Parámetros inválidos: filter vacío debe tratarse como null")
         void filtroVacioSeConvierteEnNull() {
-            when(utils.createPageable(0, 10)).thenReturn(pageable);
             Page<User> pageUser = new PageImpl<>(List.of(userBase), pageable, 1);
             when(userRepository.findByFilter(isNull(), any(Pageable.class))).thenReturn(pageUser);
 

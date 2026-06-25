@@ -26,17 +26,12 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
-import com.mabc.back_cv.common.Utils;
-
 @ExtendWith(MockitoExtension.class)
 @DisplayName("Pruebas unitarias de PortafolioServiceImpl")
 class PortafolioServiceImplTest {
 
     @Mock
     private PortafolioRepository portafolioRepository;
-    
-    @Mock
-    private Utils utils;
 
     @InjectMocks
     private PortafolioServiceImpl service;
@@ -174,7 +169,6 @@ class PortafolioServiceImplTest {
         @DisplayName("Éxito: retorna página de DTOs con parámetros válidos")
         void exitoConParametrosValidos() {
             Page<Portafolio> pageEntidad = new PageImpl<>(List.of(portafolioBase), pageable, 1);
-            when(utils.createPageable(0, 10)).thenReturn(pageable);
             when(portafolioRepository.findBySearchText(eq(1L), eq("portafolio"), any(Pageable.class)))
                     .thenReturn(pageEntidad);
 
@@ -189,7 +183,6 @@ class PortafolioServiceImplTest {
         @DisplayName("Éxito: retorna página vacía cuando no hay resultados")
         void exitoConPaginaVacia() {
             Page<Portafolio> pageVacia = new PageImpl<>(List.of(), pageable, 0);
-            when(utils.createPageable(0, 10)).thenReturn(pageable);
             when(portafolioRepository.findBySearchText(isNull(), isNull(), any(Pageable.class)))
                     .thenReturn(pageVacia);
 
@@ -203,7 +196,6 @@ class PortafolioServiceImplTest {
         @DisplayName("Parámetros nulos: page y size null usan valores por defecto (0 y 10)")
         void pageYSizeNulosUsanDefecto() {
             Page<Portafolio> pageEntidad = new PageImpl<>(List.of(portafolioBase), pageable, 1);
-            when(utils.createPageable(null, null)).thenReturn(pageable);
             when(portafolioRepository.findBySearchText(isNull(), isNull(), any(Pageable.class)))
                     .thenReturn(pageEntidad);
 
@@ -218,7 +210,6 @@ class PortafolioServiceImplTest {
         @DisplayName("Parámetro fuera de rango: page negativo se corrige a 0")
         void pageNegativaSeCorrigeACero() {
             Page<Portafolio> pageEntidad = new PageImpl<>(List.of(portafolioBase), pageable, 1);
-            when(utils.createPageable(-3, 10)).thenReturn(pageable);
             when(portafolioRepository.findBySearchText(any(), any(), any(Pageable.class)))
                     .thenReturn(pageEntidad);
 
@@ -232,7 +223,6 @@ class PortafolioServiceImplTest {
         @DisplayName("Parámetro fuera de rango: size=0 se corrige a 10")
         void sizeCeroSeCorrigeADiez() {
             Page<Portafolio> pageEntidad = new PageImpl<>(List.of(portafolioBase), pageable, 1);
-            when(utils.createPageable(0, 0)).thenReturn(pageable);
             when(portafolioRepository.findBySearchText(any(), any(), any(Pageable.class)))
                     .thenReturn(pageEntidad);
 
@@ -252,7 +242,6 @@ class PortafolioServiceImplTest {
             p2.setDescription(new ArrayList<>());
 
             Page<Portafolio> pageEntidad = new PageImpl<>(List.of(portafolioBase, p2), pageable, 2);
-            when(utils.createPageable(0, 10)).thenReturn(pageable);
             when(portafolioRepository.findBySearchText(any(), any(), any(Pageable.class)))
                     .thenReturn(pageEntidad);
 

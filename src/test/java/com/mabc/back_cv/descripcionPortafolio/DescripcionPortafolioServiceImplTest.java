@@ -5,7 +5,7 @@ import com.mabc.back_cv.web.entities.DescripcionPortafolio;
 import com.mabc.back_cv.web.entities.Portafolio;
 import com.mabc.back_cv.web.repositories.DescripcionPortafolioRepository;
 import com.mabc.back_cv.web.services.descripcionPortafolio.DescripcionPortafolioServiceImpl;
-import com.mabc.back_cv.web.services.descripcionPortafolio.DescripcionPortafolioUtils;
+import com.mabc.back_cv.web.services.descripcionPortafolio.DescripcionPortafolioMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -33,16 +33,11 @@ import static org.mockito.Mockito.mockStatic;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.mabc.back_cv.common.Utils;
-
 @ExtendWith(MockitoExtension.class)
 class DescripcionPortafolioServiceImplTest {
 
     @Mock
     private DescripcionPortafolioRepository descripcionPortafolioRepository;
-
-    @Mock
-    private Utils utils;
 
     @InjectMocks
     private DescripcionPortafolioServiceImpl descripcionPortafolioService;
@@ -63,7 +58,6 @@ class DescripcionPortafolioServiceImplTest {
     void shouldReturnAllDescriptionsWhenSearchTermIsNull() {
         DescripcionPortafolio entity = createEntity(1L, "texto prueba", 1);
         Page<DescripcionPortafolio> page = new PageImpl<>(List.of(entity), pageable, 1);
-        when(utils.createPageable(0, 10)).thenReturn(pageable);
         when(descripcionPortafolioRepository.findAll(any(Pageable.class))).thenReturn(page);
 
         var result = descripcionPortafolioService.getAll(null, 0, 10);
@@ -77,7 +71,6 @@ class DescripcionPortafolioServiceImplTest {
     void shouldReturnAllDescriptionsWhenSearchTermIsEmpty() {
         DescripcionPortafolio entity = createEntity(10L, "texto vacio", 1);
         Page<DescripcionPortafolio> page = new PageImpl<>(List.of(entity), pageable, 1);
-        when(utils.createPageable(0, 10)).thenReturn(pageable);
         when(descripcionPortafolioRepository.findAll(any(Pageable.class))).thenReturn(page);
 
         var result = descripcionPortafolioService.getAll("", 0, 10);
@@ -120,7 +113,6 @@ class DescripcionPortafolioServiceImplTest {
     @Test
     void shouldReturnPagedResultsWhenSearchTermIsProvided() {
         DescripcionPortafolio entity = createEntity(2L, "texto buscado", 2);
-        when(utils.createPageable(0, 5)).thenReturn(pageable);
         Page<DescripcionPortafolio> page = new PageImpl<>(List.of(entity), pageable, 1);
         when(descripcionPortafolioRepository.findByParrafoContainingIgnoreCase(anyString(), any(Pageable.class)))
                 .thenReturn(page);
@@ -160,8 +152,8 @@ class DescripcionPortafolioServiceImplTest {
     @Test
     void shouldThrowWhenSaveReturnsNullEntity() {
         DescripcionPortafolioDTO dto = createDto(5L, "texto entity null", 5);
-        try (MockedStatic<DescripcionPortafolioUtils> utilities = mockStatic(DescripcionPortafolioUtils.class)) {
-            utilities.when(() -> DescripcionPortafolioUtils.DTOToEntity(dto)).thenReturn(null);
+        try (MockedStatic<DescripcionPortafolioMapper> utilities = mockStatic(DescripcionPortafolioMapper.class)) {
+            utilities.when(() -> DescripcionPortafolioMapper.DTOToEntity(dto)).thenReturn(null);
             assertThrows(IllegalArgumentException.class, () -> descripcionPortafolioService.save(dto));
         }
     }

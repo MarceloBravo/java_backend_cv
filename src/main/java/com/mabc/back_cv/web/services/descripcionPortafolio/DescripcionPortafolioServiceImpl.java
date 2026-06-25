@@ -14,15 +14,13 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.mabc.back_cv.common.Utils;
+import com.mabc.back_cv.web.services.descripcionPortafolio.DescripcionPortafolioMapper;
 
 @Service
 public class DescripcionPortafolioServiceImpl implements DescripcionPortafolioService {
 
     @Autowired
     private DescripcionPortafolioRepository descripcionPortafolioRepository;
-
-    @Autowired
-    private Utils utils;
 
     @Override
     public Page<DescripcionPortafolioDTO> getAll(String terminoBuscado, Integer page, Integer size) {
@@ -35,22 +33,22 @@ public class DescripcionPortafolioServiceImpl implements DescripcionPortafolioSe
     public List<DescripcionPortafolioDTO> getAll() {
         List<DescripcionPortafolio> entities = descripcionPortafolioRepository.findAll();
         return entities.stream()
-                .map(DescripcionPortafolioUtils::entityToDTO)
+                .map(DescripcionPortafolioMapper::entityToDTO)
                 .collect(Collectors.toList());
     }
 
     private Page<DescripcionPortafolioDTO> getAll(Integer page, Integer size) {
-        Pageable pageable = utils.createPageable(page, size);
+        Pageable pageable = Utils.createPageable(page, size);
         Page<DescripcionPortafolio> entities = descripcionPortafolioRepository.findAll(pageable);
-        return entities.map(DescripcionPortafolioUtils::entityToDTO);
+        return entities.map(DescripcionPortafolioMapper::entityToDTO);
 
     }
 
     private Page<DescripcionPortafolioDTO> searchByParrafo(String terminoBuscado, Integer page, Integer size) {
-        Pageable pageable = utils.createPageable(page, size);
+        Pageable pageable = Utils.createPageable(page, size);
         Page<DescripcionPortafolio> entities = descripcionPortafolioRepository
                 .findByParrafoContainingIgnoreCase(terminoBuscado, pageable);
-        return entities.map(DescripcionPortafolioUtils::entityToDTO);
+        return entities.map(DescripcionPortafolioMapper::entityToDTO);
     }
 
     @Override
@@ -60,7 +58,7 @@ public class DescripcionPortafolioServiceImpl implements DescripcionPortafolioSe
         }
         Optional<DescripcionPortafolio> descripcionPortafolio = descripcionPortafolioRepository.findById(id);
         if (descripcionPortafolio.isPresent()) {
-            return DescripcionPortafolioUtils.entityToDTO(descripcionPortafolio.get());
+            return DescripcionPortafolioMapper.entityToDTO(descripcionPortafolio.get());
         }
         return null;
     }
@@ -70,12 +68,12 @@ public class DescripcionPortafolioServiceImpl implements DescripcionPortafolioSe
         if (detallePortafolioDTO == null) {
             throw new IllegalArgumentException("El detalle del portafolio no puede ser null");
         }
-        DescripcionPortafolio entity = DescripcionPortafolioUtils.DTOToEntity(detallePortafolioDTO);
+        DescripcionPortafolio entity = DescripcionPortafolioMapper.DTOToEntity(detallePortafolioDTO);
         if (entity == null) {
             throw new IllegalArgumentException("El detalle del portafolio no puede ser null");
         }
         DescripcionPortafolio savedDescripcionPortafolio = descripcionPortafolioRepository.save(entity);
-        return DescripcionPortafolioUtils.entityToDTO(savedDescripcionPortafolio);
+        return DescripcionPortafolioMapper.entityToDTO(savedDescripcionPortafolio);
     }
 
     @Override

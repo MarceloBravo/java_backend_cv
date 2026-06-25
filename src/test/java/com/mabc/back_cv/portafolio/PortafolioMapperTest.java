@@ -3,7 +3,7 @@ package com.mabc.back_cv.portafolio;
 import com.mabc.back_cv.web.dto.PortafolioDTO;
 import com.mabc.back_cv.web.entities.Portafolio;
 import com.mabc.back_cv.web.entities.User;
-import com.mabc.back_cv.web.services.portafolio.PortafolioUtils;
+import com.mabc.back_cv.web.services.portafolio.PortafolioMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -14,8 +14,8 @@ import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@DisplayName("Pruebas unitarias de PortafolioUtils")
-class PortafolioUtilsTest {
+@DisplayName("Pruebas unitarias de PortafolioMapper")
+class PortafolioMapperTest {
 
     private User userBase;
     private Portafolio portafolioBase;
@@ -56,84 +56,6 @@ class PortafolioUtilsTest {
     }
 
     // =========================================================================
-    // createPageable
-    // =========================================================================
-    @Nested
-    @DisplayName("createPageable")
-    class CreatePageableTests {
-
-        @Test
-        @DisplayName("Éxito: crea Pageable con parámetros válidos")
-        void exitoConParametrosValidos() {
-            Pageable pageable = PortafolioUtils.createPageable(2, 5);
-
-            assertNotNull(pageable);
-            assertEquals(2, pageable.getPageNumber());
-            assertEquals(5, pageable.getPageSize());
-        }
-
-        @Test
-        @DisplayName("Éxito: crea Pageable con page=0 y size=1 (límites mínimos válidos)")
-        void exitoConLimitesMinimosValidos() {
-            Pageable pageable = PortafolioUtils.createPageable(0, 1);
-
-            assertEquals(0, pageable.getPageNumber());
-            assertEquals(1, pageable.getPageSize());
-        }
-
-        @Test
-        @DisplayName("Parámetro nulo: page null usa valor por defecto 0")
-        void pageNulaUsaDefecto() {
-            Pageable pageable = PortafolioUtils.createPageable(null, 10);
-
-            assertEquals(0, pageable.getPageNumber());
-            assertEquals(10, pageable.getPageSize());
-        }
-
-        @Test
-        @DisplayName("Parámetro nulo: size null usa valor por defecto 10")
-        void sizeNuloUsaDefecto() {
-            Pageable pageable = PortafolioUtils.createPageable(0, null);
-
-            assertEquals(0, pageable.getPageNumber());
-            assertEquals(10, pageable.getPageSize());
-        }
-
-        @Test
-        @DisplayName("Parámetros nulos: ambos null usan valores por defecto (0 y 10)")
-        void ambosNulosUsanDefecto() {
-            Pageable pageable = PortafolioUtils.createPageable(null, null);
-
-            assertEquals(0, pageable.getPageNumber());
-            assertEquals(10, pageable.getPageSize());
-        }
-
-        @Test
-        @DisplayName("Parámetro fuera de rango: page negativo se corrige a 0")
-        void pageNegativaSeCorrigeACero() {
-            Pageable pageable = PortafolioUtils.createPageable(-5, 10);
-
-            assertEquals(0, pageable.getPageNumber());
-        }
-
-        @Test
-        @DisplayName("Parámetro fuera de rango: size=0 se corrige a 10")
-        void sizeCeroSeCorrigeADiez() {
-            Pageable pageable = PortafolioUtils.createPageable(0, 0);
-
-            assertEquals(10, pageable.getPageSize());
-        }
-
-        @Test
-        @DisplayName("Parámetro fuera de rango: size negativo se corrige a 10")
-        void sizeNegativoSeCorrigeADiez() {
-            Pageable pageable = PortafolioUtils.createPageable(0, -1);
-
-            assertEquals(10, pageable.getPageSize());
-        }
-    }
-
-    // =========================================================================
     // convertToDTO
     // =========================================================================
     @Nested
@@ -143,7 +65,7 @@ class PortafolioUtilsTest {
         @Test
         @DisplayName("Éxito: mapea correctamente todos los campos de Portafolio a PortafolioDTO")
         void exitoMapeoCompleto() {
-            PortafolioDTO result = PortafolioUtils.convertToDTO(portafolioBase);
+            PortafolioDTO result = PortafolioMapper.convertToDTO(portafolioBase);
 
             assertNotNull(result);
             assertEquals(10L, result.getId());
@@ -165,7 +87,7 @@ class PortafolioUtilsTest {
             portafolioMinimo.setTitle("Solo título");
             portafolioMinimo.setUser(userBase);
 
-            PortafolioDTO result = PortafolioUtils.convertToDTO(portafolioMinimo);
+            PortafolioDTO result = PortafolioMapper.convertToDTO(portafolioMinimo);
 
             assertNotNull(result);
             assertEquals(1L, result.getId());
@@ -181,7 +103,7 @@ class PortafolioUtilsTest {
         @Test
         @DisplayName("Parámetro nulo: retorna null cuando la entidad es null")
         void entidadNulaRetornaNull() {
-            PortafolioDTO result = PortafolioUtils.convertToDTO(null);
+            PortafolioDTO result = PortafolioMapper.convertToDTO(null);
 
             assertNull(result);
         }
@@ -191,7 +113,7 @@ class PortafolioUtilsTest {
         void portafolioSinIdProduceDTOConIdNull() {
             portafolioBase.setId(null);
 
-            PortafolioDTO result = PortafolioUtils.convertToDTO(portafolioBase);
+            PortafolioDTO result = PortafolioMapper.convertToDTO(portafolioBase);
 
             assertNotNull(result);
             assertNull(result.getId());
@@ -208,7 +130,7 @@ class PortafolioUtilsTest {
         @Test
         @DisplayName("Éxito: mapea correctamente todos los campos de PortafolioDTO a Portafolio")
         void exitoMapeoCompleto() {
-            Portafolio result = PortafolioUtils.convertToEntity(dtoBases);
+            Portafolio result = PortafolioMapper.convertToEntity(dtoBases);
 
             assertNotNull(result);
             assertEquals(10L, result.getId());
@@ -227,7 +149,7 @@ class PortafolioUtilsTest {
         void dtoSinIdProduceEntidadSinId() {
             dtoBases.setId(null);
 
-            Portafolio result = PortafolioUtils.convertToEntity(dtoBases);
+            Portafolio result = PortafolioMapper.convertToEntity(dtoBases);
 
             assertNotNull(result);
             assertNull(result.getId());
@@ -240,7 +162,7 @@ class PortafolioUtilsTest {
             dtoMinimo.setTitle("Solo título");
             dtoMinimo.setUser(userBase);
 
-            Portafolio result = PortafolioUtils.convertToEntity(dtoMinimo);
+            Portafolio result = PortafolioMapper.convertToEntity(dtoMinimo);
 
             assertNotNull(result);
             assertEquals("Solo título", result.getTitle());
@@ -255,7 +177,7 @@ class PortafolioUtilsTest {
         @Test
         @DisplayName("Parámetro nulo: retorna null cuando el DTO es null")
         void dtoNuloRetornaNull() {
-            Portafolio result = PortafolioUtils.convertToEntity(null);
+            Portafolio result = PortafolioMapper.convertToEntity(null);
 
             assertNull(result);
         }
@@ -267,7 +189,7 @@ class PortafolioUtilsTest {
             dtoBases.setImage("");
             dtoBases.setLink("");
 
-            Portafolio result = PortafolioUtils.convertToEntity(dtoBases);
+            Portafolio result = PortafolioMapper.convertToEntity(dtoBases);
 
             assertEquals("", result.getTitle());
             assertEquals("", result.getImage());
@@ -285,8 +207,8 @@ class PortafolioUtilsTest {
         @Test
         @DisplayName("Entidad convertida a DTO y de vuelta a Entidad mantiene los mismos campos")
         void cicloPortafolioDTOPortafolio() {
-            PortafolioDTO dto = PortafolioUtils.convertToDTO(portafolioBase);
-            Portafolio reconstruido = PortafolioUtils.convertToEntity(dto);
+            PortafolioDTO dto = PortafolioMapper.convertToDTO(portafolioBase);
+            Portafolio reconstruido = PortafolioMapper.convertToEntity(dto);
 
             assertEquals(portafolioBase.getId(), reconstruido.getId());
             assertEquals(portafolioBase.getTitle(), reconstruido.getTitle());

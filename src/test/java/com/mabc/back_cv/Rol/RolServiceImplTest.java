@@ -4,7 +4,7 @@ import com.mabc.back_cv.web.dto.RolDTO;
 import com.mabc.back_cv.web.entities.Rol;
 import com.mabc.back_cv.web.repositories.RolRepository;
 import com.mabc.back_cv.web.services.Rol.RolServiceImpl;
-import com.mabc.back_cv.web.services.Rol.RolUtils;
+import com.mabc.back_cv.web.services.Rol.RolMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -25,15 +25,13 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-import com.mabc.back_cv.common.Utils;
-
 import org.junit.jupiter.api.BeforeEach;
 
 /**
  * Pruebas unitarias para la implementación del servicio {@link RolServiceImpl}.
  * Valida la lógica de negocio del servicio, incluyendo búsqueda por id,
  * paginación, guardado y eliminación de roles, delegando la persistencia
- * al {@link RolRepository} y la conversión al {@link RolUtils} mockeados.
+ * al {@link RolRepository} y la conversión al {@link RolMapper} mockeados.
  */
 @ExtendWith(MockitoExtension.class)
 class RolServiceImplTest {
@@ -42,10 +40,7 @@ class RolServiceImplTest {
     private RolRepository rolRepository;
 
     @Mock
-    private RolUtils rolUtils;
-
-    @Mock
-    private Utils utils;
+    private RolMapper RolMapper;
 
     @InjectMocks
     private RolServiceImpl rolService;
@@ -127,29 +122,26 @@ class RolServiceImplTest {
         
         Page<Rol> rolPage = new PageImpl<>(List.of(rol), pageable, 1);
 
-        when(utils.createPageable(0, 10)).thenReturn(pageable);
         when(rolRepository.findAll(pageable)).thenReturn(rolPage);
-        when(rolUtils.mapToRolDTO(rol)).thenReturn(rolDTO);
+        when(RolMapper.mapToRolDTO(rol)).thenReturn(rolDTO);
 
         Page<RolDTO> result = rolService.getAll(0, 10);
 
         assertNotNull(result);
         assertEquals(1, result.getTotalElements());
         assertEquals("ADMIN", result.getContent().get(0).getNombre());
-        verify(utils, times(1)).createPageable(0, 10);
         verify(rolRepository, times(1)).findAll(pageable);
     }
 
     // -------------------------------------------------------------------------
     // getActiveRoles
     // -------------------------------------------------------------------------
-
     @Test
     void getActiveRoles_ShouldReturnOnlyActiveRoles() {
         Rol rol = new Rol(1L, "USER", true, null);
         RolDTO rolDTO = new RolDTO(1L, "USER", true);
         when(rolRepository.findByActiveState()).thenReturn(List.of(rol));
-        when(rolUtils.mapToRolDTO(rol)).thenReturn(rolDTO);
+        when(RolMapper.mapToRolDTO(rol)).thenReturn(rolDTO);
 
         List<RolDTO> result = rolService.getActiveRoles();
 
@@ -169,9 +161,8 @@ class RolServiceImplTest {
         RolDTO rolDTO = new RolDTO(1L, "ADMIN", true);
         Page<Rol> rolPage = new PageImpl<>(List.of(rol), pageable, 1);
 
-        when(utils.createPageable(0, 10)).thenReturn(pageable);
         when(rolRepository.searchByNombreAndEstado("ADMIN", true, pageable)).thenReturn(rolPage);
-        when(rolUtils.mapToRolDTO(rol)).thenReturn(rolDTO);
+        when(RolMapper.mapToRolDTO(rol)).thenReturn(rolDTO);
 
         Page<RolDTO> result = rolService.searchBy("ADMIN", true, 0, 10);
 
@@ -187,9 +178,8 @@ class RolServiceImplTest {
         RolDTO rolDTO = new RolDTO(1L, "ADMIN", true);
         Page<Rol> rolPage = new PageImpl<>(List.of(rol), pageable, 1);
 
-        when(utils.createPageable(0, 10)).thenReturn(pageable);
         when(rolRepository.findAll(pageable)).thenReturn(rolPage);
-        when(rolUtils.mapToRolDTO(rol)).thenReturn(rolDTO);
+        when(RolMapper.mapToRolDTO(rol)).thenReturn(rolDTO);
 
         Page<RolDTO> result = rolService.searchBy(null, true, 0, 10);
 
@@ -206,9 +196,8 @@ class RolServiceImplTest {
         Pageable pageable = PageRequest.of(0, 10);
         Page<Rol> rolPage = new PageImpl<>(List.of(rol), pageable, 1);
 
-        when(utils.createPageable(0, 10)).thenReturn(pageable);
         when(rolRepository.findAll(pageable)).thenReturn(rolPage);
-        when(rolUtils.mapToRolDTO(rol)).thenReturn(rolDTO);
+        when(RolMapper.mapToRolDTO(rol)).thenReturn(rolDTO);
 
         Page<RolDTO> result = rolService.searchBy("", true, 0, 10);
 
@@ -229,29 +218,29 @@ class RolServiceImplTest {
         Rol savedRol = new Rol(3L, "EDITOR", true, null);
         RolDTO savedDTO = new RolDTO(3L, "EDITOR", true);
 
-        when(rolUtils.mapToRol(inputDTO)).thenReturn(rolToSave);
+        when(RolMapper.mapToRol(inputDTO)).thenReturn(rolToSave);
         when(rolRepository.save(rolToSave)).thenReturn(savedRol);
-        when(rolUtils.mapToRolDTO(savedRol)).thenReturn(savedDTO);
+        when(RolMapper.mapToRolDTO(savedRol)).thenReturn(savedDTO);
 
         RolDTO result = rolService.save(inputDTO);
 
         assertNotNull(result);
         assertEquals(3L, result.getId());
         assertEquals("EDITOR", result.getNombre());
-        verify(rolUtils, times(1)).mapToRol(inputDTO);
+        verify(RolMapper, times(1)).mapToRol(inputDTO);
         verify(rolRepository, times(1)).save(rolToSave);
-        verify(rolUtils, times(1)).mapToRolDTO(savedRol);
+        verify(RolMapper, times(1)).mapToRolDTO(savedRol);
     }
 
     @Test
     void save_InvalidDTO_ShouldReturnNull() {
         RolDTO inputDTO = new RolDTO(null, "", true);
-        when(rolUtils.mapToRol(inputDTO)).thenReturn(null);
+        when(RolMapper.mapToRol(inputDTO)).thenReturn(null);
 
         RolDTO result = rolService.save(inputDTO);
 
         assertNull(result);
-        verify(rolUtils, times(1)).mapToRol(inputDTO);
+        verify(RolMapper, times(1)).mapToRol(inputDTO);
         verify(rolRepository, never()).save(any(Rol.class));
     }
 

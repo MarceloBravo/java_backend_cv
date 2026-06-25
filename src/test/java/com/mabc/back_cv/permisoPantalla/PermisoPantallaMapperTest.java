@@ -13,8 +13,8 @@ import com.mabc.back_cv.web.entities.Pantalla;
 import com.mabc.back_cv.web.entities.PermisoPantalla;
 import com.mabc.back_cv.web.entities.Rol;
 
-@DisplayName("Pruebas unitarias para PermisoPantallaUtil")
-public class PermisoPantallaUtilTest {
+@DisplayName("Pruebas unitarias para PermisoPantallaMapper")
+public class PermisoPantallaMapperTest {
 
     @Test
     @DisplayName("mapToDTO - éxito con datos completos")
@@ -39,7 +39,7 @@ public class PermisoPantallaUtilTest {
         entidad.setAccion_eliminar(false);
         entidad.setActivo(true);
 
-        PermisoPantallaDTO dto = com.mabc.back_cv.web.services.permisoPantalla.PermisoPantallaUtil.mapToDTO(entidad);
+        PermisoPantallaDTO dto = com.mabc.back_cv.web.services.permisoPantalla.PermisoPantallaMapper.mapToDTO(entidad);
 
         assertAll("dto completo",
                 () -> assertNotNull(dto),
@@ -56,7 +56,7 @@ public class PermisoPantallaUtilTest {
     @Test
     @DisplayName("mapToDTO - entrada nula devuelve nulo")
     public void testMapToDTO_NullInput() {
-        PermisoPantallaDTO dto = com.mabc.back_cv.web.services.permisoPantalla.PermisoPantallaUtil.mapToDTO(null);
+        PermisoPantallaDTO dto = com.mabc.back_cv.web.services.permisoPantalla.PermisoPantallaMapper.mapToDTO(null);
 
         assertNull(dto);
     }
@@ -74,7 +74,7 @@ public class PermisoPantallaUtilTest {
         entidad.setAccion_eliminar(null);
         entidad.setActivo(null);
 
-        PermisoPantallaDTO dto = com.mabc.back_cv.web.services.permisoPantalla.PermisoPantallaUtil.mapToDTO(entidad);
+        PermisoPantallaDTO dto = com.mabc.back_cv.web.services.permisoPantalla.PermisoPantallaMapper.mapToDTO(entidad);
 
         assertAll("dto con valores nulos",
                 () -> assertNotNull(dto),
@@ -111,7 +111,7 @@ public class PermisoPantallaUtilTest {
         dto.setAccion_eliminar(true);
         dto.setActivo(false);
 
-        PermisoPantalla entidad = com.mabc.back_cv.web.services.permisoPantalla.PermisoPantallaUtil.mapToEntity(dto);
+        PermisoPantalla entidad = com.mabc.back_cv.web.services.permisoPantalla.PermisoPantallaMapper.mapToEntity(dto);
 
         assertAll("entidad completa",
                 () -> assertNotNull(entidad),
@@ -128,7 +128,7 @@ public class PermisoPantallaUtilTest {
     @Test
     @DisplayName("mapToEntity - dto nulo devuelve nulo")
     public void testMapToEntity_NullInput() {
-        PermisoPantalla entidad = com.mabc.back_cv.web.services.permisoPantalla.PermisoPantallaUtil.mapToEntity(null);
+        PermisoPantalla entidad = com.mabc.back_cv.web.services.permisoPantalla.PermisoPantallaMapper.mapToEntity(null);
 
         assertNull(entidad);
     }
@@ -146,7 +146,7 @@ public class PermisoPantallaUtilTest {
         dto.setAccion_eliminar(true);
         dto.setActivo(true);
 
-        PermisoPantalla entidad = com.mabc.back_cv.web.services.permisoPantalla.PermisoPantallaUtil.mapToEntity(dto);
+        PermisoPantalla entidad = com.mabc.back_cv.web.services.permisoPantalla.PermisoPantallaMapper.mapToEntity(dto);
 
         assertAll("entidad sin id",
                 () -> assertNotNull(entidad),
@@ -173,7 +173,7 @@ public class PermisoPantallaUtilTest {
         dto.setAccion_eliminar(null);
         dto.setActivo(null);
 
-        PermisoPantalla entidad = com.mabc.back_cv.web.services.permisoPantalla.PermisoPantallaUtil.mapToEntity(dto);
+        PermisoPantalla entidad = com.mabc.back_cv.web.services.permisoPantalla.PermisoPantallaMapper.mapToEntity(dto);
 
         assertAll("entidad con valores nulos",
                 () -> assertNotNull(entidad),

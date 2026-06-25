@@ -3,7 +3,7 @@ package com.mabc.back_cv.web.services.trabajo;
 import com.mabc.back_cv.web.dto.TrabajoDTO;
 import com.mabc.back_cv.web.entities.Trabajo;
 import com.mabc.back_cv.web.repositories.TrabajoRepository;
-import com.mabc.back_cv.web.services.trabajo.TrabajoUtils;
+import com.mabc.back_cv.web.services.trabajo.TrabajoMapper;
 
 import org.springframework.data.domain.Page;
 
@@ -16,7 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.mabc.back_cv.web.services.trabajo.TrabajoService;
-import com.mabc.back_cv.web.services.trabajo.TrabajoUtils;
+import com.mabc.back_cv.web.services.trabajo.TrabajoMapper;
 import com.mabc.back_cv.web.dto.TrabajoDTO;
 import com.mabc.back_cv.web.entities.Trabajo;
 
@@ -28,8 +28,6 @@ public class TrabajoServiceImpl implements TrabajoService {
     @Autowired
     private TrabajoRepository repository;
     
-    @Autowired
-    private Utils utils;
 
     @Override
     public List<TrabajoDTO> getAll(Long userId, String searchText) {
@@ -38,18 +36,18 @@ public class TrabajoServiceImpl implements TrabajoService {
         }
         return repository.findAllList(userId, searchText)
                 .stream()
-                .map(TrabajoUtils::entityToDTO)
+                .map(TrabajoMapper::entityToDTO)
                 .collect(Collectors.toList());
     }
 
     @Override
     public Page<TrabajoDTO> getAll(Long userId, String searchText, Integer page, Integer size) {
-        Pageable pageable = utils.createPageable(page, size);
+        Pageable pageable = Utils.createPageable(page, size);
         if (searchText == null) {
             searchText = "";
         }
         return repository.findAllPage(userId, searchText, pageable)
-                .map(TrabajoUtils::entityToDTO);
+                .map(TrabajoMapper::entityToDTO);
     }
 
     @Override
@@ -58,7 +56,7 @@ public class TrabajoServiceImpl implements TrabajoService {
             return null;
         }
         return repository.findById(id)
-                .map(TrabajoUtils::entityToDTO)
+                .map(TrabajoMapper::entityToDTO)
                 .orElse(null);
     }
 
@@ -67,9 +65,9 @@ public class TrabajoServiceImpl implements TrabajoService {
         if (trabajoDTO == null) {
             throw new IllegalArgumentException("Datos no válidos para guardar el registro.");
         }
-        Trabajo entity = TrabajoUtils.dtoToEntity(trabajoDTO);
+        Trabajo entity = TrabajoMapper.dtoToEntity(trabajoDTO);
         entity = repository.save(entity);
-        return TrabajoUtils.entityToDTO(entity);
+        return TrabajoMapper.entityToDTO(entity);
     }
 
     @Override

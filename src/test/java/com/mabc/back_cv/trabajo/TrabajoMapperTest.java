@@ -1,6 +1,6 @@
 package com.mabc.back_cv.trabajo;
 
-import com.mabc.back_cv.web.services.trabajo.TrabajoUtils;
+import com.mabc.back_cv.web.services.trabajo.TrabajoMapper;
 import com.mabc.back_cv.web.dto.TrabajoDTO;
 import com.mabc.back_cv.web.entities.Trabajo;
 import com.mabc.back_cv.web.dto.UsuarioDTO;
@@ -25,9 +25,9 @@ import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
-public class TrabajoUtilsTest{
+public class TrabajoMapperTest{
 
-    private TrabajoUtils utils;
+    private TrabajoMapper utils;
     private Trabajo entity;
     private TrabajoDTO dto;
     private User user;
@@ -35,7 +35,7 @@ public class TrabajoUtilsTest{
 
     @BeforeEach
     void setUp(){
-        utils = new TrabajoUtils();
+        utils = new TrabajoMapper();
         user = new User();
         user.setId(1L);
         user.setNombre("Juan");
@@ -54,36 +54,6 @@ public class TrabajoUtilsTest{
 
         entity = new Trabajo(1L, "Empresa 1", "Posición 1", "Descripción trabajo 1", "2023-01-01", "2023-02-01", false, null, user);
         dto = new TrabajoDTO(1L, 1, "Empresa 1", "Posición 1", "Descripción trabajo 1", "2023-01-01", "2023-02-01", false, null, userDTO);
-    }
-
-    // --------------------------------------------------------------------
-    // Pageable createPageable(Integer page, Integer size)
-    // --------------------------------------------------------------------
-    @Test
-    @DisplayName("Genera un Pageable")
-    void createPageable_whitAllCorrectParameters_returnPageable(){
-        Pageable pageable = utils.createPageable(0, 10);
-        assertNotNull(pageable);
-        assertEquals(0, pageable.getPageNumber());
-        assertEquals(10, pageable.getPageSize());
-    }
-
-    @Test
-    @DisplayName("Genera un Pageable con parametros nulos")
-    void createPageable_whitNullParameters_returnPageable(){
-        Pageable pageable = utils.createPageable(null, null);
-        assertNotNull(pageable);
-        assertEquals(0, pageable.getPageNumber());
-        assertEquals(10, pageable.getPageSize());
-    }
-
-    @Test
-    @DisplayName("Genera un Pageable con parametros negativos")
-    void createPageable_whitNegativeParameters_returnPageable(){
-        Pageable pageable = utils.createPageable(-1, -20);
-        assertNotNull(pageable);
-        assertEquals(0, pageable.getPageNumber());
-        assertEquals(10, pageable.getPageSize());
     }
 
     // ----------------------------------------------------------

@@ -13,7 +13,7 @@ import com.mabc.back_cv.web.entities.User;
  * @version 1.0
  */
 @Component
-public class UsuarioUtils {
+public class UsuarioMapper {
 
     /**
      * Convierte un UsuarioDTO a una entidad User.

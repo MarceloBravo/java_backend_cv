@@ -1,6 +1,6 @@
 package com.mabc.back_cv.tecnologia;
 
-import com.mabc.back_cv.web.services.tecnologia.TecnologiaUtils;
+import com.mabc.back_cv.web.services.tecnologia.TecnologiaMapper;
 import com.mabc.back_cv.web.dto.TecnologiaDTO;
 import com.mabc.back_cv.web.entities.Tecnologia;
 import com.mabc.back_cv.web.enums.TipoTecnologiaEnum;
@@ -24,47 +24,17 @@ import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
-public class TecnologiaUtilsTest{
+public class TecnologiaMapperTest{
 
-    private TecnologiaUtils utils;
+    private TecnologiaMapper utils;
     private Tecnologia entity;
     private TecnologiaDTO dto;
 
     @BeforeEach
     void setUp(){
-        utils = new TecnologiaUtils();
+        utils = new TecnologiaMapper();
         entity = new Tecnologia(1L, "Java", TipoTecnologiaEnum.LENGUAJE, "/ruta/imagen/java.png", "<svg javascript></svg>");
         dto = new TecnologiaDTO(1L, "Java", TipoTecnologiaEnum.LENGUAJE, "/ruta/imagen/java.png", "<svg javascript></svg>");
-    }
-
-    // --------------------------------------------------------------------
-    // Pageable createPageable(Integer page, Integer size)
-    // --------------------------------------------------------------------
-    @Test
-    @DisplayName("Genera un Pageable")
-    void createPageable_whitAllCorrectParameters_returnPageable(){
-        Pageable pageable = utils.createPageable(0, 10);
-        assertNotNull(pageable);
-        assertEquals(0, pageable.getPageNumber());
-        assertEquals(10, pageable.getPageSize());
-    }
-
-    @Test
-    @DisplayName("Genera un Pageable con parametros nulos")
-    void createPageable_whitNullParameters_returnPageable(){
-        Pageable pageable = utils.createPageable(null, null);
-        assertNotNull(pageable);
-        assertEquals(0, pageable.getPageNumber());
-        assertEquals(10, pageable.getPageSize());
-    }
-
-    @Test
-    @DisplayName("Genera un Pageable con parametros negativos")
-    void createPageable_whitNegativeParameters_returnPageable(){
-        Pageable pageable = utils.createPageable(-1, -20);
-        assertNotNull(pageable);
-        assertEquals(0, pageable.getPageNumber());
-        assertEquals(10, pageable.getPageSize());
     }
 
     // ----------------------------------------------------------

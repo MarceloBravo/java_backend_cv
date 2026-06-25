@@ -31,8 +31,6 @@ import com.mabc.back_cv.web.repositories.PermisoPantallaRepository;
 import com.mabc.back_cv.web.repositories.RolRepository;
 import com.mabc.back_cv.web.services.permisoPantalla.PermisoPantallaServiceImpl;
 
-import com.mabc.back_cv.common.Utils;
-
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Pageable;
@@ -49,10 +47,6 @@ public class PermisoPantallaServiceImplTest {
 
     @Mock
     private PantallaRepository pantallaRepository;
-    
-    @Mock
-    private Utils utils;
-
 
     @InjectMocks
     private PermisoPantallaServiceImpl permisoPantallaService;

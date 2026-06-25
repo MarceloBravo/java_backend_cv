@@ -25,17 +25,12 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
-import com.mabc.back_cv.common.Utils;
-
 @ExtendWith(MockitoExtension.class)
 @DisplayName("Pruebas unitarias para PresentacionServiceImpl")
 class PresentacionServiceImplTest {
 
     @Mock
     private PresentacionRepository presentacionRepository;
-
-    @Mock
-    private Utils utils;
 
     @InjectMocks
     private PresentacionServiceImpl presentacionService;
@@ -51,7 +46,6 @@ class PresentacionServiceImplTest {
     void getPresentaciones_WithPageSize_ShouldReturnPresentacionDTOPage() {
         Presentacion presentacion = new Presentacion(1L, "Texto de presentación", null);
         Page<Presentacion> page = new PageImpl<>(List.of(presentacion), pageable, 1);
-        when(utils.createPageable(0,10)).thenReturn(pageable);
         when(presentacionRepository.findAll(pageable)).thenReturn(page);
 
         Page<PresentacionDTO> result = presentacionService.getPresentaciones(0, 10);
@@ -65,7 +59,6 @@ class PresentacionServiceImplTest {
 
     @Test
     void getPresentaciones_WhenRepositoryThrows_ShouldPropagateException() {
-        when(utils.createPageable(0,10)).thenReturn(pageable);
         when(presentacionRepository.findAll(any(Pageable.class))).thenThrow(new RuntimeException("Error de acceso a datos"));
 
         RuntimeException exception = assertThrows(RuntimeException.class,
@@ -79,7 +72,6 @@ class PresentacionServiceImplTest {
     void getPresentacionesByParrafo_WithValidParrafo_ShouldReturnPage() {
         Presentacion presentacion = new Presentacion(2L, "Parrafo especial", null);
         Page<Presentacion> page = new PageImpl<>(List.of(presentacion), PageRequest.of(0, 10), 1);
-        when(utils.createPageable(0,10)).thenReturn(pageable);
         when(presentacionRepository.findByParrafoContainingIgnoreCase(eq("especial"), any(Pageable.class))).thenReturn(page);
 
         Page<PresentacionDTO> result = presentacionService.getPresentaciones("especial", 0, 10);
@@ -92,7 +84,6 @@ class PresentacionServiceImplTest {
 
     @Test
     void getPresentacionesByParrafo_WhenRepositoryThrows_ShouldPropagateException() {
-        when(utils.createPageable(0,10)).thenReturn(pageable);
         when(presentacionRepository.findByParrafoContainingIgnoreCase(any(), any(Pageable.class)))
                 .thenThrow(new RuntimeException("Error de consulta por párrafo"));
 
@@ -107,7 +98,6 @@ class PresentacionServiceImplTest {
     void getPresentacionesByUserIdAndParrafo_WithValidArgs_ShouldReturnPage() {
         Presentacion presentacion = new Presentacion(3L, "Presentación por usuario", null);
         Page<Presentacion> page = new PageImpl<>(List.of(presentacion), PageRequest.of(0, 10), 1);
-        when(utils.createPageable(0,10)).thenReturn(pageable);
         when(presentacionRepository.findByUserIdAndParrafoContainingIgnoreCase(eq(1L), eq("usuario"), any(Pageable.class)))
             .thenReturn(page);
 
@@ -121,7 +111,6 @@ class PresentacionServiceImplTest {
 
     @Test
     void getPresentacionesByUserIdAndParrafo_WhenRepositoryThrows_ShouldPropagateException() {
-        when(utils.createPageable(0, 10)).thenReturn(pageable);
         when(presentacionRepository.findByUserIdAndParrafoContainingIgnoreCase(anyLong(), any(), any(Pageable.class)))
             .thenThrow(new RuntimeException("Error en consulta por usuario y párrafo"));
 
@@ -224,7 +213,6 @@ class PresentacionServiceImplTest {
     @Test
     void getPresentaciones_NullPageSize_ShouldUseDefaults() {
         Presentacion presentacion = new Presentacion(10L, "Default page/size", null);
-        when(utils.createPageable(null, null)).thenReturn(pageable);
         Page<Presentacion> page = new PageImpl<>(List.of(presentacion), PageRequest.of(0, 10), 1);
 
         when(presentacionRepository.findAll(PageRequest.of(0, 10))).thenReturn(page);
@@ -239,7 +227,6 @@ class PresentacionServiceImplTest {
     @Test
     void getPresentaciones_NegativePageSize_ShouldUseDefaults() {
         Presentacion presentacion = new Presentacion(11L, "Negative page/size", null);
-        when(utils.createPageable(-5, -1)).thenReturn(pageable);
         Page<Presentacion> page = new PageImpl<>(List.of(presentacion), PageRequest.of(0, 10), 1);
 
         when(presentacionRepository.findAll(PageRequest.of(0, 10))).thenReturn(page);
@@ -254,7 +241,6 @@ class PresentacionServiceImplTest {
     @Test
     void getPresentacionesByParrafo_NullPageSize_ShouldUseDefaults() {
         Presentacion presentacion = new Presentacion(12L, "Parrafo default", null);
-        when(utils.createPageable(null, null)).thenReturn(pageable);
         Page<Presentacion> page = new PageImpl<>(List.of(presentacion), PageRequest.of(0, 10), 1);
 
         when(presentacionRepository.findByParrafoContainingIgnoreCase(eq("test"), any(Pageable.class))).thenReturn(page);
@@ -269,7 +255,6 @@ class PresentacionServiceImplTest {
     @Test
     void getPresentacionesByParrafo_NegativePageSize_ShouldUseDefaults() {
         Presentacion presentacion = new Presentacion(13L, "Parrafo negative", null);
-        when(utils.createPageable(-2, -3)).thenReturn(pageable);
         Page<Presentacion> page = new PageImpl<>(List.of(presentacion), PageRequest.of(0, 10), 1);
 
         when(presentacionRepository.findByParrafoContainingIgnoreCase(eq("neg"), any(Pageable.class))).thenReturn(page);
@@ -284,7 +269,6 @@ class PresentacionServiceImplTest {
     @Test
     void getPresentacionesByUserIdAndParrafo_NullPageSize_ShouldUseDefaults() {
         Presentacion presentacion = new Presentacion(1L, "User parrafo default", null);
-        when(utils.createPageable(null, null)).thenReturn(pageable);
         Page<Presentacion> page = new PageImpl<>(List.of(presentacion), PageRequest.of(0, 10), 1);
 
         when(presentacionRepository.findByUserIdAndParrafoContainingIgnoreCase(eq(1L), eq("u"), any(Pageable.class))).thenReturn(page);
@@ -299,7 +283,6 @@ class PresentacionServiceImplTest {
     @Test
     void getPresentacionesByUserIdAndParrafo_NegativePageSize_ShouldUseDefaults() {
         Presentacion presentacion = new Presentacion(15L, "User parrafo negative", null);
-        when(utils.createPageable(-4, -7)).thenReturn(pageable);
         Page<Presentacion> page = new PageImpl<>(List.of(presentacion), PageRequest.of(0, 10), 1);
 
         when(presentacionRepository.findByUserIdAndParrafoContainingIgnoreCase(eq(1L), eq("u2"), any(Pageable.class))).thenReturn(page);

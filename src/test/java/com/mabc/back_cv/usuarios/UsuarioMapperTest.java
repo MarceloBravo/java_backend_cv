@@ -3,7 +3,7 @@ package com.mabc.back_cv.usuarios;
 import com.mabc.back_cv.web.dto.UsuarioDTO;
 import com.mabc.back_cv.web.entities.Rol;
 import com.mabc.back_cv.web.entities.User;
-import com.mabc.back_cv.web.services.usuarios.UsuarioUtils;
+import com.mabc.back_cv.web.services.usuarios.UsuarioMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -13,8 +13,8 @@ import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@DisplayName("Pruebas unitarias de UsuarioUtils")
-class UsuarioUtilsTest {
+@DisplayName("Pruebas unitarias de UsuarioMapper")
+class UsuarioMapperTest {
 
     private Rol rol;
     private User userBase;
@@ -58,7 +58,7 @@ class UsuarioUtilsTest {
         @Test
         @DisplayName("Éxito: mapea correctamente todos los campos de User a UsuarioDTO")
         void exitoMapeoCompleto() {
-            UsuarioDTO result = UsuarioUtils.userToDTO(userBase);
+            UsuarioDTO result = UsuarioMapper.userToDTO(userBase);
 
             assertNotNull(result);
             assertEquals(10L, result.getId());
@@ -73,7 +73,7 @@ class UsuarioUtilsTest {
         @Test
         @DisplayName("Éxito: el campo password NO se copia al DTO (seguridad)")
         void passwordNoSeCopiaalDTO() {
-            UsuarioDTO result = UsuarioUtils.userToDTO(userBase);
+            UsuarioDTO result = UsuarioMapper.userToDTO(userBase);
 
             assertNull(result.getPassword());
         }
@@ -91,7 +91,7 @@ class UsuarioUtilsTest {
             userMinimo.setRol(rol);
             userMinimo.setParrafos(new ArrayList<>());
 
-            UsuarioDTO result = UsuarioUtils.userToDTO(userMinimo);
+            UsuarioDTO result = UsuarioMapper.userToDTO(userMinimo);
 
             assertNotNull(result);
             assertEquals(5L, result.getId());
@@ -101,7 +101,7 @@ class UsuarioUtilsTest {
         @Test
         @DisplayName("Parámetro nulo: lanza NullPointerException al recibir null")
         void userNuloLanzaExcepcion() {
-            assertThrows(NullPointerException.class, () -> UsuarioUtils.userToDTO(null));
+            assertThrows(NullPointerException.class, () -> UsuarioMapper.userToDTO(null));
         }
     }
 
@@ -115,7 +115,7 @@ class UsuarioUtilsTest {
         @Test
         @DisplayName("Éxito: mapea correctamente todos los campos de UsuarioDTO a User")
         void exitoMapeoCompleto() {
-            User result = UsuarioUtils.DTOToUser(dtoBases);
+            User result = UsuarioMapper.DTOToUser(dtoBases);
 
             assertNotNull(result);
             assertEquals(10L, result.getId());
@@ -132,7 +132,7 @@ class UsuarioUtilsTest {
         void exitoSinId() {
             dtoBases.setId(null);
 
-            User result = UsuarioUtils.DTOToUser(dtoBases);
+            User result = UsuarioMapper.DTOToUser(dtoBases);
 
             assertNotNull(result);
             assertNull(result.getId());
@@ -143,7 +143,7 @@ class UsuarioUtilsTest {
         void exitoActivoFalse() {
             dtoBases.setActivo(false);
 
-            User result = UsuarioUtils.DTOToUser(dtoBases);
+            User result = UsuarioMapper.DTOToUser(dtoBases);
 
             assertFalse(result.getActivo());
         }
@@ -154,7 +154,7 @@ class UsuarioUtilsTest {
             dtoBases.setNombre("");
             dtoBases.setApellido("");
 
-            User result = UsuarioUtils.DTOToUser(dtoBases);
+            User result = UsuarioMapper.DTOToUser(dtoBases);
 
             assertEquals("", result.getNombre());
             assertEquals("", result.getApellido());
@@ -163,7 +163,7 @@ class UsuarioUtilsTest {
         @Test
         @DisplayName("Parámetro nulo: lanza NullPointerException al recibir null")
         void dtoNuloLanzaExcepcion() {
-            assertNull(UsuarioUtils.DTOToUser(null));
+            assertNull(UsuarioMapper.DTOToUser(null));
         }
     }
 
@@ -177,9 +177,9 @@ class UsuarioUtilsTest {
         @Test
         @DisplayName("User convertido a DTO y de vuelta a User mantiene los mismos campos de negocio")
         void cicloUserDTOUser() {
-            UsuarioDTO dto = UsuarioUtils.userToDTO(userBase);
+            UsuarioDTO dto = UsuarioMapper.userToDTO(userBase);
             dto.setPassword("secret"); // restaurar password para la conversión inversa
-            User userReconstruido = UsuarioUtils.DTOToUser(dto);
+            User userReconstruido = UsuarioMapper.DTOToUser(dto);
 
             assertEquals(userBase.getId(), userReconstruido.getId());
             assertEquals(userBase.getNombre(), userReconstruido.getNombre());

@@ -6,7 +6,7 @@ import com.mabc.back_cv.web.dto.UserPresentationDTO;
 import com.mabc.back_cv.web.dto.UsuarioDTO;
 import com.mabc.back_cv.web.entities.UserPresentation;
 import com.mabc.back_cv.web.entities.User;
-import com.mabc.back_cv.web.services.userPresentation.UserPresentationUtils;
+import com.mabc.back_cv.web.services.userPresentation.UserPresentationMapper;
 import com.mabc.back_cv.web.repositories.UserPresentationRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -27,14 +27,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import org.junit.jupiter.api.DisplayName;
 
 @ExtendWith(MockitoExtension.class)
-@DisplayName("UserPresentationUtilsTest Tests")
-public class UserPresentationUtilsTest{
+@DisplayName("UserPresentationMapperTest Tests")
+public class UserPresentationMapperTest{
 
     @Mock
     private UserPresentationRepository userPresentationRepository;
 
     @Mock
-    private UserPresentationUtils userPresentationUtils;
+    private UserPresentationMapper UserPresentationMapper;
 
     private ObjectMapper objectMapper;
     private UserPresentation userPresentation;
@@ -71,62 +71,9 @@ public class UserPresentationUtilsTest{
     }
 
     @Test
-    void createPageable_conParametrosValidos_retornaPageable() throws Exception {
-        Pageable pageable = UserPresentationUtils.createPageable(0, 10);
-        assertEquals(0, pageable.getPageNumber());
-        assertEquals(10, pageable.getPageSize());
-    }
-
-    @Test
-    void createPageable_conParametrosNulos_retornaPageable() throws Exception {
-        Pageable pageable = UserPresentationUtils.createPageable(null, null);
-        assertEquals(0, pageable.getPageNumber());
-        assertEquals(10, pageable.getPageSize());
-
-        Pageable pageable2 = UserPresentationUtils.createPageable(null, 10);
-        assertEquals(0, pageable2.getPageNumber());
-        assertEquals(10, pageable2.getPageSize());
-
-        Pageable pageable3 = UserPresentationUtils.createPageable(0, null);
-        assertEquals(0, pageable3.getPageNumber());
-        assertEquals(10, pageable3.getPageSize());
-    }
-
-    @Test
-    void createPageable_conParametrosNegativos_retornaPageable() throws Exception {
-        Pageable pageable = UserPresentationUtils.createPageable(-1, -10);
-        assertEquals(0, pageable.getPageNumber());
-        assertEquals(10, pageable.getPageSize());
-
-        Pageable pageable2 = UserPresentationUtils.createPageable(0, -10);
-        assertEquals(0, pageable2.getPageNumber());
-        assertEquals(10, pageable2.getPageSize());
-
-        Pageable pageable3 = UserPresentationUtils.createPageable(-1, 10);
-        assertEquals(0, pageable3.getPageNumber());
-        assertEquals(10, pageable3.getPageSize());
-    }
-
-
-    @Test
-    void createPageable_conParametrosNulosYNegativos_retornaPageable() throws Exception {
-        Pageable pageable = UserPresentationUtils.createPageable(null, -10);
-        assertEquals(0, pageable.getPageNumber());
-        assertEquals(10, pageable.getPageSize());
-
-        Pageable pageable2 = UserPresentationUtils.createPageable(0, null);
-        assertEquals(0, pageable2.getPageNumber());
-        assertEquals(10, pageable2.getPageSize());
-
-        Pageable pageable3 = UserPresentationUtils.createPageable(null, 10);
-        assertEquals(0, pageable3.getPageNumber());
-        assertEquals(10, pageable3.getPageSize());
-    }
-
-    @Test
     void dtoToEntity_conDTOValido_retornaEntity() throws Exception {
         userPresentationDTO.setUser(usuarioDTO);
-        UserPresentation userPresentation = UserPresentationUtils.dtoToEntity(userPresentationDTO);
+        UserPresentation userPresentation = UserPresentationMapper.dtoToEntity(userPresentationDTO);
         assertEquals(userPresentationDTO.getId(), userPresentation.getId());
         assertEquals(userPresentationDTO.getPosicion(), userPresentation.getPosicion());
         assertEquals(userPresentationDTO.getParrafo(), userPresentation.getParrafo());
@@ -137,13 +84,13 @@ public class UserPresentationUtilsTest{
 
     @Test
     void dtoToEntity_conDTONulo_retornaNulo() throws Exception {
-        UserPresentation userPresentation = UserPresentationUtils.dtoToEntity(null);
+        UserPresentation userPresentation = UserPresentationMapper.dtoToEntity(null);
         assertNull(userPresentation);
     }
 
     @Test
     void entityToDTO_conEntityValidao_retornaDTO() throws Exception {
-        UserPresentationDTO userPresentationDTO = UserPresentationUtils.entityToDTO(userPresentation);
+        UserPresentationDTO userPresentationDTO = UserPresentationMapper.entityToDTO(userPresentation);
         assertEquals(userPresentationDTO.getId(), userPresentation.getId());
         assertEquals(userPresentationDTO.getPosicion(), userPresentation.getPosicion());
         assertEquals(userPresentationDTO.getParrafo(), userPresentation.getParrafo());
@@ -154,7 +101,7 @@ public class UserPresentationUtilsTest{
 
     @Test
     void entityToDTO_conEntityNulo_retornaNulo() throws Exception {
-        UserPresentationDTO userPresentationDTO = UserPresentationUtils.entityToDTO(null);
+        UserPresentationDTO userPresentationDTO = UserPresentationMapper.entityToDTO(null);
         assertNull(userPresentationDTO);
     }
 }

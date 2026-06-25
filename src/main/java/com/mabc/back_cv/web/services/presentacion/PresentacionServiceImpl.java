@@ -9,8 +9,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import static com.mabc.back_cv.web.services.presentacion.PresentacionUtils.dtoToEntity;
-import static com.mabc.back_cv.web.services.presentacion.PresentacionUtils.entityToDTO;
+import static com.mabc.back_cv.web.services.presentacion.PresentacionMapper.dtoToEntity;
+import static com.mabc.back_cv.web.services.presentacion.PresentacionMapper.entityToDTO;
 
 import com.mabc.back_cv.common.Utils;
 
@@ -19,11 +19,11 @@ import com.mabc.back_cv.common.Utils;
  * de negocio relacionadas con las presentaciones del CV.
  *
  * <p>Utiliza {@link PresentacionRepository} para el acceso a datos y
- * {@link PresentacionUtils} para la conversión entre entidades y DTOs.</p>
+ * {@link PresentacionMapper} para la conversión entre entidades y DTOs.</p>
  *
  * @author mabc
  * @see PresentacionService
- * @see PresentacionUtils
+ * @see PresentacionMapper
  */
 @Service
 public class PresentacionServiceImpl implements PresentacionService {
@@ -32,8 +32,6 @@ public class PresentacionServiceImpl implements PresentacionService {
     @Autowired
     private PresentacionRepository presentacionRepository;
     
-    @Autowired
-    private Utils utils;
 
     /**
      * {@inheritDoc}
@@ -43,9 +41,9 @@ public class PresentacionServiceImpl implements PresentacionService {
      */
     @Override
     public Page<PresentacionDTO> getPresentaciones(Integer page, Integer size) {
-        Pageable pageable = utils.createPageable(page, size);
+        Pageable pageable = Utils.createPageable(page, size);
         Page<Presentacion> presentaciones = presentacionRepository.findAll(pageable);
-        return presentaciones.map(PresentacionUtils::entityToDTO);
+        return presentaciones.map(PresentacionMapper::entityToDTO);
     }
 
     /**
@@ -57,9 +55,9 @@ public class PresentacionServiceImpl implements PresentacionService {
      */
     @Override
     public Page<PresentacionDTO> getPresentaciones(String parrafo, Integer page, Integer size){
-        Pageable pageable = utils.createPageable(page, size);
+        Pageable pageable = Utils.createPageable(page, size);
         Page<Presentacion> presentaciones = presentacionRepository.findByParrafoContainingIgnoreCase(parrafo, pageable);
-        return presentaciones.map(PresentacionUtils::entityToDTO);
+        return presentaciones.map(PresentacionMapper::entityToDTO);
     }
 
     /**
@@ -71,9 +69,9 @@ public class PresentacionServiceImpl implements PresentacionService {
      */
     @Override
     public Page<PresentacionDTO> getPresentaciones(Long userId, String parrafo, Integer page, Integer size){
-        Pageable pageable = utils.createPageable(page, size);
+        Pageable pageable = Utils.createPageable(page, size);
         Page<Presentacion> presentaciones = presentacionRepository.findByUserIdAndParrafoContainingIgnoreCase(userId, parrafo, pageable);
-        return presentaciones.map(PresentacionUtils::entityToDTO);
+        return presentaciones.map(PresentacionMapper::entityToDTO);
     }
 
     /**
@@ -87,24 +85,24 @@ public class PresentacionServiceImpl implements PresentacionService {
         if(userId == null || userId < 0) {
             return null;
         }
-        return PresentacionUtils.entityToDTO(presentacionRepository.findByUserId(userId));
+        return PresentacionMapper.entityToDTO(presentacionRepository.findByUserId(userId));
     }
 
     /**
      * {@inheritDoc}
      *
-     * <p>El párrafo del DTO es saneado por {@link PresentacionUtils#dtoToEntity(PresentacionDTO)}
+     * <p>El párrafo del DTO es saneado por {@link PresentacionMapper#dtoToEntity(PresentacionDTO)}
      * antes de la persistencia (eliminación de espacios redundantes).</p>
      *
      * @throws IllegalArgumentException si la conversión del DTO produce una entidad {@code null}.
      */
     @Override
     public PresentacionDTO savePresentacion(PresentacionDTO presentacion) {
-        Presentacion presentacionEntity = PresentacionUtils.dtoToEntity(presentacion);
+        Presentacion presentacionEntity = PresentacionMapper.dtoToEntity(presentacion);
         if(presentacionEntity == null){
             throw new IllegalArgumentException("La presentación no puede ser nula.");
         }
-        return PresentacionUtils.entityToDTO(presentacionRepository.save(presentacionEntity));
+        return PresentacionMapper.entityToDTO(presentacionRepository.save(presentacionEntity));
     }
 
     /**

@@ -8,17 +8,7 @@ import com.mabc.back_cv.web.dto.RolDTO;
 import com.mabc.back_cv.web.entities.Rol;
 
 @Component
-public class RolUtils {
-
-    public Pageable createPageable(int page, int rows) {
-        if (page < 0) {
-            page = 0;
-        }
-        if (rows <= 0) {
-            rows = 10;
-        }
-        return PageRequest.of(page, rows);
-    }
+public class RolMapper {
 
     public Rol mapToRol(RolDTO rolDTO) {
         if (rolDTO == null || rolDTO.getNombre() == null || rolDTO.getNombre().isEmpty()) {

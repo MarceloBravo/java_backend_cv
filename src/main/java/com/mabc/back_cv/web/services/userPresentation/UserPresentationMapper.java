@@ -6,17 +6,10 @@ import org.springframework.stereotype.Component;
 
 import com.mabc.back_cv.web.dto.UserPresentationDTO;
 import com.mabc.back_cv.web.entities.UserPresentation;
-import com.mabc.back_cv.web.services.usuarios.UsuarioUtils;
+import com.mabc.back_cv.web.services.usuarios.UsuarioMapper;
 
 @Component
-public class UserPresentationUtils{
-
-    
-    public static  Pageable createPageable(Integer page, Integer rows){
-        page = (page == null || page < 0) ? 0 : page;
-        rows = (rows == null || rows <= 0) ? 10 : rows;
-        return PageRequest.of(page, rows);
-    }
+public class UserPresentationMapper{
 
     public static  UserPresentation dtoToEntity(UserPresentationDTO userPresentationDTO){
         if(userPresentationDTO == null){
@@ -28,7 +21,7 @@ public class UserPresentationUtils{
         }
         userPresentation.setPosicion(userPresentationDTO.getPosicion());
         userPresentation.setParrafo(userPresentationDTO.getParrafo());
-        userPresentation.setUser(UsuarioUtils.DTOToUser(userPresentationDTO.getUser()));
+        userPresentation.setUser(UsuarioMapper.DTOToUser(userPresentationDTO.getUser()));
         return userPresentation;
     }
 
@@ -40,7 +33,7 @@ public class UserPresentationUtils{
         userPresentationDTO.setId(userPresentation.getId());
         userPresentationDTO.setPosicion(userPresentation.getPosicion());
         userPresentationDTO.setParrafo(userPresentation.getParrafo());
-        userPresentationDTO.setUser(UsuarioUtils.userToDTO(userPresentation.getUser()));
+        userPresentationDTO.setUser(UsuarioMapper.userToDTO(userPresentation.getUser()));
         return userPresentationDTO;
     }
 }

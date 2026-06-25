@@ -11,7 +11,7 @@ import com.mabc.back_cv.web.entities.Educacion;
 import com.mabc.back_cv.web.dto.EducacionDTO;
 import com.mabc.back_cv.web.repositories.EducacionRepository;
 
-import com.mabc.back_cv.web.services.educacion.EducacionUtils;
+import com.mabc.back_cv.web.services.educacion.EducacionMapper;
 
 import com.mabc.back_cv.common.Utils;
 
@@ -22,26 +22,24 @@ public class EducacionServiceImpl implements EducacionService{
     @Autowired
     private EducacionRepository educacionRepository;
     
-    @Autowired
-    private Utils utils;
 
     @Override
     public Page<EducacionDTO> findByUserId(Long userId, Integer page, Integer size){
-        Pageable pageable = utils.createPageable(page, size);
+        Pageable pageable = Utils.createPageable(page, size);
         Page<Educacion> entity = educacionRepository.findByUserId(userId, pageable);
-        return entity.map(educacion -> EducacionUtils.entityToDTO(educacion));
+        return entity.map(educacion -> EducacionMapper.entityToDTO(educacion));
     }
 
     @Override
     public Page<EducacionDTO> findBySearchText(Long userId, String searchText, Integer page, Integer size){
-        Pageable pageable = utils.createPageable(page, size);
+        Pageable pageable = Utils.createPageable(page, size);
         Page<Educacion> entity;
         if(searchText == null){
             entity = educacionRepository.getAllByUserId(userId, pageable);
         }else{
             entity = educacionRepository.findBySearchText(userId, searchText, pageable);
         } 
-        return entity.map(educacion -> EducacionUtils.entityToDTO(educacion));
+        return entity.map(educacion -> EducacionMapper.entityToDTO(educacion));
     }
 
     @Override
@@ -50,17 +48,17 @@ public class EducacionServiceImpl implements EducacionService{
             return null;
         }
         Educacion entity = educacionRepository.findById(id).orElse(null);
-        return EducacionUtils.entityToDTO(entity);
+        return EducacionMapper.entityToDTO(entity);
     }
 
     @Override
     public EducacionDTO save(EducacionDTO educacion){
-        Educacion entity = EducacionUtils.dtoToEntity(educacion);
+        Educacion entity = EducacionMapper.dtoToEntity(educacion);
         if(entity == null){
             throw new IllegalArgumentException("Datos inválidos.");
         }
         entity = educacionRepository.save(entity);
-        return EducacionUtils.entityToDTO(entity);
+        return EducacionMapper.entityToDTO(entity);
     }
 
     @Override
