@@ -373,5 +373,21 @@ class UsuariosServiceImplTest {
             assertEquals("Error: El usuario no existe.", ex.getMessage());
             verifyNoInteractions(userRepository);
         }
+
+        @Test
+        @DisplayName("Error: lanza RuntimeException cuando el usuario persiste tras eliminar")
+        void errorUsuarioNoSePudoEliminar() {
+            when(userRepository.existsById(1L)).thenReturn(true);
+            doNothing().when(userRepository).deleteById(1L);
+            when(userRepository.findById(1L)).thenReturn(Optional.of(userBase));
+
+            RuntimeException ex = assertThrows(RuntimeException.class,
+                    () -> service.deleteUsuario(1L));
+
+            assertEquals("Error: El usuario no se pudo eliminar.", ex.getMessage());
+            verify(userRepository).existsById(1L);
+            verify(userRepository).deleteById(1L);
+            verify(userRepository).findById(1L);
+        }
     }
 }
