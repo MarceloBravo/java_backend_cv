@@ -12,6 +12,10 @@ import com.mabc.back_cv.web.repositories.CursoRepository;
 
 import com.mabc.back_cv.common.Utils;
 
+/**
+ * Implementación del servicio de cursos.
+ * Proporciona la lógica de negocio para las operaciones CRUD de cursos.
+ */
 @Service
 public class CursoServiceImpl implements CursoService {
 

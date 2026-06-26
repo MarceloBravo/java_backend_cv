@@ -15,6 +15,10 @@ import com.mabc.back_cv.web.repositories.PantallaRepository;
 
 import com.mabc.back_cv.common.Utils;
 
+/**
+ * Implementación del servicio de pantallas.
+ * Proporciona la lógica de negocio para las operaciones CRUD de pantallas.
+ */
 @Service
 public class PantallaServiceImpl implements PantallaService {
 

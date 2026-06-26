@@ -8,9 +8,18 @@ import com.mabc.back_cv.web.entities.Educacion;
 import com.mabc.back_cv.web.dto.EducacionDTO;
 import com.mabc.back_cv.web.services.usuarios.UsuarioMapper;
 
+/**
+ * Mapper para la conversión entre entidades Educacion y DTOs EducacionDTO.
+ */
 @Component
 public class EducacionMapper{
 
+    /**
+     * Convierte una entidad Educacion a un EducacionDTO.
+     *
+     * @param educacion Entidad a convertir.
+     * @return EducacionDTO convertido o null si la entidad es null.
+     */
     public static EducacionDTO entityToDTO(Educacion educacion){
         if(educacion == null){
             return null;
@@ -32,6 +41,12 @@ public class EducacionMapper{
         return educacionDTO;
     }
 
+    /**
+     * Convierte un EducacionDTO a una entidad Educacion.
+     *
+     * @param educacionDTO DTO a convertir.
+     * @return Entidad Educacion convertida o null si el DTO es null.
+     */
     public static Educacion dtoToEntity(EducacionDTO educacionDTO){
         if(educacionDTO == null){
             return null;

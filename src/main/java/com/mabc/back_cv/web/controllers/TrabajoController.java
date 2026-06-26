@@ -20,6 +20,10 @@ import jakarta.validation.Valid;
 
 import java.util.List;
 
+/**
+ * Controlador REST para la gestión de trabajos o experiencias laborales.
+ * Proporciona endpoints para listar, paginar, obtener, guardar y eliminar trabajos.
+ */
 @RestController
 @RequestMapping("/trabajos")
 public class TrabajoController{
@@ -27,6 +31,13 @@ public class TrabajoController{
     @Autowired
     private TrabajoService trabajoService;
 
+    /**
+     * Obtiene la lista de trabajos filtrados por usuario y texto de búsqueda.
+     *
+     * @param searchText Texto de búsqueda opcional.
+     * @param userId     Identificador del usuario (obligatorio).
+     * @return ResponseEntity con la lista de TrabajoDTO o error 500.
+     */
     @GetMapping("/all")
     public ResponseEntity<List<TrabajoDTO>> getAll(
         @RequestParam(value = "searchText", defaultValue="") String searchText,
@@ -43,6 +54,15 @@ public class TrabajoController{
         }
     }
     
+    /**
+     * Obtiene una página de trabajos filtrados por usuario y texto de búsqueda.
+     *
+     * @param searchText Texto de búsqueda opcional.
+     * @param userId     Identificador del usuario (obligatorio).
+     * @param page       Número de página (por defecto 0).
+     * @param size       Tamaño de página (por defecto 10).
+     * @return ResponseEntity con la página de TrabajoDTO o error 500.
+     */
     @GetMapping("/page")
     public ResponseEntity<Page<TrabajoDTO>> getAll(
         @RequestParam(value = "searchText", defaultValue="") String searchText,
@@ -61,6 +81,12 @@ public class TrabajoController{
         }
     }
 
+    /**
+     * Obtiene un trabajo por su identificador.
+     *
+     * @param id Identificador único del trabajo.
+     * @return ResponseEntity con el TrabajoDTO encontrado, 404 si no existe o error 500.
+     */
     @GetMapping("/{id}")
     public ResponseEntity<TrabajoDTO> getById(@PathVariable Long id){
         try{
@@ -74,6 +100,12 @@ public class TrabajoController{
         }
     }
 
+    /**
+     * Crea o actualiza un trabajo.
+     *
+     * @param trabajoRequestDTO DTO con los datos del trabajo a guardar.
+     * @return ResponseEntity con el TrabajoDTO guardado o error 500.
+     */
     @PostMapping("/save")
     public ResponseEntity<TrabajoDTO> save(@RequestBody @Valid TrabajoDTO trabajoRequestDTO){
         try{
@@ -84,6 +116,12 @@ public class TrabajoController{
         }
     }
 
+    /**
+     * Elimina un trabajo por su identificador.
+     *
+     * @param id Identificador único del trabajo a eliminar.
+     * @return ResponseEntity con mensaje de confirmación o error 400.
+     */
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> delete(@PathVariable Long id){
         try{    

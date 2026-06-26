@@ -18,6 +18,10 @@ import com.mabc.back_cv.web.services.userPresentation.UserPresentationService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 
+/**
+ * Controlador REST para la gestión de presentaciones de usuario (UserPresentation).
+ * Proporciona endpoints para listar, obtener, guardar y eliminar presentaciones de usuario.
+ */
 @RestController
 @RequestMapping("/userPresentation")
 public class UserPresentationController{
@@ -25,6 +29,15 @@ public class UserPresentationController{
     @Autowired
     private UserPresentationService userPresentationService;
 
+    /**
+     * Obtiene una página de presentaciones de usuario con filtros opcionales.
+     *
+     * @param searchText Texto de búsqueda opcional para filtrar resultados.
+     * @param userId     Identificador del usuario para filtrar (opcional).
+     * @param page       Número de página (por defecto 0).
+     * @param size       Tamaño de página (por defecto 10).
+     * @return ResponseEntity con la página de UserPresentationDTO o error 500.
+     */
     @GetMapping("/all")
     public ResponseEntity<Page<UserPresentationDTO>> getAll(
         @RequestParam(value = "searchText", defaultValue="") String searchText,
@@ -40,6 +53,12 @@ public class UserPresentationController{
         }
     }
 
+    /**
+     * Obtiene una presentación de usuario por su identificador.
+     *
+     * @param id Identificador único de la presentación.
+     * @return ResponseEntity con el UserPresentationDTO encontrado, 404 si no existe o error 500.
+     */
     @GetMapping("/{id}")
     public ResponseEntity<UserPresentationDTO> getById(@PathVariable Long id){
         try{
@@ -53,6 +72,12 @@ public class UserPresentationController{
         }
     }
 
+    /**
+     * Crea o actualiza una presentación de usuario.
+     *
+     * @param userPresentationRequestDTO DTO con los datos de la presentación a guardar.
+     * @return ResponseEntity con el UserPresentationDTO guardado o error 500.
+     */
     @PostMapping("/save")
     public ResponseEntity<UserPresentationDTO> save(@Valid @RequestBody UserPresentationDTO userPresentationRequestDTO){
         try{
@@ -63,6 +88,12 @@ public class UserPresentationController{
         }
     }
 
+    /**
+     * Elimina una presentación de usuario por su identificador.
+     *
+     * @param id Identificador único de la presentación a eliminar.
+     * @return ResponseEntity con mensaje de confirmación o error 400.
+     */
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> delete(@PathVariable Long id){
         try{

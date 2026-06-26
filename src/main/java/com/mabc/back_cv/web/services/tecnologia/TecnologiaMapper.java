@@ -7,9 +7,18 @@ import com.mabc.back_cv.web.dto.TecnologiaDTO;
 import com.mabc.back_cv.web.entities.Tecnologia;
 
 
+/**
+ * Mapper para la conversión entre entidades Tecnologia y DTOs TecnologiaDTO.
+ */
 @Component
 public class TecnologiaMapper{
 
+    /**
+     * Convierte una entidad Tecnologia a un TecnologiaDTO.
+     *
+     * @param entity Entidad a convertir.
+     * @return TecnologiaDTO convertido o null si la entidad es null.
+     */
     public static TecnologiaDTO entityToDTO(Tecnologia entity){
         if(entity == null){
             return null;
@@ -23,6 +32,12 @@ public class TecnologiaMapper{
         return dto;
     }
 
+    /**
+     * Convierte un TecnologiaDTO a una entidad Tecnologia.
+     *
+     * @param dto DTO a convertir.
+     * @return Entidad Tecnologia convertida o null si el DTO es null.
+     */
     public static Tecnologia dtoToEntity(TecnologiaDTO dto){
         if(dto == null){
             return null;

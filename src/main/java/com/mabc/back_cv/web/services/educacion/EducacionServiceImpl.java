@@ -16,6 +16,10 @@ import com.mabc.back_cv.web.services.educacion.EducacionMapper;
 import com.mabc.back_cv.common.Utils;
 
 
+/**
+ * Implementación del servicio de educación.
+ * Proporciona la lógica de negocio para las operaciones CRUD de registros educativos.
+ */
 @Service
 public class EducacionServiceImpl implements EducacionService{
 

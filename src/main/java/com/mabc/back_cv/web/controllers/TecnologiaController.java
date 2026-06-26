@@ -21,6 +21,10 @@ import jakarta.validation.Valid;
 
 import java.util.List;
 
+/**
+ * Controlador REST para la gestión de tecnologías.
+ * Proporciona endpoints para listar, paginar, obtener, guardar y eliminar tecnologías.
+ */
 @RestController
 @RequestMapping("/tecnologias")
 public class TecnologiaController {
@@ -28,6 +32,14 @@ public class TecnologiaController {
     @Autowired
     private TecnologiaService service;
 
+    /**
+     * Obtiene una página de tecnologías filtradas por texto de búsqueda.
+     *
+     * @param searchText Texto de búsqueda opcional.
+     * @param page       Número de página (por defecto 0).
+     * @param size       Tamaño de página (por defecto 10).
+     * @return ResponseEntity con la página de TecnologiaDTO o error 500.
+     */
     @GetMapping("/all")
     public ResponseEntity<Page<TecnologiaDTO>> getAll(
         @RequestParam(value = "searchText", defaultValue="") String searchText,
@@ -42,6 +54,12 @@ public class TecnologiaController {
         }
     }
 
+    /**
+     * Obtiene la lista completa de tecnologías filtradas por texto de búsqueda.
+     *
+     * @param searchText Texto de búsqueda opcional.
+     * @return ResponseEntity con la lista de TecnologiaDTO o error 500.
+     */
     @GetMapping("/list")
     public ResponseEntity<List<TecnologiaDTO>> getList(
         @RequestParam(value = "searchText", defaultValue="") String searchText
@@ -54,6 +72,12 @@ public class TecnologiaController {
         }
     }
 
+    /**
+     * Obtiene una tecnología por su identificador.
+     *
+     * @param id Identificador único de la tecnología.
+     * @return ResponseEntity con el TecnologiaDTO encontrado, 404 si no existe o error 500.
+     */
     @GetMapping("/{id}")
     public ResponseEntity<TecnologiaDTO> getById(@PathVariable Long id){
         try{
@@ -67,6 +91,12 @@ public class TecnologiaController {
         }
     }
 
+    /**
+     * Crea o actualiza una tecnología.
+     *
+     * @param tecnologiaRequestDTO DTO con los datos de la tecnología a guardar.
+     * @return ResponseEntity con el TecnologiaDTO guardado o error 500.
+     */
     @PostMapping("/save")
     public ResponseEntity<TecnologiaDTO> save(@Valid @RequestBody TecnologiaDTO tecnologiaRequestDTO){
         try{    
@@ -77,6 +107,12 @@ public class TecnologiaController {
         }
     }
 
+    /**
+     * Elimina una tecnología por su identificador.
+     *
+     * @param id Identificador único de la tecnología a eliminar.
+     * @return ResponseEntity con mensaje de confirmación o error 400.
+     */
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> delete(@PathVariable Long id){
         try{

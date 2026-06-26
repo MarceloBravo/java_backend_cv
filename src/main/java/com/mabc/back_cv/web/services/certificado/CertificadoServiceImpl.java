@@ -11,6 +11,10 @@ import com.mabc.back_cv.web.repositories.CertificadoRepository;
 
 import com.mabc.back_cv.common.Utils;
 
+/**
+ * Implementación del servicio de certificados.
+ * Proporciona la lógica de negocio para las operaciones CRUD de certificados.
+ */
 @Service
 public class CertificadoServiceImpl implements CertificadoService {
 

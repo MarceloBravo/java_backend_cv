@@ -8,6 +8,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * Controlador REST para la gestión de certificados.
+ * Proporciona endpoints para listar, paginar, obtener, guardar y eliminar certificados.
+ */
 @RestController
 @RequestMapping("/certificado")
 public class CertificadoController {
@@ -15,6 +19,15 @@ public class CertificadoController {
     @Autowired
     private CertificadoService certificadoService;
 
+    /**
+     * Obtiene una página de certificados filtrados por usuario y texto de búsqueda.
+     *
+     * @param userId     Identificador del usuario (opcional).
+     * @param searchText Texto de búsqueda (opcional).
+     * @param page       Número de página (opcional).
+     * @param size       Tamaño de página (opcional).
+     * @return ResponseEntity con la página de CertificadoDTO o error 500.
+     */
     @GetMapping("/all")
     public ResponseEntity<Page<CertificadoDTO>> getAll(
         @RequestParam(required = false) Long userId,
@@ -30,6 +43,12 @@ public class CertificadoController {
         }
     }
 
+    /**
+     * Obtiene un certificado por su identificador.
+     *
+     * @param id Identificador único del certificado.
+     * @return ResponseEntity con el CertificadoDTO encontrado, 404 si no existe o error 500.
+     */
     @GetMapping("/{id}")
     public ResponseEntity<CertificadoDTO> getById(@PathVariable Long id) {
         try {
@@ -43,6 +62,14 @@ public class CertificadoController {
         }
     }
 
+    /**
+     * Obtiene una página de certificados por usuario.
+     *
+     * @param userId Identificador del usuario.
+     * @param page   Número de página (opcional).
+     * @param size   Tamaño de página (opcional).
+     * @return ResponseEntity con la página de CertificadoDTO o error 500.
+     */
     @GetMapping("/user/{userId}")
     public ResponseEntity<Page<CertificadoDTO>> getAllByUserId(
         @PathVariable(name = "userId") Long userId,
@@ -57,6 +84,12 @@ public class CertificadoController {
         }
     }
 
+    /**
+     * Crea o actualiza un certificado.
+     *
+     * @param certificadoRequestDTO DTO con los datos del certificado a guardar.
+     * @return ResponseEntity con el CertificadoDTO guardado o error 500.
+     */
     @PostMapping("/save")
     public ResponseEntity<CertificadoDTO> save(@RequestBody CertificadoDTO certificadoRequestDTO) {
         try {
@@ -67,6 +100,12 @@ public class CertificadoController {
         }
     }
 
+    /**
+     * Elimina un certificado por su identificador.
+     *
+     * @param id Identificador único del certificado a eliminar.
+     * @return ResponseEntity con mensaje de confirmación o error 400.
+     */
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> delete(@PathVariable Long id) {
         try {

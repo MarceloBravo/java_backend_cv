@@ -6,9 +6,18 @@ import com.mabc.back_cv.web.entities.Certificado;
 import com.mabc.back_cv.web.dto.CertificadoDTO;
 import com.mabc.back_cv.web.services.usuarios.UsuarioMapper;
 
+/**
+ * Mapper para la conversión entre entidades Certificado y DTOs CertificadoDTO.
+ */
 @Component
 public class CertificadoMapper {
 
+    /**
+     * Convierte una entidad Certificado a un CertificadoDTO.
+     *
+     * @param certificado Entidad a convertir.
+     * @return CertificadoDTO convertido o null si la entidad es null.
+     */
     public static CertificadoDTO entityToDTO(Certificado certificado) {
         if (certificado == null) {
             return null;
@@ -24,6 +33,12 @@ public class CertificadoMapper {
         return dto;
     }
 
+    /**
+     * Convierte un CertificadoDTO a una entidad Certificado.
+     *
+     * @param dto DTO a convertir.
+     * @return Entidad Certificado convertida o null si el DTO es null.
+     */
     public static Certificado dtoToEntity(CertificadoDTO dto) {
         if (dto == null) {
             return null;

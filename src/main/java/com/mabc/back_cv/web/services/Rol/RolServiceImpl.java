@@ -13,6 +13,10 @@ import com.mabc.back_cv.web.repositories.RolRepository;
 
 import com.mabc.back_cv.common.Utils;
 
+/**
+ * Implementación del servicio de roles.
+ * Proporciona la lógica de negocio para las operaciones CRUD de roles.
+ */
 @Service
 public class RolServiceImpl implements RolService {
     private final RolRepository rolRepository;

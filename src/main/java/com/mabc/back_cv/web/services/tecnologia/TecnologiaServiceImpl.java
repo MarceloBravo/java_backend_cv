@@ -18,6 +18,10 @@ import com.mabc.back_cv.web.services.tecnologia.TecnologiaMapper;
 import com.mabc.back_cv.common.Utils;
 
 
+/**
+ * Implementación del servicio de tecnologías.
+ * Proporciona la lógica de negocio para las operaciones CRUD de tecnologías.
+ */
 @Service
 public class TecnologiaServiceImpl implements TecnologiaService{
 

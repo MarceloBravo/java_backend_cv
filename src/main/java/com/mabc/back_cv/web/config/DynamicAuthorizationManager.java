@@ -80,6 +80,12 @@ public class DynamicAuthorizationManager implements AuthorizationManager<Request
         return new AuthorizationDecision(granted);
     }
 
+    /**
+     * Extrae el identificador del rol del usuario autenticado.
+     *
+     * @param authentication Objeto de autenticación del usuario actual.
+     * @return ID del rol del usuario, o null si no se pudo determinar.
+     */
     private Long extractRoleId(Authentication authentication) {
         Object principal = authentication.getPrincipal();
         if (principal instanceof User user && user.getRol() != null) {
@@ -89,6 +95,14 @@ public class DynamicAuthorizationManager implements AuthorizationManager<Request
         return null;
     }
 
+    /**
+     * Busca un permiso de pantalla que coincida con el rol y la URI solicitada.
+     * Normaliza la URI eliminando la barra final si existe.
+     *
+     * @param roleId    Identificador del rol.
+     * @param requestUri URI de la solicitud HTTP.
+     * @return Optional con el permiso encontrado, o vacío si no hay coincidencia.
+     */
     private Optional<PermisoPantalla> findMatchingPermission(Long roleId, String requestUri) {
         String ruta = requestUri.endsWith("/") ? requestUri.substring(0, requestUri.length() - 1) : requestUri;
         List<PermisoPantalla> permisos = permisoPantallaRepository.findAllByRolIdAndMenuUrlAndActive(roleId, ruta, true);
@@ -98,6 +112,14 @@ public class DynamicAuthorizationManager implements AuthorizationManager<Request
                 .findFirst();
     }
 
+    /**
+     * Verifica si el método HTTP de la solicitud está permitido según los permisos del rol.
+     *
+     * @param method    Método HTTP de la solicitud (GET, POST, PUT, DELETE, etc.).
+     * @param permiso   Permiso de pantalla asociado al rol.
+     * @param requestUri URI de la solicitud HTTP.
+     * @return true si el método está permitido, false en caso contrario.
+     */
     private boolean hasPermissionForMethod(String method, PermisoPantalla permiso, String requestUri) {
         if (requestUri.endsWith("/")) {
             requestUri = requestUri.substring(0, requestUri.length() - 1);
@@ -113,6 +135,12 @@ public class DynamicAuthorizationManager implements AuthorizationManager<Request
         };
     }
 
+    /**
+     * Determina si la URI corresponde a una solicitud de detalle (consulta por ID).
+     *
+     * @param requestUri URI de la solicitud HTTP.
+     * @return true si la URI termina con un identificador numérico, false en caso contrario.
+     */
     private boolean isDetailRequest(String requestUri) {
         return requestUri.matches(".*/\\d+$");
     }

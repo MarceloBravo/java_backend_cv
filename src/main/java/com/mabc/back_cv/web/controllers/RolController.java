@@ -31,6 +31,11 @@ public class RolController {
         this.service = service;
     }
 
+    /**
+     * Obtiene la lista completa de todos los roles registrados.
+     *
+     * @return ResponseEntity con la lista de RolDTO o error 400.
+     */
     @GetMapping("/all")
     public ResponseEntity<List<RolDTO>> getAllRoles() {
         try {
@@ -40,6 +45,12 @@ public class RolController {
         }
     }
 
+    /**
+     * Obtiene un rol por su identificador.
+     *
+     * @param id Identificador único del rol.
+     * @return ResponseEntity con el RolDTO encontrado o error 400.
+     */
     @GetMapping("/{id}")
     public ResponseEntity<RolDTO> getRolById(@PathVariable("id") Long id) {
         try {
@@ -49,6 +60,15 @@ public class RolController {
         }
     }
 
+    /**
+     * Obtiene una página de roles filtrados por nombre y estado activo.
+     *
+     * @param nombre Nombre del rol para filtrar (opcional).
+     * @param activo Estado activo del rol (por defecto true).
+     * @param page   Número de página (por defecto 0).
+     * @param rows   Cantidad de registros por página (por defecto 10).
+     * @return ResponseEntity con la página de RolDTO o error 400.
+     */
     @GetMapping("/page")
     public ResponseEntity<Page<RolDTO>> getRolesByPage(
             @RequestParam(value = "nombre", defaultValue = "") String nombre,
@@ -62,6 +82,11 @@ public class RolController {
         }
     }
 
+    /**
+     * Obtiene la lista de roles activos.
+     *
+     * @return ResponseEntity con la lista de RolDTO activos o error 400.
+     */
     @GetMapping("/active")
     public ResponseEntity<List<RolDTO>> getActiveRoles() {
         try {
@@ -71,6 +96,12 @@ public class RolController {
         }
     }
 
+    /**
+     * Crea o actualiza un rol.
+     *
+     * @param rolDTO DTO con los datos del rol a guardar.
+     * @return ResponseEntity con el RolDTO guardado o error 400.
+     */
     @PostMapping("/save")
     public ResponseEntity<RolDTO> saveRol(@RequestBody RolDTO rolDTO) {
         try {
@@ -80,6 +111,12 @@ public class RolController {
         }
     }
 
+    /**
+     * Elimina un rol por su identificador.
+     *
+     * @param id Identificador único del rol a eliminar.
+     * @return ResponseEntity con mensaje de confirmación o error 400.
+     */
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteById(@PathVariable("id") Long id) {
         try {

@@ -16,6 +16,10 @@ import java.util.stream.Collectors;
 import com.mabc.back_cv.common.Utils;
 import com.mabc.back_cv.web.services.descripcionPortafolio.DescripcionPortafolioMapper;
 
+/**
+ * Implementación del servicio de descripciones de portafolio.
+ * Proporciona la lógica de negocio para las operaciones CRUD de descripciones de portafolio.
+ */
 @Service
 public class DescripcionPortafolioServiceImpl implements DescripcionPortafolioService {
 

@@ -22,6 +22,10 @@ import com.mabc.back_cv.web.entities.Trabajo;
 
 import com.mabc.back_cv.common.Utils;
 
+/**
+ * Implementación del servicio de trabajos o experiencias laborales.
+ * Proporciona la lógica de negocio para las operaciones CRUD de trabajos.
+ */
 @Service
 public class TrabajoServiceImpl implements TrabajoService {
 

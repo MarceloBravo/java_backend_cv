@@ -16,9 +16,18 @@ import org.springframework.data.domain.PageRequest;
 import com.mabc.back_cv.web.services.usuarios.UsuarioMapper;
 
 
+/**
+ * Mapper para la conversión entre entidades Trabajo y DTOs TrabajoDTO.
+ */
 @Component
 public class TrabajoMapper{
     
+    /**
+     * Convierte una entidad Trabajo a un TrabajoDTO.
+     *
+     * @param entity Entidad a convertir.
+     * @return TrabajoDTO convertido o null si la entidad es null.
+     */
     public static TrabajoDTO entityToDTO(Trabajo entity){
         if(entity == null){
             return null;
@@ -35,6 +44,12 @@ public class TrabajoMapper{
         return dto;
     }
 
+    /**
+     * Convierte un TrabajoDTO a una entidad Trabajo.
+     *
+     * @param dto DTO a convertir.
+     * @return Entidad Trabajo convertida o null si el DTO es null.
+     */
     public static Trabajo dtoToEntity(TrabajoDTO dto){
         if(dto == null){
             return null;

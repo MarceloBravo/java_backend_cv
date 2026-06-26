@@ -8,6 +8,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * Controlador REST para la gestión de educación.
+ * Proporciona endpoints para listar, paginar, obtener, guardar y eliminar registros educativos.
+ */
 @RestController
 @RequestMapping("/educacion")
 public class EducacionController{
@@ -15,6 +19,15 @@ public class EducacionController{
     @Autowired
     private EducacionService educacionService;
 
+    /**
+     * Obtiene una página de registros educativos filtrados por usuario y texto de búsqueda.
+     *
+     * @param userId     Identificador del usuario (opcional).
+     * @param searchText Texto de búsqueda (opcional).
+     * @param page       Número de página (opcional).
+     * @param size       Tamaño de página (opcional).
+     * @return ResponseEntity con la página de EducacionDTO o error 500.
+     */
     @GetMapping("/all")
     public ResponseEntity<Page<EducacionDTO>> getAll(
         @RequestParam(required = false) Long userId,
@@ -30,6 +43,12 @@ public class EducacionController{
         }
     }
 
+    /**
+     * Obtiene un registro educativo por su identificador.
+     *
+     * @param id Identificador único del registro.
+     * @return ResponseEntity con el EducacionDTO encontrado, 404 si no existe o error 500.
+     */
     @GetMapping("/{id}")
     public ResponseEntity<EducacionDTO> getById(@PathVariable Long id){
         try{
@@ -43,6 +62,14 @@ public class EducacionController{
         }
     }
 
+    /**
+     * Obtiene una página de registros educativos por usuario.
+     *
+     * @param userId Identificador del usuario.
+     * @param page   Número de página (opcional).
+     * @param size   Tamaño de página (opcional).
+     * @return ResponseEntity con la página de EducacionDTO o error 500.
+     */
     @GetMapping("/user/{userId}")
     public ResponseEntity<Page<EducacionDTO>> getAllByUserId(
         @PathVariable(name = "userId") Long userId,
@@ -58,6 +85,12 @@ public class EducacionController{
     }
 
 
+    /**
+     * Crea o actualiza un registro educativo.
+     *
+     * @param educacionRequestDTO DTO con los datos educativos a guardar.
+     * @return ResponseEntity con el EducacionDTO guardado o error 500.
+     */
     @PostMapping("/save")
     public ResponseEntity<EducacionDTO> save(@RequestBody EducacionDTO educacionRequestDTO){
         try{
@@ -68,6 +101,12 @@ public class EducacionController{
         }
     }
 
+    /**
+     * Elimina un registro educativo por su identificador.
+     *
+     * @param id Identificador único del registro a eliminar.
+     * @return ResponseEntity con mensaje de confirmación o error 400.
+     */
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> delete(@PathVariable Long id){
         try{

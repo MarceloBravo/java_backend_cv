@@ -10,6 +10,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * Controlador REST para la gestión de descripciones de portafolio.
+ * Proporciona endpoints para listar, buscar, obtener, guardar y eliminar descripciones de portafolio.
+ */
 @RestController
 @RequestMapping("/descripcion-portafolio")
 public class DescripcionPortafolioController {
@@ -17,6 +21,11 @@ public class DescripcionPortafolioController {
     @Autowired
     private DescripcionPortafolioService descripcionPortafolioService;
 
+    /**
+     * Obtiene la lista completa de descripciones de portafolio.
+     *
+     * @return ResponseEntity con la lista de DescripcionPortafolioDTO o error 400.
+     */
     @GetMapping("/all")
     public ResponseEntity<List<DescripcionPortafolioDTO>> getAll() {
         try {
@@ -27,6 +36,14 @@ public class DescripcionPortafolioController {
         }
     }
 
+    /**
+     * Obtiene una página de descripciones de portafolio filtradas por término de búsqueda.
+     *
+     * @param terminoBuscado Término de búsqueda opcional.
+     * @param page           Número de página (opcional).
+     * @param size           Tamaño de página (opcional).
+     * @return ResponseEntity con la página de DescripcionPortafolioDTO o error 500.
+     */
     @GetMapping("/search")
     public ResponseEntity<Page<DescripcionPortafolioDTO>> getAll(
             @RequestParam(required = false) String terminoBuscado,
@@ -40,6 +57,12 @@ public class DescripcionPortafolioController {
         }
     }
 
+    /**
+     * Obtiene una descripción de portafolio por su identificador.
+     *
+     * @param id Identificador único de la descripción.
+     * @return ResponseEntity con el DescripcionPortafolioDTO encontrado, 404 si no existe o error 500.
+     */
     @GetMapping("/{id}")
     public ResponseEntity<DescripcionPortafolioDTO> getById(@PathVariable Long id) {
         try {
@@ -53,6 +76,12 @@ public class DescripcionPortafolioController {
         }
     }
 
+    /**
+     * Crea o actualiza una descripción de portafolio.
+     *
+     * @param descripcionPortafolioRequestDTO DTO con los datos a guardar.
+     * @return ResponseEntity con el DescripcionPortafolioDTO guardado o error 500.
+     */
     @PostMapping("/save")
     public ResponseEntity<DescripcionPortafolioDTO> save(
             @RequestBody DescripcionPortafolioDTO descripcionPortafolioRequestDTO) {
@@ -65,6 +94,12 @@ public class DescripcionPortafolioController {
         }
     }
 
+    /**
+     * Elimina una descripción de portafolio por su identificador.
+     *
+     * @param id Identificador único de la descripción a eliminar.
+     * @return ResponseEntity con mensaje de confirmación o error 400.
+     */
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> delete(@PathVariable Long id) {
         try {

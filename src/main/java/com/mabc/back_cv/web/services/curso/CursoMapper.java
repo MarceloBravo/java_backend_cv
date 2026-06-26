@@ -12,9 +12,18 @@ import com.mabc.back_cv.web.services.usuarios.UsuarioMapper;
 
 import java.util.stream.Collectors;
 
+/**
+ * Mapper para la conversión entre entidades Curso y DTOs CursoDTO.
+ */
 @Component
 public class CursoMapper {
 
+    /**
+     * Convierte una entidad Curso a un CursoDTO, incluyendo certificado y contenidos asociados.
+     *
+     * @param curso Entidad a convertir.
+     * @return CursoDTO convertido o null si la entidad es null.
+     */
     public static CursoDTO entityToDTO(Curso curso) {
         if (curso == null) {
             return null;
@@ -58,6 +67,12 @@ public class CursoMapper {
         return cursoDTO;
     }
 
+    /**
+     * Convierte un CursoDTO a una entidad Curso, incluyendo certificado asociado.
+     *
+     * @param cursoDTO DTO a convertir.
+     * @return Entidad Curso convertida o null si el DTO es null.
+     */
     public static Curso dtoToEntity(CursoDTO cursoDTO) {
         if (cursoDTO == null) {
             return null;

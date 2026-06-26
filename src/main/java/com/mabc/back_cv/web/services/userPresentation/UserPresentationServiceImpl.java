@@ -12,6 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.mabc.back_cv.common.Utils;
 
+/**
+ * Implementación del servicio de presentaciones de usuario.
+ * Proporciona la lógica de negocio para las operaciones CRUD de presentaciones de usuario.
+ */
 @Service
 public class UserPresentationServiceImpl implements UserPresentationService{
 

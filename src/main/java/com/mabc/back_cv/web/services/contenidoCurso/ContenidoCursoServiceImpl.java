@@ -19,6 +19,10 @@ import java.util.stream.Collectors;
 
 import com.mabc.back_cv.common.Utils;
 
+/**
+ * Implementación del servicio de contenido de cursos.
+ * Proporciona la lógica de negocio para las operaciones CRUD de contenido de cursos.
+ */
 @Service
 public class ContenidoCursoServiceImpl implements ContenidoCursoService{
 

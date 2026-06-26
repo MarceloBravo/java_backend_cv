@@ -7,9 +7,18 @@ import org.springframework.data.domain.Pageable;
 import com.mabc.back_cv.web.dto.RolDTO;
 import com.mabc.back_cv.web.entities.Rol;
 
+/**
+ * Mapper para la conversión entre entidades Rol y DTOs RolDTO.
+ */
 @Component
 public class RolMapper {
 
+    /**
+     * Convierte un RolDTO a una entidad Rol.
+     *
+     * @param rolDTO DTO a convertir.
+     * @return Entidad Rol convertida o null si el DTO es inválido.
+     */
     public Rol mapToRol(RolDTO rolDTO) {
         if (rolDTO == null || rolDTO.getNombre() == null || rolDTO.getNombre().isEmpty()) {
             return null;
@@ -22,6 +31,12 @@ public class RolMapper {
         return rol;
     }
 
+    /**
+     * Convierte una entidad Rol a un RolDTO.
+     *
+     * @param rol Entidad a convertir.
+     * @return RolDTO convertido.
+     */
     public RolDTO mapToRolDTO(Rol rol) {
         return new RolDTO(rol.getId(), rol.getNombre(), rol.getActivo());
     }

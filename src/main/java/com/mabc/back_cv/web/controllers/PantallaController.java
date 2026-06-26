@@ -26,16 +26,21 @@ public class PantallaController {
 
     private final PantallaService pantallaService;
 
+    /**
+     * Constructor para la inyección de dependencias.
+     *
+     * @param pantallaService Servicio de pantallas.
+     */
     public PantallaController(PantallaService pantallaService) {
         this.pantallaService = pantallaService;
     }
 
-    @GetMapping("/all")
     /**
      * Obtiene la lista completa de pantallas.
      *
      * @return ResponseEntity con la lista de PantallaDTO o estado 500 en caso de error.
      */
+    @GetMapping("/all")
     public ResponseEntity<List<PantallaDTO>> getAllPantallas() {
         try{
             return ResponseEntity.ok(pantallaService.getAllPantallas());
@@ -70,13 +75,13 @@ public class PantallaController {
         }
     }
 
-    @GetMapping("/{id}")
     /**
      * Obtiene una pantalla por su identificador.
      *
      * @param id identificador de la pantalla.
      * @return ResponseEntity con el PantallaDTO encontrado, 404 si no existe o 500 en caso de error.
      */
+    @GetMapping("/{id}")
     public ResponseEntity<PantallaDTO> getPantallaById(@PathVariable Long id) {
         try{
             PantallaDTO pantallaDTO = pantallaService.getPantallaById(id);
