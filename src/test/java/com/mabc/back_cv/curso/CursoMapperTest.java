@@ -249,4 +249,15 @@ class CursoMapperTest {
         assertNotNull(resultado);
         assertEquals(5L, resultado.getId());
     }
+
+    @Test
+    void dtoToEntity_conDTOCertificadoSinId_retornaEntityConCertificadoSinId() {
+        certificadoDTO.setId(null);
+
+        Curso resultado = CursoMapper.dtoToEntity(cursoDTO);
+
+        assertNotNull(resultado);
+        assertNotNull(resultado.getCertificate());
+        assertNull(resultado.getCertificate().getId());
+    }
 }
