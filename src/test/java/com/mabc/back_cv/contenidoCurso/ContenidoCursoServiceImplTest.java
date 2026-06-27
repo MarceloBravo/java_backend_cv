@@ -4,6 +4,7 @@ import com.mabc.back_cv.web.dto.ContenidoCursoDTO;
 import com.mabc.back_cv.web.entities.ContenidoCurso;
 import com.mabc.back_cv.web.entities.Portafolio;
 import com.mabc.back_cv.web.repositories.ContenidoCursoRepository;
+import com.mabc.back_cv.web.services.contenidoCurso.ContenidoCursoMapper;
 import com.mabc.back_cv.web.services.contenidoCurso.ContenidoCursoServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -35,17 +36,12 @@ import static org.mockito.Mockito.mockStatic;
 import static org.mockito.Mockito.verify;
 import org.junit.jupiter.api.DisplayName;
 
-import org.modelmapper.ModelMapper;
-
 
 @ExtendWith(MockitoExtension.class)
 public class ContenidoCursoServiceImplTest{
 
     @Mock
     private ContenidoCursoRepository repository;
-
-    @Mock
-    private ModelMapper modelMapper;
 
     @InjectMocks
     private ContenidoCursoServiceImpl service;
@@ -73,16 +69,6 @@ public class ContenidoCursoServiceImplTest{
         pageable = PageRequest.of(0, 10);
     }
 
-    private ContenidoCursoDTO entityToDTO(ContenidoCurso entity){
-        ContenidoCursoDTO dto = new ContenidoCursoDTO();
-        dto.setId(entity.getId());
-        dto.setTitle(entity.getTitle());
-        dto.setDescription(entity.getDescription());
-        dto.setActivo(entity.getActivo());
-        
-        return dto;
-    }
-
     // --------------------------------------------------------------------
     // List<ContenidoCursoDTO> findAllList(String searchText, Boolean activo)
     // --------------------------------------------------------------------
@@ -91,18 +77,18 @@ public class ContenidoCursoServiceImplTest{
     void getListOfContenidoCurso_whitAllCorrectParameters_returnPageOfContenidoCurso(){
         when(repository.findAllList("Curso", true)).thenReturn(Arrays.asList(contenidoCurso1, contenidoCurso2));
         
-        when(modelMapper.map(any(), eq(ContenidoCursoDTO.class))).thenAnswer(invocation -> {
-            ContenidoCurso entidadId = invocation.getArgument(0);             
-            return entityToDTO(entidadId);
-        });
+        try (MockedStatic<ContenidoCursoMapper> mapperMock = mockStatic(ContenidoCursoMapper.class)) {
+            mapperMock.when(() -> ContenidoCursoMapper.entityToDTO(contenidoCurso1)).thenReturn(contenidoCursoDTO1);
+            mapperMock.when(() -> ContenidoCursoMapper.entityToDTO(contenidoCurso2)).thenReturn(contenidoCursoDTO2);
 
-        List<ContenidoCursoDTO> result = service.findAllList("Curso", true);
+            List<ContenidoCursoDTO> result = service.findAllList("Curso", true);
 
-        assertNotNull(result);
-        assertEquals(2, result.size());
-        assertEquals("Curso 1", result.get(0).getTitle());
-        assertEquals("Curso 2", result.get(1).getTitle());
-        verify(repository, times(1)).findAllList("Curso", true);
+            assertNotNull(result);
+            assertEquals(2, result.size());
+            assertEquals("Curso 1", result.get(0).getTitle());
+            assertEquals("Curso 2", result.get(1).getTitle());
+            verify(repository, times(1)).findAllList("Curso", true);
+        }
     }
 
     @Test
@@ -110,18 +96,18 @@ public class ContenidoCursoServiceImplTest{
     void getListOfContenidoCurso_whitSearchTextIsNull_returnPageOfContenidoCurso(){
         when(repository.findAllList(null, true)).thenReturn(Arrays.asList(contenidoCurso1, contenidoCurso2));
         
-        when(modelMapper.map(any(), eq(ContenidoCursoDTO.class))).thenAnswer(invocation -> {            
-            ContenidoCurso entidadId = invocation.getArgument(0); 
-            return entityToDTO(entidadId);
-        });
+        try (MockedStatic<ContenidoCursoMapper> mapperMock = mockStatic(ContenidoCursoMapper.class)) {
+            mapperMock.when(() -> ContenidoCursoMapper.entityToDTO(contenidoCurso1)).thenReturn(contenidoCursoDTO1);
+            mapperMock.when(() -> ContenidoCursoMapper.entityToDTO(contenidoCurso2)).thenReturn(contenidoCursoDTO2);
 
-        List<ContenidoCursoDTO> result = service.findAllList(null, true);
+            List<ContenidoCursoDTO> result = service.findAllList(null, true);
 
-        assertNotNull(result);
-        assertEquals(2, result.size());
-        assertEquals("Curso 1", result.get(0).getTitle());
-        assertEquals("Curso 2", result.get(1).getTitle());
-        verify(repository, times(1)).findAllList(null, true);
+            assertNotNull(result);
+            assertEquals(2, result.size());
+            assertEquals("Curso 1", result.get(0).getTitle());
+            assertEquals("Curso 2", result.get(1).getTitle());
+            verify(repository, times(1)).findAllList(null, true);
+        }
     }
 
     @Test
@@ -129,19 +115,20 @@ public class ContenidoCursoServiceImplTest{
     void getListOfContenidoCurso_whitActivoIsNull_returnPageOfContenidoCurso(){
         when(repository.findAllList("Curso", null)).thenReturn(Arrays.asList(contenidoCurso1, contenidoCurso2, contenidoCurso3));
         
-        when(modelMapper.map(any(), eq(ContenidoCursoDTO.class))).thenAnswer(invocation -> {            
-            ContenidoCurso entidadId = invocation.getArgument(0); 
-            return entityToDTO(entidadId);
-        });
+        try (MockedStatic<ContenidoCursoMapper> mapperMock = mockStatic(ContenidoCursoMapper.class)) {
+            mapperMock.when(() -> ContenidoCursoMapper.entityToDTO(contenidoCurso1)).thenReturn(contenidoCursoDTO1);
+            mapperMock.when(() -> ContenidoCursoMapper.entityToDTO(contenidoCurso2)).thenReturn(contenidoCursoDTO2);
+            mapperMock.when(() -> ContenidoCursoMapper.entityToDTO(contenidoCurso3)).thenReturn(contenidoCursoDTO3);
 
-        List<ContenidoCursoDTO> result = service.findAllList("Curso", null);
+            List<ContenidoCursoDTO> result = service.findAllList("Curso", null);
 
-        assertNotNull(result);
-        assertEquals(3, result.size());
-        assertEquals("Curso 1", result.get(0).getTitle());
-        assertEquals("Curso 2", result.get(1).getTitle());
-        assertEquals("Curso 3", result.get(2).getTitle());
-        verify(repository, times(1)).findAllList("Curso", null);
+            assertNotNull(result);
+            assertEquals(3, result.size());
+            assertEquals("Curso 1", result.get(0).getTitle());
+            assertEquals("Curso 2", result.get(1).getTitle());
+            assertEquals("Curso 3", result.get(2).getTitle());
+            verify(repository, times(1)).findAllList("Curso", null);
+        }
     }
     
     @Test
@@ -149,17 +136,16 @@ public class ContenidoCursoServiceImplTest{
     void getListOfContenidoCurso_whitActivoIsFalse_returnPageOfContenidoCurso(){
         when(repository.findAllList("Curso", false)).thenReturn(Arrays.asList(contenidoCurso3));
         
-        when(modelMapper.map(any(), eq(ContenidoCursoDTO.class))).thenAnswer(invocation -> {            
-            ContenidoCurso entidadId = invocation.getArgument(0); 
-            return entityToDTO(entidadId);
-        });
+        try (MockedStatic<ContenidoCursoMapper> mapperMock = mockStatic(ContenidoCursoMapper.class)) {
+            mapperMock.when(() -> ContenidoCursoMapper.entityToDTO(contenidoCurso3)).thenReturn(contenidoCursoDTO3);
 
-        List<ContenidoCursoDTO> result = service.findAllList("Curso", false);
+            List<ContenidoCursoDTO> result = service.findAllList("Curso", false);
 
-        assertNotNull(result);
-        assertEquals(1, result.size());
-        assertEquals("Curso 3", result.get(0).getTitle());
-        verify(repository, times(1)).findAllList("Curso", false);
+            assertNotNull(result);
+            assertEquals(1, result.size());
+            assertEquals("Curso 3", result.get(0).getTitle());
+            verify(repository, times(1)).findAllList("Curso", false);
+        }
     }
         
     @Test
@@ -167,19 +153,20 @@ public class ContenidoCursoServiceImplTest{
     void getListOfContenidoCurso_whitAllParametersAreNull_returnPageOfContenidoCurso(){
         when(repository.findAllList(null, null)).thenReturn(Arrays.asList(contenidoCurso1, contenidoCurso2, contenidoCurso3));
         
-        when(modelMapper.map(any(), eq(ContenidoCursoDTO.class))).thenAnswer(invocation -> {            
-            ContenidoCurso entidadId = invocation.getArgument(0); 
-            return entityToDTO(entidadId);
-        });
+        try (MockedStatic<ContenidoCursoMapper> mapperMock = mockStatic(ContenidoCursoMapper.class)) {
+            mapperMock.when(() -> ContenidoCursoMapper.entityToDTO(contenidoCurso1)).thenReturn(contenidoCursoDTO1);
+            mapperMock.when(() -> ContenidoCursoMapper.entityToDTO(contenidoCurso2)).thenReturn(contenidoCursoDTO2);
+            mapperMock.when(() -> ContenidoCursoMapper.entityToDTO(contenidoCurso3)).thenReturn(contenidoCursoDTO3);
 
-        List<ContenidoCursoDTO> result = service.findAllList(null, null);
+            List<ContenidoCursoDTO> result = service.findAllList(null, null);
 
-        assertNotNull(result);
-        assertEquals(3, result.size());
-        assertEquals("Curso 1", result.get(0).getTitle());
-        assertEquals("Curso 2", result.get(1).getTitle());
-        assertEquals("Curso 3", result.get(2).getTitle());
-        verify(repository, times(1)).findAllList(null, null);
+            assertNotNull(result);
+            assertEquals(3, result.size());
+            assertEquals("Curso 1", result.get(0).getTitle());
+            assertEquals("Curso 2", result.get(1).getTitle());
+            assertEquals("Curso 3", result.get(2).getTitle());
+            verify(repository, times(1)).findAllList(null, null);
+        }
     }
 
     // --------------------------------------------------------------------
@@ -190,18 +177,18 @@ public class ContenidoCursoServiceImplTest{
     void getPageOfContenidoCurso_whitAllCorrectParameters_returnPageOfContenidoCurso(){
         when(repository.findAllPage("Curso", true, pageable)).thenReturn(new PageImpl<>(Arrays.asList(contenidoCurso1, contenidoCurso2), pageable, 2));
         
-        when(modelMapper.map(any(), eq(ContenidoCursoDTO.class))).thenAnswer(invocation -> {
-            ContenidoCurso entidadId = invocation.getArgument(0);             
-            return entityToDTO(entidadId);
-        });
+        try (MockedStatic<ContenidoCursoMapper> mapperMock = mockStatic(ContenidoCursoMapper.class)) {
+            mapperMock.when(() -> ContenidoCursoMapper.entityToDTO(contenidoCurso1)).thenReturn(contenidoCursoDTO1);
+            mapperMock.when(() -> ContenidoCursoMapper.entityToDTO(contenidoCurso2)).thenReturn(contenidoCursoDTO2);
 
-        Page<ContenidoCursoDTO> result = service.findAllPage("Curso", 0, 10, true);
+            Page<ContenidoCursoDTO> result = service.findAllPage("Curso", 0, 10, true);
 
-        assertNotNull(result);
-        assertEquals(2, result.getTotalElements());
-        assertEquals("Curso 1", result.getContent().get(0).getTitle());
-        assertEquals("Curso 2", result.getContent().get(1).getTitle());
-        verify(repository, times(1)).findAllPage("Curso", true, pageable);
+            assertNotNull(result);
+            assertEquals(2, result.getTotalElements());
+            assertEquals("Curso 1", result.getContent().get(0).getTitle());
+            assertEquals("Curso 2", result.getContent().get(1).getTitle());
+            verify(repository, times(1)).findAllPage("Curso", true, pageable);
+        }
     }
     
     @Test
@@ -209,18 +196,18 @@ public class ContenidoCursoServiceImplTest{
     void getPageOfContenidoCurso_whitSearchTextIsNull_returnPageOfContenidoCurso(){
         when(repository.findAllPage(null, true, pageable)).thenReturn(new PageImpl<>(Arrays.asList(contenidoCurso1, contenidoCurso2), pageable, 2));
         
-        when(modelMapper.map(any(), eq(ContenidoCursoDTO.class))).thenAnswer(invocation -> {            
-            ContenidoCurso entidadId = invocation.getArgument(0); 
-            return entityToDTO(entidadId);
-        });
+        try (MockedStatic<ContenidoCursoMapper> mapperMock = mockStatic(ContenidoCursoMapper.class)) {
+            mapperMock.when(() -> ContenidoCursoMapper.entityToDTO(contenidoCurso1)).thenReturn(contenidoCursoDTO1);
+            mapperMock.when(() -> ContenidoCursoMapper.entityToDTO(contenidoCurso2)).thenReturn(contenidoCursoDTO2);
 
-        Page<ContenidoCursoDTO> result = service.findAllPage(null, 0, 10, true);
+            Page<ContenidoCursoDTO> result = service.findAllPage(null, 0, 10, true);
 
-        assertNotNull(result);
-        assertEquals(2, result.getTotalElements());
-        assertEquals("Curso 1", result.getContent().get(0).getTitle());
-        assertEquals("Curso 2", result.getContent().get(1).getTitle());
-        verify(repository, times(1)).findAllPage(null, true, pageable);
+            assertNotNull(result);
+            assertEquals(2, result.getTotalElements());
+            assertEquals("Curso 1", result.getContent().get(0).getTitle());
+            assertEquals("Curso 2", result.getContent().get(1).getTitle());
+            verify(repository, times(1)).findAllPage(null, true, pageable);
+        }
     }
 
     @Test
@@ -228,19 +215,20 @@ public class ContenidoCursoServiceImplTest{
     void getPageOfContenidoCurso_whitActivoIsNull_returnPageOfContenidoCurso(){
         when(repository.findAllPage("Curso", null, pageable)).thenReturn(new PageImpl<>(Arrays.asList(contenidoCurso1, contenidoCurso2, contenidoCurso3), pageable, 3));
         
-        when(modelMapper.map(any(), eq(ContenidoCursoDTO.class))).thenAnswer(invocation -> {            
-            ContenidoCurso entidadId = invocation.getArgument(0); 
-            return entityToDTO(entidadId);
-        });
+        try (MockedStatic<ContenidoCursoMapper> mapperMock = mockStatic(ContenidoCursoMapper.class)) {
+            mapperMock.when(() -> ContenidoCursoMapper.entityToDTO(contenidoCurso1)).thenReturn(contenidoCursoDTO1);
+            mapperMock.when(() -> ContenidoCursoMapper.entityToDTO(contenidoCurso2)).thenReturn(contenidoCursoDTO2);
+            mapperMock.when(() -> ContenidoCursoMapper.entityToDTO(contenidoCurso3)).thenReturn(contenidoCursoDTO3);
 
-        Page<ContenidoCursoDTO> result = service.findAllPage("Curso", 0, 10, null);
+            Page<ContenidoCursoDTO> result = service.findAllPage("Curso", 0, 10, null);
 
-        assertNotNull(result);
-        assertEquals(3, result.getTotalElements());
-        assertEquals("Curso 1", result.getContent().get(0).getTitle());
-        assertEquals("Curso 2", result.getContent().get(1).getTitle());
-        assertEquals("Curso 3", result.getContent().get(2).getTitle());
-        verify(repository, times(1)).findAllPage("Curso", null, pageable);
+            assertNotNull(result);
+            assertEquals(3, result.getTotalElements());
+            assertEquals("Curso 1", result.getContent().get(0).getTitle());
+            assertEquals("Curso 2", result.getContent().get(1).getTitle());
+            assertEquals("Curso 3", result.getContent().get(2).getTitle());
+            verify(repository, times(1)).findAllPage("Curso", null, pageable);
+        }
     }
     
     @Test
@@ -248,17 +236,16 @@ public class ContenidoCursoServiceImplTest{
     void getPageOfContenidoCurso_whitActivoIsFalse_returnPageOfContenidoCurso(){
         when(repository.findAllPage("Curso", false, pageable)).thenReturn(new PageImpl<>(Arrays.asList(contenidoCurso3), pageable, 1));
         
-        when(modelMapper.map(any(), eq(ContenidoCursoDTO.class))).thenAnswer(invocation -> {            
-            ContenidoCurso entidadId = invocation.getArgument(0); 
-            return entityToDTO(entidadId);
-        });
+        try (MockedStatic<ContenidoCursoMapper> mapperMock = mockStatic(ContenidoCursoMapper.class)) {
+            mapperMock.when(() -> ContenidoCursoMapper.entityToDTO(contenidoCurso3)).thenReturn(contenidoCursoDTO3);
 
-        Page<ContenidoCursoDTO> result = service.findAllPage("Curso", 0, 10, false);
+            Page<ContenidoCursoDTO> result = service.findAllPage("Curso", 0, 10, false);
 
-        assertNotNull(result);
-        assertEquals(1, result.getTotalElements());
-        assertEquals("Curso 3", result.getContent().get(0).getTitle());
-        verify(repository, times(1)).findAllPage("Curso", false, pageable);
+            assertNotNull(result);
+            assertEquals(1, result.getTotalElements());
+            assertEquals("Curso 3", result.getContent().get(0).getTitle());
+            verify(repository, times(1)).findAllPage("Curso", false, pageable);
+        }
     }
     
     @Test
@@ -266,18 +253,18 @@ public class ContenidoCursoServiceImplTest{
     void getPageOfContenidoCurso_whitSizeIsNull_returnPageOfContenidoCurso(){
         when(repository.findAllPage("Curso", true, pageable)).thenReturn(new PageImpl<>(Arrays.asList(contenidoCurso1, contenidoCurso2), pageable, 2));
         
-        when(modelMapper.map(any(), eq(ContenidoCursoDTO.class))).thenAnswer(invocation -> {            
-            ContenidoCurso entidadId = invocation.getArgument(0); 
-            return entityToDTO(entidadId);
-        });
+        try (MockedStatic<ContenidoCursoMapper> mapperMock = mockStatic(ContenidoCursoMapper.class)) {
+            mapperMock.when(() -> ContenidoCursoMapper.entityToDTO(contenidoCurso1)).thenReturn(contenidoCursoDTO1);
+            mapperMock.when(() -> ContenidoCursoMapper.entityToDTO(contenidoCurso2)).thenReturn(contenidoCursoDTO2);
 
-        Page<ContenidoCursoDTO> result = service.findAllPage("Curso", 0, null, true);
+            Page<ContenidoCursoDTO> result = service.findAllPage("Curso", 0, null, true);
 
-        assertNotNull(result);
-        assertEquals(2, result.getTotalElements());
-        assertEquals("Curso 1", result.getContent().get(0).getTitle());
-        assertEquals("Curso 2", result.getContent().get(1).getTitle());
-        verify(repository, times(1)).findAllPage("Curso", true, pageable);
+            assertNotNull(result);
+            assertEquals(2, result.getTotalElements());
+            assertEquals("Curso 1", result.getContent().get(0).getTitle());
+            assertEquals("Curso 2", result.getContent().get(1).getTitle());
+            verify(repository, times(1)).findAllPage("Curso", true, pageable);
+        }
     }
     
     @Test
@@ -285,18 +272,18 @@ public class ContenidoCursoServiceImplTest{
     void getPageOfContenidoCurso_whitPageIsNull_returnPageOfContenidoCurso(){
         when(repository.findAllPage("Curso", true, pageable)).thenReturn(new PageImpl<>(Arrays.asList(contenidoCurso1, contenidoCurso2), pageable, 2));
         
-        when(modelMapper.map(any(), eq(ContenidoCursoDTO.class))).thenAnswer(invocation -> {            
-            ContenidoCurso entidadId = invocation.getArgument(0); 
-            return entityToDTO(entidadId);
-        });
+        try (MockedStatic<ContenidoCursoMapper> mapperMock = mockStatic(ContenidoCursoMapper.class)) {
+            mapperMock.when(() -> ContenidoCursoMapper.entityToDTO(contenidoCurso1)).thenReturn(contenidoCursoDTO1);
+            mapperMock.when(() -> ContenidoCursoMapper.entityToDTO(contenidoCurso2)).thenReturn(contenidoCursoDTO2);
 
-        Page<ContenidoCursoDTO> result = service.findAllPage("Curso", null, 10, true);
+            Page<ContenidoCursoDTO> result = service.findAllPage("Curso", null, 10, true);
 
-        assertNotNull(result);
-        assertEquals(2, result.getTotalElements());
-        assertEquals("Curso 1", result.getContent().get(0).getTitle());
-        assertEquals("Curso 2", result.getContent().get(1).getTitle());
-        verify(repository, times(1)).findAllPage("Curso", true, pageable);
+            assertNotNull(result);
+            assertEquals(2, result.getTotalElements());
+            assertEquals("Curso 1", result.getContent().get(0).getTitle());
+            assertEquals("Curso 2", result.getContent().get(1).getTitle());
+            verify(repository, times(1)).findAllPage("Curso", true, pageable);
+        }
     }
     
     @Test
@@ -304,19 +291,20 @@ public class ContenidoCursoServiceImplTest{
     void getPageOfContenidoCurso_whitAllParametersAreNull_returnPageOfContenidoCurso(){
         when(repository.findAllPage(null, null, pageable)).thenReturn(new PageImpl<>(Arrays.asList(contenidoCurso1, contenidoCurso2, contenidoCurso3), pageable, 3));
         
-        when(modelMapper.map(any(), eq(ContenidoCursoDTO.class))).thenAnswer(invocation -> {            
-            ContenidoCurso entidadId = invocation.getArgument(0); 
-            return entityToDTO(entidadId);
-        });
+        try (MockedStatic<ContenidoCursoMapper> mapperMock = mockStatic(ContenidoCursoMapper.class)) {
+            mapperMock.when(() -> ContenidoCursoMapper.entityToDTO(contenidoCurso1)).thenReturn(contenidoCursoDTO1);
+            mapperMock.when(() -> ContenidoCursoMapper.entityToDTO(contenidoCurso2)).thenReturn(contenidoCursoDTO2);
+            mapperMock.when(() -> ContenidoCursoMapper.entityToDTO(contenidoCurso3)).thenReturn(contenidoCursoDTO3);
 
-        Page<ContenidoCursoDTO> result = service.findAllPage(null, null, null, null);
+            Page<ContenidoCursoDTO> result = service.findAllPage(null, null, null, null);
 
-        assertNotNull(result);
-        assertEquals(3, result.getTotalElements());
-        assertEquals("Curso 1", result.getContent().get(0).getTitle());
-        assertEquals("Curso 2", result.getContent().get(1).getTitle());
-        assertEquals("Curso 3", result.getContent().get(2).getTitle());
-        verify(repository, times(1)).findAllPage(null, null, pageable);
+            assertNotNull(result);
+            assertEquals(3, result.getTotalElements());
+            assertEquals("Curso 1", result.getContent().get(0).getTitle());
+            assertEquals("Curso 2", result.getContent().get(1).getTitle());
+            assertEquals("Curso 3", result.getContent().get(2).getTitle());
+            verify(repository, times(1)).findAllPage(null, null, pageable);
+        }
     }
     
     @Test
@@ -324,18 +312,18 @@ public class ContenidoCursoServiceImplTest{
     void getPageOfContenidoCurso_whitPageIsNegative_returnPageOfContenidoCurso(){
         when(repository.findAllPage("Curso", true, pageable)).thenReturn(new PageImpl<>(Arrays.asList(contenidoCurso1, contenidoCurso2), pageable, 2));
         
-        when(modelMapper.map(any(), eq(ContenidoCursoDTO.class))).thenAnswer(invocation -> {            
-            ContenidoCurso entidadId = invocation.getArgument(0); 
-            return entityToDTO(entidadId);
-        });
+        try (MockedStatic<ContenidoCursoMapper> mapperMock = mockStatic(ContenidoCursoMapper.class)) {
+            mapperMock.when(() -> ContenidoCursoMapper.entityToDTO(contenidoCurso1)).thenReturn(contenidoCursoDTO1);
+            mapperMock.when(() -> ContenidoCursoMapper.entityToDTO(contenidoCurso2)).thenReturn(contenidoCursoDTO2);
 
-        Page<ContenidoCursoDTO> result = service.findAllPage("Curso", -10, 10, true);
+            Page<ContenidoCursoDTO> result = service.findAllPage("Curso", -10, 10, true);
 
-        assertNotNull(result);
-        assertEquals(2, result.getTotalElements());
-        assertEquals("Curso 1", result.getContent().get(0).getTitle());
-        assertEquals("Curso 2", result.getContent().get(1).getTitle());
-        verify(repository, times(1)).findAllPage("Curso", true, pageable);
+            assertNotNull(result);
+            assertEquals(2, result.getTotalElements());
+            assertEquals("Curso 1", result.getContent().get(0).getTitle());
+            assertEquals("Curso 2", result.getContent().get(1).getTitle());
+            verify(repository, times(1)).findAllPage("Curso", true, pageable);
+        }
     }
     
     @Test
@@ -343,18 +331,18 @@ public class ContenidoCursoServiceImplTest{
     void getPageOfContenidoCurso_whitSizeIsNegative_returnPageOfContenidoCurso(){
         when(repository.findAllPage("Curso", true, pageable)).thenReturn(new PageImpl<>(Arrays.asList(contenidoCurso1, contenidoCurso2), pageable, 2));
         
-        when(modelMapper.map(any(), eq(ContenidoCursoDTO.class))).thenAnswer(invocation -> {            
-            ContenidoCurso entidadId = invocation.getArgument(0); 
-            return entityToDTO(entidadId);
-        });
+        try (MockedStatic<ContenidoCursoMapper> mapperMock = mockStatic(ContenidoCursoMapper.class)) {
+            mapperMock.when(() -> ContenidoCursoMapper.entityToDTO(contenidoCurso1)).thenReturn(contenidoCursoDTO1);
+            mapperMock.when(() -> ContenidoCursoMapper.entityToDTO(contenidoCurso2)).thenReturn(contenidoCursoDTO2);
 
-        Page<ContenidoCursoDTO> result = service.findAllPage("Curso", 0, -10, true);
+            Page<ContenidoCursoDTO> result = service.findAllPage("Curso", 0, -10, true);
 
-        assertNotNull(result);
-        assertEquals(2, result.getTotalElements());
-        assertEquals("Curso 1", result.getContent().get(0).getTitle());
-        assertEquals("Curso 2", result.getContent().get(1).getTitle());
-        verify(repository, times(1)).findAllPage("Curso", true, pageable);
+            assertNotNull(result);
+            assertEquals(2, result.getTotalElements());
+            assertEquals("Curso 1", result.getContent().get(0).getTitle());
+            assertEquals("Curso 2", result.getContent().get(1).getTitle());
+            verify(repository, times(1)).findAllPage("Curso", true, pageable);
+        }
     }
 
     // --------------------------------------------------------------------
@@ -364,13 +352,16 @@ public class ContenidoCursoServiceImplTest{
     @DisplayName("Obtiene un registrio de los Contenidos de un Curso con éxito con todos los parámetros correctos")
     void getByIdOfContenidoCurso_whitValidId_returnContenidoCurso(){
         when(repository.findById(1L)).thenReturn(Optional.of(contenidoCurso1));
-        when(modelMapper.map(contenidoCurso1, ContenidoCursoDTO.class)).thenReturn(contenidoCursoDTO1);
         
-        ContenidoCursoDTO result = service.getById(1L);
+        try (MockedStatic<ContenidoCursoMapper> mapperMock = mockStatic(ContenidoCursoMapper.class)) {
+            mapperMock.when(() -> ContenidoCursoMapper.entityToDTO(contenidoCurso1)).thenReturn(contenidoCursoDTO1);
 
-        assertNotNull(result);
-        assertEquals("Curso 1", result.getTitle());
-        verify(repository, times(1)).findById(1L);
+            ContenidoCursoDTO result = service.getById(1L);
+
+            assertNotNull(result);
+            assertEquals("Curso 1", result.getTitle());
+            verify(repository, times(1)).findById(1L);
+        }
     }
     
     @Test
@@ -378,10 +369,14 @@ public class ContenidoCursoServiceImplTest{
     void getByIdOfContenidoCurso_whitInvalidId_returnNull(){
         when(repository.findById(99999L)).thenReturn(Optional.empty());
         
-        ContenidoCursoDTO result = service.getById(99999L);
+        try (MockedStatic<ContenidoCursoMapper> mapperMock = mockStatic(ContenidoCursoMapper.class)) {
+            mapperMock.when(() -> ContenidoCursoMapper.entityToDTO(null)).thenReturn(null);
 
-        assertNull(result);
-        verify(repository, times(1)).findById(99999L);
+            ContenidoCursoDTO result = service.getById(99999L);
+
+            assertNull(result);
+            verify(repository, times(1)).findById(99999L);
+        }
     }
     
     @Test
@@ -403,15 +398,18 @@ public class ContenidoCursoServiceImplTest{
         ContenidoCurso newContenidoCurso = new ContenidoCurso(null, "Curso 1", "Contenido de ejemplo del curso 1", true);
         ContenidoCursoDTO newContenidoCursoDTO = new ContenidoCursoDTO(null, "Curso 1", "Contenido de ejemplo del curso 1", true);
         when(repository.save(newContenidoCurso)).thenReturn(contenidoCurso1);
-        when(modelMapper.map(newContenidoCursoDTO, ContenidoCurso.class)).thenReturn(newContenidoCurso);
-        when(modelMapper.map(contenidoCurso1, ContenidoCursoDTO.class)).thenReturn(contenidoCursoDTO1);
         
-        ContenidoCursoDTO result = service.save(newContenidoCursoDTO);
+        try (MockedStatic<ContenidoCursoMapper> mapperMock = mockStatic(ContenidoCursoMapper.class)) {
+            mapperMock.when(() -> ContenidoCursoMapper.dtoToEntity(newContenidoCursoDTO)).thenReturn(newContenidoCurso);
+            mapperMock.when(() -> ContenidoCursoMapper.entityToDTO(contenidoCurso1)).thenReturn(contenidoCursoDTO1);
 
-        assertNotNull(result);
-        assertEquals(1, result.getId());
-        assertEquals("Curso 1", result.getTitle());
-        verify(repository, times(1)).save(newContenidoCurso);
+            ContenidoCursoDTO result = service.save(newContenidoCursoDTO);
+
+            assertNotNull(result);
+            assertEquals(1, result.getId());
+            assertEquals("Curso 1", result.getTitle());
+            verify(repository, times(1)).save(newContenidoCurso);
+        }
     }
     
     @Test
@@ -420,12 +418,16 @@ public class ContenidoCursoServiceImplTest{
         ContenidoCurso newContenidoCurso = new ContenidoCurso(null, "Curso 1", "Contenido de ejemplo del curso 1", true);
         ContenidoCursoDTO newContenidoCursoDTO = new ContenidoCursoDTO(null, "Curso 1", "Contenido de ejemplo del curso 1", true);
         when(repository.save(newContenidoCurso)).thenReturn(null);
-        when(modelMapper.map(newContenidoCursoDTO, ContenidoCurso.class)).thenReturn(newContenidoCurso);
         
-        ContenidoCursoDTO result = service.save(newContenidoCursoDTO);
+        try (MockedStatic<ContenidoCursoMapper> mapperMock = mockStatic(ContenidoCursoMapper.class)) {
+            mapperMock.when(() -> ContenidoCursoMapper.dtoToEntity(newContenidoCursoDTO)).thenReturn(newContenidoCurso);
+            mapperMock.when(() -> ContenidoCursoMapper.entityToDTO(null)).thenReturn(null);
 
-        assertNull(result);
-        verify(repository, times(1)).save(newContenidoCurso);
+            ContenidoCursoDTO result = service.save(newContenidoCursoDTO);
+
+            assertNull(result);
+            verify(repository, times(1)).save(newContenidoCurso);
+        }
     }
     
     @Test

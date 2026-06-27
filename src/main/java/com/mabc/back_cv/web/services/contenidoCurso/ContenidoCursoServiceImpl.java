@@ -12,7 +12,6 @@ import com.mabc.back_cv.web.entities.ContenidoCurso;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.modelmapper.ModelMapper;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,20 +29,18 @@ public class ContenidoCursoServiceImpl implements ContenidoCursoService{
     private ContenidoCursoRepository repository;
 
 
-    private ModelMapper modelMapper;
-
     public List<ContenidoCursoDTO> findAllList(String searchText, Boolean activo){
         List<ContenidoCurso> entities = this.repository.findAllList(searchText, activo);
         return entities
             .stream()
-            .map(entity -> modelMapper.map(entity, ContenidoCursoDTO.class))
+            .map(ContenidoCursoMapper::entityToDTO)
             .collect(Collectors.toList());
     }
 
     public Page<ContenidoCursoDTO> findAllPage(String searchText, Integer page, Integer size, Boolean activo){
         Pageable pageable = Utils.createPageable(page, size);
         Page<ContenidoCurso> entities = this.repository.findAllPage(searchText, activo, pageable);
-        return entities.map(entity -> modelMapper.map(entity, ContenidoCursoDTO.class));
+        return entities.map(ContenidoCursoMapper::entityToDTO);
     }
 
     public ContenidoCursoDTO getById(Long id){
@@ -51,16 +48,16 @@ public class ContenidoCursoServiceImpl implements ContenidoCursoService{
             return null;
         }
         ContenidoCurso entity = repository.findById(id).orElse(null);
-        return entity != null ? modelMapper.map(entity, ContenidoCursoDTO.class) : null;
+        return ContenidoCursoMapper.entityToDTO(entity);
     }
 
     public ContenidoCursoDTO save(ContenidoCursoDTO dto){
         if(dto == null){
             return null;
         }
-        ContenidoCurso entity = modelMapper.map(dto, ContenidoCurso.class);
+        ContenidoCurso entity = ContenidoCursoMapper.dtoToEntity(dto);
         ContenidoCurso savedEntity = repository.save(entity);
-        return savedEntity != null ? modelMapper.map(savedEntity, ContenidoCursoDTO.class) : null;
+        return ContenidoCursoMapper.entityToDTO(savedEntity);
     }
 
     public void delete(Long id){

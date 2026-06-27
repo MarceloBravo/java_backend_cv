@@ -1,8 +1,6 @@
 package com.mabc.back_cv.web.services.educacion;
 
 import org.springframework.stereotype.Component;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.PageRequest;
 
 import com.mabc.back_cv.web.entities.Educacion;
 import com.mabc.back_cv.web.dto.EducacionDTO;
