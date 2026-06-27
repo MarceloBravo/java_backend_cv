@@ -34,9 +34,9 @@ import com.mabc.back_cv.web.entities.Pantalla;
 import com.mabc.back_cv.web.repositories.PantallaRepository;
 import com.mabc.back_cv.web.services.pantalla.PantallaServiceImpl;
 
-import org.modelmapper.ModelMapper;
+import static org.mockito.ArgumentMatchers.any;
 
-import org.springframework.data.domain.Sort;
+import com.mabc.back_cv.web.services.pantalla.PantallaMapper;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -45,9 +45,6 @@ public class PantallaServiceImplTest {
 
     @Mock
     private PantallaRepository pantallaRepository;
-
-    @Mock
-    private ModelMapper modelMapper;
 
     @InjectMocks
     private PantallaServiceImpl pantallaService;
@@ -73,11 +70,6 @@ public class PantallaServiceImplTest {
             new Pantalla(2L, "Pantalla 2",  menu, true, true, true, true, true, true)
         );
         when(pantallaRepository.findAll()).thenReturn(pantallasMock);
-        
-        PantallaDTO dto1 = new PantallaDTO(1L, "Pantalla 1",  menu, true, true, true, true, true, true);
-        PantallaDTO dto2 = new PantallaDTO(2L, "Pantalla 2",  menu, true, true, true, true, true, true);
-        when(modelMapper.map(pantallasMock.get(0), PantallaDTO.class)).thenReturn(dto1);
-        when(modelMapper.map(pantallasMock.get(1), PantallaDTO.class)).thenReturn(dto2);
 
         // Llamar al método a probar
         List<PantallaDTO> resultado = pantallaService.getAllPantallas();
@@ -116,11 +108,6 @@ public class PantallaServiceImplTest {
         Page<Pantalla> pageResult = new PageImpl<>(pantallasMock, pageable, 2);
         when(pantallaRepository.searchByNombrePantallaUrlArchivoOrMenu("Pantalla", true, pageable))
             .thenReturn(pageResult);
-        
-        PantallaDTO dto1 = new PantallaDTO(1L, "Pantalla 1",  menu, true, true, true, true, true, true);
-        PantallaDTO dto2 = new PantallaDTO(2L, "Pantalla 2",  menu, true, true, true, true, true, true);
-        when(modelMapper.map(pantallasMock.get(0), PantallaDTO.class)).thenReturn(dto1);
-        when(modelMapper.map(pantallasMock.get(1), PantallaDTO.class)).thenReturn(dto2);
 
         // Llamar al método a probar
         Page<PantallaDTO> resultado = pantallaService.searchPantallas("Pantalla", true, 0, 10, "id");
@@ -177,11 +164,6 @@ public class PantallaServiceImplTest {
         Page<Pantalla> pageResult = new PageImpl<>(pantallasMock, pageable, 2);
         when(pantallaRepository.searchByNombrePantallaUrlArchivoOrMenu("Pantalla", true, pageable))
             .thenReturn(pageResult);
-        
-        PantallaDTO dto1 = new PantallaDTO(1L, "Pantalla 1",  menu, true, true, true, true, true, true);
-        PantallaDTO dto2 = new PantallaDTO(2L, "Pantalla 2",  menu, true, true, true, true, true, true);
-        when(modelMapper.map(pantallasMock.get(0), PantallaDTO.class)).thenReturn(dto1);
-        when(modelMapper.map(pantallasMock.get(1), PantallaDTO.class)).thenReturn(dto2);
 
         Page<PantallaDTO> resultado1 = pantallaService.searchPantallas("Pantalla", true, null, null, null);
 
@@ -220,11 +202,6 @@ public class PantallaServiceImplTest {
         Page<Pantalla> pageResult = new PageImpl<>(pantallasMock);
         when(pantallaRepository.searchByNombrePantallaUrlArchivoOrMenu("Pantalla", true, pageable))
             .thenReturn(pageResult);
-        
-        PantallaDTO dto1 = new PantallaDTO(1L, "Pantalla 1",  menu, true, true, true, true, true, true);
-        PantallaDTO dto2 = new PantallaDTO(2L, "Pantalla 2",  menu, true, true, true, true, true, true);
-        when(modelMapper.map(pantallasMock.get(0), PantallaDTO.class)).thenReturn(dto1);
-        when(modelMapper.map(pantallasMock.get(1), PantallaDTO.class)).thenReturn(dto2);
 
         // Llamar al método a probar
         Page<PantallaDTO> resultado = pantallaService.searchPantallas("Pantalla", true, 0, 10, "");
@@ -246,11 +223,6 @@ public class PantallaServiceImplTest {
         Page<Pantalla> pageResult = new PageImpl<>(pantallasMock);
         when(pantallaRepository.searchByNombrePantallaUrlArchivoOrMenu("Pantalla", true, pageable))
             .thenReturn(pageResult);
-        
-        PantallaDTO dto1 = new PantallaDTO(1L, "Pantalla 1",  menu, true, true, true, true, true, true);
-        PantallaDTO dto2 = new PantallaDTO(2L, "Pantalla 2",  menu, true, true, true, true, true, true);
-        when(modelMapper.map(pantallasMock.get(0), PantallaDTO.class)).thenReturn(dto1);
-        when(modelMapper.map(pantallasMock.get(1), PantallaDTO.class)).thenReturn(dto2);
 
         // Llamar al método a probar
         Page<PantallaDTO> resultado = pantallaService.searchPantallas("Pantalla", true, 0, 10, null);
@@ -266,9 +238,6 @@ public class PantallaServiceImplTest {
         // Configurar el comportamiento del mock del repositorio
         Pantalla pantallaMock = new Pantalla(1L, "Pantalla 1",  null, true, true, true, true, true, true);
         when(pantallaRepository.findById(1L)).thenReturn(Optional.of(pantallaMock));
-        
-        PantallaDTO dto = new PantallaDTO(1L, "Pantalla 1",  null, true, true, true, true, true, true);
-        when(modelMapper.map(pantallaMock, PantallaDTO.class)).thenReturn(dto);
 
         // Llamar al método a probar
         PantallaDTO resultado = pantallaService.getPantallaById(1L);
@@ -306,14 +275,9 @@ public class PantallaServiceImplTest {
     public void testSavePantalla() {
         // Configurar el comportamiento del mock del repositorio
         PantallaDTO pantallaToSave = new PantallaDTO(null, "Nueva Pantalla",  null, true, true, true, true, true, true);
-        Pantalla pantallaEntity = new Pantalla(null, "Nueva Pantalla",  null, true, true, true, true, true, true);
         Pantalla pantallaSavedEntity = new Pantalla(1L, "Nueva Pantalla",  null, true, true, true, true, true, true);
         
-        when(modelMapper.map(pantallaToSave, Pantalla.class)).thenReturn(pantallaEntity);
-        when(pantallaRepository.save(pantallaEntity)).thenReturn(pantallaSavedEntity);
-        
-        PantallaDTO pantallaSaved = new PantallaDTO(1L, "Nueva Pantalla",  null, true, true, true, true, true, true);
-        when(modelMapper.map(pantallaSavedEntity, PantallaDTO.class)).thenReturn(pantallaSaved);
+        when(pantallaRepository.save(any(Pantalla.class))).thenReturn(pantallaSavedEntity);
 
         // Llamar al método a probar
         PantallaDTO resultado = pantallaService.savePantalla(pantallaToSave);
@@ -329,14 +293,9 @@ public class PantallaServiceImplTest {
     public void testSavePantallaInvalid() {
         // Configurar el comportamiento del mock del repositorio
         PantallaDTO pantallaToSave = new PantallaDTO(null, "",  null, true, true, true, true, true, true);
-        Pantalla pantallaEntity = new Pantalla(null, "", null, true, true, true, true, true, true);
         Pantalla pantallaSavedEntity = new Pantalla(1L, "", null, true, true, true, true, true, true);
         
-        when(modelMapper.map(pantallaToSave, Pantalla.class)).thenReturn(pantallaEntity);
-        when(pantallaRepository.save(pantallaEntity)).thenReturn(pantallaSavedEntity);
-        
-        PantallaDTO pantallaSaved = new PantallaDTO(1L, "", null, true, true, true, true, true, true);
-        when(modelMapper.map(pantallaSavedEntity, PantallaDTO.class)).thenReturn(pantallaSaved);
+        when(pantallaRepository.save(any(Pantalla.class))).thenReturn(pantallaSavedEntity);
 
         // Llamar al método a probar
         PantallaDTO resultado = pantallaService.savePantalla(pantallaToSave);
@@ -352,11 +311,7 @@ public class PantallaServiceImplTest {
         PantallaDTO pantallaToUpdate = new PantallaDTO(1L, "Pantalla Actualizada",  null, true, true, true, true, true, true);
         Pantalla pantallaEntity = new Pantalla(1L, "Pantalla Actualizada",  null, true, true, true, true, true, true);
         
-        when(modelMapper.map(pantallaToUpdate, Pantalla.class)).thenReturn(pantallaEntity);
-        when(pantallaRepository.save(pantallaEntity)).thenReturn(pantallaEntity);
-        
-        PantallaDTO pantallaUpdated = new PantallaDTO(1L, "Pantalla Actualizada",  null, true, true, true, true, true, true);
-        when(modelMapper.map(pantallaEntity, PantallaDTO.class)).thenReturn(pantallaUpdated);
+        when(pantallaRepository.save(any(Pantalla.class))).thenReturn(pantallaEntity);
 
         // Llamar al método a probar
         PantallaDTO resultado = pantallaService.savePantalla(pantallaToUpdate);
@@ -373,11 +328,7 @@ public class PantallaServiceImplTest {
         PantallaDTO pantallaToUpdate = new PantallaDTO(1L, "", null, true, true, true, true, true, true);
         Pantalla pantallaEntity = new Pantalla(1L, "", null, true, true, true, true, true, true);
         
-        when(modelMapper.map(pantallaToUpdate, Pantalla.class)).thenReturn(pantallaEntity);
-        when(pantallaRepository.save(pantallaEntity)).thenReturn(pantallaEntity);
-        
-        PantallaDTO pantallaUpdated = new PantallaDTO(1L, "", null, true, true, true, true, true, true);
-        when(modelMapper.map(pantallaEntity, PantallaDTO.class)).thenReturn(pantallaUpdated);
+        when(pantallaRepository.save(any(Pantalla.class))).thenReturn(pantallaEntity);
 
         // Llamar al método a probar
         PantallaDTO resultado = pantallaService.savePantalla(pantallaToUpdate);

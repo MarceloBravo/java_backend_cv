@@ -6,7 +6,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import com.mabc.back_cv.web.dto.PantallaDTO;
@@ -23,11 +22,9 @@ import com.mabc.back_cv.common.Utils;
 public class PantallaServiceImpl implements PantallaService {
 
     private final PantallaRepository pantallaRepository;
-    private final ModelMapper modelMapper;
 
-    public PantallaServiceImpl(PantallaRepository pantallaRepository, ModelMapper modelMapper) {
+    public PantallaServiceImpl(PantallaRepository pantallaRepository) {
         this.pantallaRepository = pantallaRepository;
-        this.modelMapper = modelMapper;
     }
 
     @Override
@@ -35,7 +32,7 @@ public class PantallaServiceImpl implements PantallaService {
         List<Pantalla> pantallas = pantallaRepository.findAll();
         List<PantallaDTO> pantallaDTOs = pantallas
                 .stream()
-                .map(p -> modelMapper.map(p, PantallaDTO.class))
+                .map(PantallaMapper::entityToDTO)
                 .collect(Collectors.toList());
         return pantallaDTOs;
     }
@@ -52,7 +49,7 @@ public class PantallaServiceImpl implements PantallaService {
         Pageable pageable = Utils.createPageable(page, size, sortBy);        
         Page<Pantalla> pantallaPage = pantallaRepository.searchByNombrePantallaUrlArchivoOrMenu(terminoBuscado, estado,
                 pageable);
-        Page<PantallaDTO> pantallaDTOPage = pantallaPage.map(p -> modelMapper.map(p, PantallaDTO.class));
+        Page<PantallaDTO> pantallaDTOPage = pantallaPage.map(PantallaMapper::entityToDTO);
         return pantallaDTOPage;
     }
 
@@ -62,17 +59,15 @@ public class PantallaServiceImpl implements PantallaService {
         if (pantalla == null)
             return null;
 
-        PantallaDTO pantallaDTO = modelMapper.map(pantalla, PantallaDTO.class);
-        return pantallaDTO;
+        return PantallaMapper.entityToDTO(pantalla);
     }
 
     @Override
     public PantallaDTO savePantalla(PantallaDTO pantallaDTO) {
-        Pantalla pantalla = modelMapper.map(pantallaDTO, Pantalla.class);
+        Pantalla pantalla = PantallaMapper.dtoToEntity(pantallaDTO);
 
         Pantalla pantallaGuardada = pantallaRepository.save(pantalla);
-        PantallaDTO pantallaDTOGuardada = modelMapper.map(pantallaGuardada, PantallaDTO.class);
-        return pantallaDTOGuardada;
+        return PantallaMapper.entityToDTO(pantallaGuardada);
     }
 
     @Override
