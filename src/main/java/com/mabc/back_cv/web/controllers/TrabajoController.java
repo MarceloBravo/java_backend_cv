@@ -38,7 +38,7 @@ public class TrabajoController{
      * @param userId     Identificador del usuario (obligatorio).
      * @return ResponseEntity con la lista de TrabajoDTO o error 500.
      */
-    @GetMapping("/all")
+    @GetMapping("/list")
     public ResponseEntity<List<TrabajoDTO>> getAll(
         @RequestParam(value = "searchText", defaultValue="") String searchText,
         @RequestParam(value = "userId", defaultValue="") Long userId
@@ -63,7 +63,7 @@ public class TrabajoController{
      * @param size       Tamaño de página (por defecto 10).
      * @return ResponseEntity con la página de TrabajoDTO o error 500.
      */
-    @GetMapping("/page")
+    @GetMapping("/all")
     public ResponseEntity<Page<TrabajoDTO>> getAll(
         @RequestParam(value = "searchText", defaultValue="") String searchText,
         @RequestParam(value = "userId", defaultValue="") Long userId,

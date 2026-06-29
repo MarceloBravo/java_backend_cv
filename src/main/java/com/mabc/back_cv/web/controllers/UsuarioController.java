@@ -40,7 +40,7 @@ public class UsuarioController {
      * @return ResponseEntity con la lista de UsuarioDTO o error en caso de
      *         excepción
      */
-    @GetMapping("/all")
+    @GetMapping("/list")
     public ResponseEntity<List<UsuarioDTO>> getAll(
             @RequestParam(value = "filter", required = false) String filter) {
         try {
@@ -76,7 +76,7 @@ public class UsuarioController {
      * @return ResponseEntity con una Page de UsuarioDTO o error en caso de
      *         excepción
      */
-    @GetMapping("/page")
+    @GetMapping("/all")
     public ResponseEntity<Page<UsuarioDTO>> getAllPage(
             @RequestParam(required = false) String filter,
             @RequestParam(required = false) Integer page,

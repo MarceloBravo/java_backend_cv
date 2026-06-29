@@ -53,7 +53,7 @@ class RolControllerTest {
     }
 
     // -------------------------------------------------------------------------
-    // GET /roles/all
+    // GET /roles/list
     // -------------------------------------------------------------------------
 
     @Test
@@ -64,7 +64,7 @@ class RolControllerTest {
 
         when(rolService.getAll()).thenReturn(roles);
 
-        mockMvc.perform(get("/roles/all"))
+        mockMvc.perform(get("/roles/list"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$", hasSize(2)))
@@ -80,7 +80,7 @@ class RolControllerTest {
     void getAllRoles_ServiceThrowsException_ShouldReturnBadRequest() throws Exception {
         when(rolService.getAll()).thenThrow(new RuntimeException("DB error"));
 
-        mockMvc.perform(get("/roles/all"))
+        mockMvc.perform(get("/roles/list"))
                 .andExpect(status().isBadRequest());
 
         verify(rolService, times(1)).getAll();
@@ -115,7 +115,7 @@ class RolControllerTest {
     }
 
     // -------------------------------------------------------------------------
-    // GET /roles/page
+    // GET /roles/all
     // -------------------------------------------------------------------------
 
     @Test
@@ -125,7 +125,7 @@ class RolControllerTest {
 
         when(rolService.searchBy("", true, 0, 10)).thenReturn(page);
 
-        mockMvc.perform(get("/roles/page")
+        mockMvc.perform(get("/roles/all")
                 .param("nombre", "")
                 .param("active", "true")
                 .param("page", "0")
@@ -143,7 +143,7 @@ class RolControllerTest {
         when(rolService.searchBy(any(), any(), anyInt(), anyInt()))
                 .thenThrow(new RuntimeException("DB error"));
 
-        mockMvc.perform(get("/roles/page"))
+        mockMvc.perform(get("/roles/all"))
                 .andExpect(status().isBadRequest());
     }
 

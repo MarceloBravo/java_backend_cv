@@ -105,7 +105,7 @@ public class ContenidoCursoControllerTest{
         Page<ContenidoCursoDTO> page = new PageImpl<>(contenidoCurso, PageRequest.of(0, 10), 2);
 
         when(service.findAllPage(any(), any(), any(), any())).thenReturn(page);
-        mockMvc.perform(get("/contenido-curso/page")
+        mockMvc.perform(get("/contenido-curso/all")
                 .param("searchText", "")
                 .param("page", "0")
                 .param("size", "10")
@@ -124,7 +124,7 @@ public class ContenidoCursoControllerTest{
         Page<ContenidoCursoDTO> page = new PageImpl<>(contenidoCurso, PageRequest.of(0, 10), 2);
 
         when(service.findAllPage(any(), any(), any(), any())).thenReturn(page);
-        mockMvc.perform(get("/contenido-curso/page")
+        mockMvc.perform(get("/contenido-curso/all")
                 .header("Accept", "application/json"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content", hasSize(2)));
@@ -139,7 +139,7 @@ public class ContenidoCursoControllerTest{
         Page<ContenidoCursoDTO> page = new PageImpl<>(contenidoCurso, PageRequest.of(0, 10), 1);
 
         when(service.findAllPage(any(), any(), any(), any())).thenReturn(page);
-        mockMvc.perform(get("/contenido-curso/page")
+        mockMvc.perform(get("/contenido-curso/all")
                 .param("searchText", "Curso 1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content", hasSize(1)))
@@ -157,7 +157,7 @@ public class ContenidoCursoControllerTest{
         Page<ContenidoCursoDTO> page = new PageImpl<>(contenidoCurso, PageRequest.of(0, 10), 2);
 
         when(service.findAllPage("", -1, -10, true)).thenReturn(page);
-        mockMvc.perform(get("/contenido-curso/page")
+        mockMvc.perform(get("/contenido-curso/all")
                 .param("searchText", "")
                 .param("page", "-1")
                 .param("size", "-10")
@@ -179,7 +179,7 @@ public class ContenidoCursoControllerTest{
     void getAll_shouldHandleError() throws Exception {
         when(service.findAllPage("", 0, 10, true)).thenThrow(new RuntimeException("Error"));
 
-        mockMvc.perform(get("/contenido-curso/page")
+        mockMvc.perform(get("/contenido-curso/all")
                     .param("searchText", "")
                     .param("page", "0")
                     .param("size", "10")

@@ -36,7 +36,7 @@ public class RolController {
      *
      * @return ResponseEntity con la lista de RolDTO o error 400.
      */
-    @GetMapping("/all")
+    @GetMapping("/list")
     public ResponseEntity<List<RolDTO>> getAllRoles() {
         try {
             return ResponseEntity.ok(service.getAll());
@@ -69,7 +69,7 @@ public class RolController {
      * @param rows   Cantidad de registros por página (por defecto 10).
      * @return ResponseEntity con la página de RolDTO o error 400.
      */
-    @GetMapping("/page")
+    @GetMapping("/all")
     public ResponseEntity<Page<RolDTO>> getRolesByPage(
             @RequestParam(value = "nombre", defaultValue = "") String nombre,
             @RequestParam(value = "active", defaultValue = "true") Boolean activo,

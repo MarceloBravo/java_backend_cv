@@ -40,7 +40,7 @@ public class PantallaController {
      *
      * @return ResponseEntity con la lista de PantallaDTO o estado 500 en caso de error.
      */
-    @GetMapping("/all")
+    @GetMapping("/list")
     public ResponseEntity<List<PantallaDTO>> getAllPantallas() {
         try{
             return ResponseEntity.ok(pantallaService.getAllPantallas());

@@ -76,7 +76,7 @@ public class TrabajoControllerTest{
     }
 
     // --------------------------------------------------------------------
-    // GET /trabajos/all
+    // GET /trabajos/list
     // --------------------------------------------------------------------
     @Test
     @DisplayName("Obtiene una lista  de trabajos con éxito")
@@ -84,7 +84,7 @@ public class TrabajoControllerTest{
         List<TrabajoDTO> trabajos = Arrays.asList(trabajoDTO1, trabajoDTO2);
 
         when(service.getAll(1L, "")).thenReturn(trabajos);
-        mockMvc.perform(get("/trabajos/all")
+        mockMvc.perform(get("/trabajos/list")
                 .param("searchText", "")
                 .param("userId", "1"))
                 .andExpect(status().isOk())
@@ -98,7 +98,7 @@ public class TrabajoControllerTest{
         List<TrabajoDTO> trabajos = Arrays.asList(trabajoDTO1);
 
         when(service.getAll(1L, "Empresa 1")).thenReturn(trabajos);
-        mockMvc.perform(get("/trabajos/all")
+        mockMvc.perform(get("/trabajos/list")
                 .param("searchText", "Empresa 1")
                 .param("userId", "1"))
                 .andExpect(status().isOk())
@@ -113,7 +113,7 @@ public class TrabajoControllerTest{
         List<TrabajoDTO> trabajos = Arrays.asList(trabajoDTO1, trabajoDTO2);
 
         when(service.getAll(1L, "")).thenReturn(trabajos);
-        mockMvc.perform(get("/trabajos/all")
+        mockMvc.perform(get("/trabajos/list")
                 .param("userId", "1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)));
@@ -126,7 +126,7 @@ public class TrabajoControllerTest{
     void getAll_ShouldHandleError() throws Exception {
 
         when(service.getAll(1L, "")).thenThrow(new RuntimeException("Error"));
-        mockMvc.perform(get("/trabajos/all")
+        mockMvc.perform(get("/trabajos/list")
                 .param("userId", "1"))
                 .andExpect(status().is5xxServerError());
 
@@ -137,7 +137,7 @@ public class TrabajoControllerTest{
     @DisplayName("Obtiene una lista de trabajos con éxito sin parámetros")
     void getAll_WhithOutParameters_ShouldReturnListOfTrabajos() throws Exception {
         
-        mockMvc.perform(get("/trabajos/all"))
+        mockMvc.perform(get("/trabajos/list"))
                     .andExpect(status().is4xxClientError());
 
         verifyNoInteractions(service);
@@ -148,7 +148,7 @@ public class TrabajoControllerTest{
     void getAll_whithUserIdInvalid_shouldReturnEmptList() throws Exception {
         when(service.getAll(99999L, "")).thenReturn(Arrays.asList());
 
-        mockMvc.perform(get("/trabajos/all")
+        mockMvc.perform(get("/trabajos/list")
                     .param("userId", "99999"))
                     .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(0)));
@@ -157,7 +157,7 @@ public class TrabajoControllerTest{
     }
 
     // --------------------------------------------------------------------
-    // GET /trabajos/Page
+    // GET /trabajos/all
     // --------------------------------------------------------------------
     @Test
     @DisplayName("Obtiene una página  de trabajos con éxito")
@@ -166,7 +166,7 @@ public class TrabajoControllerTest{
         Page<TrabajoDTO> page = new PageImpl<>(trabajos, PageRequest.of(0, 10), 2);
 
         when(service.getAll(1L, "", 0, 10)).thenReturn(page);
-        mockMvc.perform(get("/trabajos/page")
+        mockMvc.perform(get("/trabajos/all")
                 .param("searchText", "")
                 .param("userId", "1")
                 .param("page", "0")
@@ -184,7 +184,7 @@ public class TrabajoControllerTest{
         Page<TrabajoDTO> page = new PageImpl<>(trabajos, PageRequest.of(0, 10), 1);
 
         when(service.getAll(1L, "Empresa 1", 0, 10)).thenReturn(page);
-        mockMvc.perform(get("/trabajos/page")
+        mockMvc.perform(get("/trabajos/all")
                 .param("searchText", "Empresa 1")
                 .param("userId", "1")
                 .param("page", "0")
@@ -202,7 +202,7 @@ public class TrabajoControllerTest{
         Page<TrabajoDTO> page = new PageImpl<>(trabajos, PageRequest.of(0, 10), 2);
 
         when(service.getAll(1L, "", -10, -200)).thenReturn(page);
-        mockMvc.perform(get("/trabajos/page")
+        mockMvc.perform(get("/trabajos/all")
                 .param("searchText", "")
                 .param("userId", "1")
                 .param("page", "-10")
@@ -220,7 +220,7 @@ public class TrabajoControllerTest{
         Page<TrabajoDTO> page = new PageImpl<>(trabajos, PageRequest.of(0, 10), 2);
 
         when(service.getAll(1L, "", 0, 10)).thenReturn(page);
-        mockMvc.perform(get("/trabajos/page")
+        mockMvc.perform(get("/trabajos/all")
                 .param("userId", "1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content", hasSize(2)));
@@ -233,7 +233,7 @@ public class TrabajoControllerTest{
     void getPage_ShouldHandleError() throws Exception {
 
         when(service.getAll(1L, "", 0, 10)).thenThrow(new RuntimeException("Error"));
-        mockMvc.perform(get("/trabajos/page")
+        mockMvc.perform(get("/trabajos/all")
                 .param("userId", "1"))
                 .andExpect(status().is5xxServerError());
 
@@ -244,7 +244,7 @@ public class TrabajoControllerTest{
     @DisplayName("Obtiene una página  de trabajos con éxito sin parámetros")
     void getPage_WhithOutParameters_ShouldReturnPageOfTrabajos() throws Exception {
         
-        mockMvc.perform(get("/trabajos/page"))
+        mockMvc.perform(get("/trabajos/all"))
                     .andExpect(status().is4xxClientError());
 
         verifyNoInteractions(service);
@@ -256,7 +256,7 @@ public class TrabajoControllerTest{
         Page<TrabajoDTO> page = new PageImpl<>(Arrays.asList(), PageRequest.of(0, 10), 0);
         when(service.getAll(99999L, "", 0, 10)).thenReturn(page);
 
-        mockMvc.perform(get("/trabajos/page")
+        mockMvc.perform(get("/trabajos/all")
                     .param("userId", "99999"))
                     .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content", hasSize(0)));

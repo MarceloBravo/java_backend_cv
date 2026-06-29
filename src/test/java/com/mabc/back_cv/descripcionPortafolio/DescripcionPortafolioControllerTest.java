@@ -62,7 +62,7 @@ class DescripcionPortafolioControllerTest {
         DescripcionPortafolioDTO dto = createDto(1L, "texto prueba", 1);
         when(descripcionPortafolioService.getAll()).thenReturn(List.of(dto));
 
-        mockMvc.perform(get("/descripcion-portafolio/all"))
+        mockMvc.perform(get("/descripcion-portafolio/list"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(1))
                 .andExpect(jsonPath("$[0].parrafo").value(dto.getParrafo()));
@@ -76,7 +76,7 @@ class DescripcionPortafolioControllerTest {
         .when(descripcionPortafolioService)
         .getAll();
 
-        mockMvc.perform(get("/descripcion-portafolio/all"))
+        mockMvc.perform(get("/descripcion-portafolio/list"))
                 .andExpect(status().isBadRequest());
 
         verify(descripcionPortafolioService, times(1)).getAll();
@@ -88,7 +88,7 @@ class DescripcionPortafolioControllerTest {
         Page<DescripcionPortafolioDTO> page = new PageImpl<>(List.of(dto), PageRequest.of(0, 5), 1);
         when(descripcionPortafolioService.getAll(eq("busqueda"), eq(0), eq(5))).thenReturn(page);
 
-        mockMvc.perform(get("/descripcion-portafolio/search")
+        mockMvc.perform(get("/descripcion-portafolio/all")
                         .param("terminoBuscado", "busqueda")
                         .param("page", "0")
                         .param("size", "5"))
@@ -103,14 +103,14 @@ class DescripcionPortafolioControllerTest {
         Page<DescripcionPortafolioDTO> page = new PageImpl<>(List.of(dto), PageRequest.of(0, 10), 1);
         when(descripcionPortafolioService.getAll(null, null, null)).thenReturn(page);
 
-        mockMvc.perform(get("/descripcion-portafolio/search"))
+        mockMvc.perform(get("/descripcion-portafolio/all"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content.length()").value(1));
     }
 
     @Test
     void shouldReturnBadRequestForInvalidPageParameter() throws Exception {
-        mockMvc.perform(get("/descripcion-portafolio/search")
+        mockMvc.perform(get("/descripcion-portafolio/all")
                         .param("page", "abc")
                         .param("size", "5"))
                 .andExpect(status().isBadRequest());
@@ -123,7 +123,7 @@ class DescripcionPortafolioControllerTest {
         .when(descripcionPortafolioService)
         .getAll(any(), anyInt(), anyInt());
 
-        mockMvc.perform(get("/descripcion-portafolio/search")
+        mockMvc.perform(get("/descripcion-portafolio/all")
                 .param("terminoBuscado", "abc")
                 .param("page", "0")
                 .param("size", "10"))

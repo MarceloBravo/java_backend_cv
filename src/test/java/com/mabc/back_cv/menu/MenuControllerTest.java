@@ -57,7 +57,7 @@ class MenuControllerTest {
 
         when(menuService.getAllMenus()).thenReturn(menus);
 
-        mockMvc.perform(get("/menus/all"))
+        mockMvc.perform(get("/menus/list"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$", hasSize(2)))

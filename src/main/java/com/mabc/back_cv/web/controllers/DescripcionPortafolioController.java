@@ -26,7 +26,7 @@ public class DescripcionPortafolioController {
      *
      * @return ResponseEntity con la lista de DescripcionPortafolioDTO o error 400.
      */
-    @GetMapping("/all")
+    @GetMapping("/list")
     public ResponseEntity<List<DescripcionPortafolioDTO>> getAll() {
         try {
             List<DescripcionPortafolioDTO> list = descripcionPortafolioService.getAll();
@@ -44,7 +44,7 @@ public class DescripcionPortafolioController {
      * @param size           Tamaño de página (opcional).
      * @return ResponseEntity con la página de DescripcionPortafolioDTO o error 500.
      */
-    @GetMapping("/search")
+    @GetMapping("/all")
     public ResponseEntity<Page<DescripcionPortafolioDTO>> getAll(
             @RequestParam(required = false) String terminoBuscado,
             @RequestParam(required = false) Integer page,

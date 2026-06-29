@@ -52,7 +52,7 @@ public class ContenidoCursoController{
      * @param activo     Estado activo opcional.
      * @return ResponseEntity con la página de ContenidoCursoDTO o error 500.
      */
-    @GetMapping("/page")
+    @GetMapping("/all")
     public ResponseEntity<Page<ContenidoCursoDTO>> getPage(
         @RequestParam(required = false) String searchText,
         @RequestParam(required = false) Integer page,

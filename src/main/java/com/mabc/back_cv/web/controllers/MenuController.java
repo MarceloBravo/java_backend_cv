@@ -34,7 +34,7 @@ public class MenuController {
      *
      * @return ResponseEntity con la lista de MenuDTO de todos los menús.
      */
-    @GetMapping("/all")
+    @GetMapping("/list")
     public ResponseEntity<List<MenuDTO>> getAllMenus() {
         return ResponseEntity.ok(menuService.getAllMenus());
     }
