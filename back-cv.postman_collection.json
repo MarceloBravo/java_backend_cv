@@ -1,0 +1,2370 @@
+{
+  "info": {
+    "_postman_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+    "name": "back-cv API",
+    "description": "Colección de endpoints para la API de back-cv.\n\nUsa la variable {{base_url}} para configurar la URL base (ej: http://localhost:8080).\n\nCada controlador está agrupado en una carpeta con sus respectivos endpoints.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "AuthController",
+      "description": "Controlador de autenticación — /api/auth",
+      "item": [
+        {
+          "name": "POST /api/auth/register",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"user@example.com\",\n  \"password\": \"123456\",\n  \"nombre\": \"Juan\",\n  \"apellido\": \"Pérez\",\n  \"fono\": \"+56912345678\",\n  \"direccion\": \"Calle Principal 123\",\n  \"ciudad\": \"Santiago\",\n  \"idioma\": \"es\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/register",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "register"
+              ]
+            }
+          }
+        },
+        {
+          "name": "POST /api/auth/login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"user@example.com\",\n  \"password\": \"123456\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ]
+            }
+          }
+        },
+        {
+          "name": "POST /api/auth/refresh",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refreshToken\": \"eyJhbGciOiJIUzI1NiJ9...\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/refresh",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "refresh"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "CertificadoController",
+      "description": "Controlador de certificados — /api/certificado",
+      "item": [
+        {
+          "name": "GET /api/certificado/all",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/certificado/all?userId=1&searchText=&page=0&size=10",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "certificado",
+                "all"
+              ],
+              "query": [
+                {
+                  "key": "userId",
+                  "value": "1",
+                  "description": "Filtro por ID de usuario (opcional)"
+                },
+                {
+                  "key": "searchText",
+                  "value": "",
+                  "description": "Texto de búsqueda (opcional)"
+                },
+                {
+                  "key": "page",
+                  "value": "0",
+                  "description": "Número de página (opcional)"
+                },
+                {
+                  "key": "size",
+                  "value": "10",
+                  "description": "Tamaño de página (opcional)"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "GET /api/certificado/{id}",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/certificado/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "certificado",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1",
+                  "description": "ID del certificado"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "GET /api/certificado/user/{userId}",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/certificado/user/1?page=0&size=10",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "certificado",
+                "user",
+                ":userId"
+              ],
+              "variable": [
+                {
+                  "key": "userId",
+                  "value": "1",
+                  "description": "ID del usuario"
+                }
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "0",
+                  "description": "Número de página (opcional)"
+                },
+                {
+                  "key": "size",
+                  "value": "10",
+                  "description": "Tamaño de página (opcional)"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "POST /api/certificado/save",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": null,\n  \"titulo\": \"Certificado AWS Solutions Architect\",\n  \"institucion\": \"Amazon Web Services\",\n  \"fecha\": \"2025-06-01\",\n  \"url\": \"https://example.com/certificado/123\",\n  \"userId\": 1,\n  \"descripcion\": \"Certificación de arquitecto de soluciones AWS\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/certificado/save",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "certificado",
+                "save"
+              ]
+            }
+          }
+        },
+        {
+          "name": "DELETE /api/certificado/delete/{id}",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/certificado/delete/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "certificado",
+                "delete",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1",
+                  "description": "ID del certificado a eliminar"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "ContenidoCursoController",
+      "description": "Controlador de contenido de cursos — /api/contenido-curso",
+      "item": [
+        {
+          "name": "GET /api/contenido-curso/list",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/contenido-curso/list?searchText=&activo=true",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "contenido-curso",
+                "list"
+              ],
+              "query": [
+                {
+                  "key": "searchText",
+                  "value": "",
+                  "description": "Texto de búsqueda (opcional)"
+                },
+                {
+                  "key": "activo",
+                  "value": "true",
+                  "description": "Filtrar por activo (opcional)"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "GET /api/contenido-curso/all",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/contenido-curso/all?searchText=&page=0&size=10&activo=true",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "contenido-curso",
+                "all"
+              ],
+              "query": [
+                {
+                  "key": "searchText",
+                  "value": "",
+                  "description": "Texto de búsqueda (opcional)"
+                },
+                {
+                  "key": "page",
+                  "value": "0",
+                  "description": "Número de página (opcional)"
+                },
+                {
+                  "key": "size",
+                  "value": "10",
+                  "description": "Tamaño de página (opcional)"
+                },
+                {
+                  "key": "activo",
+                  "value": "true",
+                  "description": "Filtrar por activo (opcional)"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "GET /api/contenido-curso/{id}",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/contenido-curso/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "contenido-curso",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1",
+                  "description": "ID del contenido"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "POST /api/contenido-curso/save",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": null,\n  \"titulo\": \"Introducción a Java\",\n  \"descripcion\": \"Conceptos básicos de Java\",\n  \"url\": \"https://example.com/video/1\",\n  \"cursoId\": 1,\n  \"orden\": 1\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/contenido-curso/save",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "contenido-curso",
+                "save"
+              ]
+            }
+          }
+        },
+        {
+          "name": "DELETE /api/contenido-curso/delete/{id}",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/contenido-curso/delete/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "contenido-curso",
+                "delete",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1",
+                  "description": "ID del contenido a eliminar"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "CursoController",
+      "description": "Controlador de cursos — /api/curso",
+      "item": [
+        {
+          "name": "GET /api/curso/all",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/curso/all?userId=1&searchText=&page=0&size=10",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "curso",
+                "all"
+              ],
+              "query": [
+                {
+                  "key": "userId",
+                  "value": "1",
+                  "description": "Filtro por ID de usuario (opcional)"
+                },
+                {
+                  "key": "searchText",
+                  "value": "",
+                  "description": "Texto de búsqueda (opcional)"
+                },
+                {
+                  "key": "page",
+                  "value": "0",
+                  "description": "Número de página (opcional)"
+                },
+                {
+                  "key": "size",
+                  "value": "10",
+                  "description": "Tamaño de página (opcional)"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "GET /api/curso/{id}",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/curso/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "curso",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1",
+                  "description": "ID del curso"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "GET /api/curso/user/{userId}",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/curso/user/1?page=0&size=10",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "curso",
+                "user",
+                ":userId"
+              ],
+              "variable": [
+                {
+                  "key": "userId",
+                  "value": "1",
+                  "description": "ID del usuario"
+                }
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "0",
+                  "description": "Número de página (opcional)"
+                },
+                {
+                  "key": "size",
+                  "value": "10",
+                  "description": "Tamaño de página (opcional)"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "POST /api/curso/save",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": null,\n  \"nombre\": \"Curso de Spring Boot\",\n  \"institucion\": \"Udemy\",\n  \"fechaInicio\": \"2025-01-01\",\n  \"fechaFin\": \"2025-03-01\",\n  \"userId\": 1,\n  \"descripcion\": \"Curso completo de Spring Boot\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/curso/save",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "curso",
+                "save"
+              ]
+            }
+          }
+        },
+        {
+          "name": "DELETE /api/curso/delete/{id}",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/curso/delete/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "curso",
+                "delete",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1",
+                  "description": "ID del curso a eliminar"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "DescripcionPortafolioController",
+      "description": "Controlador de descripciones de portafolio — /api/descripcion-portafolio",
+      "item": [
+        {
+          "name": "GET /api/descripcion-portafolio/list",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/descripcion-portafolio/list",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "descripcion-portafolio",
+                "list"
+              ]
+            }
+          }
+        },
+        {
+          "name": "GET /api/descripcion-portafolio/all",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/descripcion-portafolio/all?terminoBuscado=&page=0&size=10",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "descripcion-portafolio",
+                "all"
+              ],
+              "query": [
+                {
+                  "key": "terminoBuscado",
+                  "value": "",
+                  "description": "Término de búsqueda (opcional)"
+                },
+                {
+                  "key": "page",
+                  "value": "0",
+                  "description": "Número de página (opcional)"
+                },
+                {
+                  "key": "size",
+                  "value": "10",
+                  "description": "Tamaño de página (opcional)"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "GET /api/descripcion-portafolio/{id}",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/descripcion-portafolio/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "descripcion-portafolio",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1",
+                  "description": "ID de la descripción"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "POST /api/descripcion-portafolio/save",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": null,\n  \"descripcion\": \"Descripción del portafolio\",\n  \"portafolioId\": 1\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/descripcion-portafolio/save",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "descripcion-portafolio",
+                "save"
+              ]
+            }
+          }
+        },
+        {
+          "name": "DELETE /api/descripcion-portafolio/delete/{id}",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/descripcion-portafolio/delete/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "descripcion-portafolio",
+                "delete",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1",
+                  "description": "ID de la descripción a eliminar"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "EducacionController",
+      "description": "Controlador de educación — /api/educacion",
+      "item": [
+        {
+          "name": "GET /api/educacion/all",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/educacion/all?userId=1&searchText=&page=0&size=10",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "educacion",
+                "all"
+              ],
+              "query": [
+                {
+                  "key": "userId",
+                  "value": "1",
+                  "description": "Filtro por ID de usuario (opcional)"
+                },
+                {
+                  "key": "searchText",
+                  "value": "",
+                  "description": "Texto de búsqueda (opcional)"
+                },
+                {
+                  "key": "page",
+                  "value": "0",
+                  "description": "Número de página (opcional)"
+                },
+                {
+                  "key": "size",
+                  "value": "10",
+                  "description": "Tamaño de página (opcional)"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "GET /api/educacion/{id}",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/educacion/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "educacion",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1",
+                  "description": "ID del registro educativo"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "GET /api/educacion/user/{userId}",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/educacion/user/1?page=0&size=10",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "educacion",
+                "user",
+                ":userId"
+              ],
+              "variable": [
+                {
+                  "key": "userId",
+                  "value": "1",
+                  "description": "ID del usuario"
+                }
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "0",
+                  "description": "Número de página (opcional)"
+                },
+                {
+                  "key": "size",
+                  "value": "10",
+                  "description": "Tamaño de página (opcional)"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "POST /api/educacion/save",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": null,\n  \"titulo\": \"Ingeniería en Sistemas\",\n  \"institucion\": \"Universidad Nacional\",\n  \"fechaInicio\": \"2018-01-01\",\n  \"fechaFin\": \"2022-12-31\",\n  \"userId\": 1,\n  \"descripcion\": \"Carrera universitaria\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/educacion/save",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "educacion",
+                "save"
+              ]
+            }
+          }
+        },
+        {
+          "name": "DELETE /api/educacion/delete/{id}",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/educacion/delete/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "educacion",
+                "delete",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1",
+                  "description": "ID del registro a eliminar"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "MenuController",
+      "description": "Controlador de menús — /api/menus",
+      "item": [
+        {
+          "name": "GET /api/menus/list",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/menus/list",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "menus",
+                "list"
+              ]
+            }
+          }
+        },
+        {
+          "name": "GET /api/menus/main/{rolId}",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/menus/main/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "menus",
+                "main",
+                ":rolId"
+              ],
+              "variable": [
+                {
+                  "key": "rolId",
+                  "value": "1",
+                  "description": "ID del rol"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "GET /api/menus/sub/{menuId}/{rolId}",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/menus/sub/1/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "menus",
+                "sub",
+                ":menuId",
+                ":rolId"
+              ],
+              "variable": [
+                {
+                  "key": "menuId",
+                  "value": "1",
+                  "description": "ID del menú padre"
+                },
+                {
+                  "key": "rolId",
+                  "value": "1",
+                  "description": "ID del rol"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "GET /api/menus/active",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/menus/active",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "menus",
+                "active"
+              ]
+            }
+          }
+        },
+        {
+          "name": "GET /api/menus/no-recursive/{menuId}",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/menus/no-recursive/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "menus",
+                "no-recursive",
+                ":menuId"
+              ],
+              "variable": [
+                {
+                  "key": "menuId",
+                  "value": "1",
+                  "description": "ID del menú de referencia"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "GET /api/menus/{id}",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/menus/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "menus",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1",
+                  "description": "ID del menú"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "POST /api/menus/save",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": null,\n  \"nombre\": \"Dashboard\",\n  \"url\": \"/dashboard\",\n  \"icono\": \"dashboard\",\n  \"padreId\": null,\n  \"orden\": 1,\n  \"activo\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/menus/save",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "menus",
+                "save"
+              ]
+            }
+          }
+        },
+        {
+          "name": "DELETE /api/menus/delete/{id}",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/menus/delete/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "menus",
+                "delete",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1",
+                  "description": "ID del menú a eliminar"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "PantallaController",
+      "description": "Controlador de pantallas — /api/pantallas",
+      "item": [
+        {
+          "name": "GET /api/pantallas/list",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/pantallas/list",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "pantallas",
+                "list"
+              ]
+            }
+          }
+        },
+        {
+          "name": "GET /api/pantallas/search",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/pantallas/search?terminoBuscado=&estado=true&page=0&size=10&sortBy=nombre",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "pantallas",
+                "search"
+              ],
+              "query": [
+                {
+                  "key": "terminoBuscado",
+                  "value": "",
+                  "description": "Término de búsqueda (opcional)"
+                },
+                {
+                  "key": "estado",
+                  "value": "true",
+                  "description": "Estado de la pantalla (opcional)"
+                },
+                {
+                  "key": "page",
+                  "value": "0",
+                  "description": "Número de página (opcional)"
+                },
+                {
+                  "key": "size",
+                  "value": "10",
+                  "description": "Tamaño de página (opcional)"
+                },
+                {
+                  "key": "sortBy",
+                  "value": "nombre",
+                  "description": "Campo de ordenamiento (opcional)"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "GET /api/pantallas/{id}",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/pantallas/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "pantallas",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1",
+                  "description": "ID de la pantalla"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "POST /api/pantallas/save",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": null,\n  \"nombre\": \"Gestión de Usuarios\",\n  \"ruta\": \"/usuarios\",\n  \"icono\": \"people\",\n  \"estado\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/pantallas/save",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "pantallas",
+                "save"
+              ]
+            }
+          }
+        },
+        {
+          "name": "DELETE /api/pantallas/delete/{id}",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/pantallas/delete/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "pantallas",
+                "delete",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1",
+                  "description": "ID de la pantalla a eliminar"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "PermisoPantallaController",
+      "description": "Controlador de permisos de pantalla — /api/permisos-pantalla",
+      "item": [
+        {
+          "name": "GET /api/permisos-pantalla/rol/{id_rol}",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/permisos-pantalla/rol/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "permisos-pantalla",
+                "rol",
+                ":id_rol"
+              ],
+              "variable": [
+                {
+                  "key": "id_rol",
+                  "value": "1",
+                  "description": "ID del rol"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "GET /api/permisos-pantalla/rol/{id_rol}/pantalla/{id_pantalla}",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/permisos-pantalla/rol/1/pantalla/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "permisos-pantalla",
+                "rol",
+                ":id_rol",
+                "pantalla",
+                ":id_pantalla"
+              ],
+              "variable": [
+                {
+                  "key": "id_rol",
+                  "value": "1",
+                  "description": "ID del rol"
+                },
+                {
+                  "key": "id_pantalla",
+                  "value": "1",
+                  "description": "ID de la pantalla"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "POST /api/permisos-pantalla/grabar",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "[\n  {\n    \"id\": null,\n    \"rolId\": 1,\n    \"pantallaId\": 1,\n    \"activo\": true\n  },\n  {\n    \"id\": null,\n    \"rolId\": 1,\n    \"pantallaId\": 2,\n    \"activo\": false\n  }\n]"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/permisos-pantalla/grabar",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "permisos-pantalla",
+                "grabar"
+              ]
+            }
+          }
+        },
+        {
+          "name": "DELETE /api/permisos-pantalla/eliminar/rol/{id_rol}",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/permisos-pantalla/eliminar/rol/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "permisos-pantalla",
+                "eliminar",
+                "rol",
+                ":id_rol"
+              ],
+              "variable": [
+                {
+                  "key": "id_rol",
+                  "value": "1",
+                  "description": "ID del rol"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "PUT /api/permisos-pantalla/desactivar/rol/{id_rol}",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/permisos-pantalla/desactivar/rol/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "permisos-pantalla",
+                "desactivar",
+                "rol",
+                ":id_rol"
+              ],
+              "variable": [
+                {
+                  "key": "id_rol",
+                  "value": "1",
+                  "description": "ID del rol"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "PortafolioController",
+      "description": "Controlador de portafolios — /api/portafolio",
+      "item": [
+        {
+          "name": "GET /api/portafolio/{id}",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/portafolio/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "portafolio",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1",
+                  "description": "ID del portafolio"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "GET /api/portafolio/user/{userId}",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/portafolio/user/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "portafolio",
+                "user",
+                ":userId"
+              ],
+              "variable": [
+                {
+                  "key": "userId",
+                  "value": "1",
+                  "description": "ID del usuario"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "GET /api/portafolio/search",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/portafolio/search?userId=1&searchText=&page=0&size=10",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "portafolio",
+                "search"
+              ],
+              "query": [
+                {
+                  "key": "userId",
+                  "value": "1",
+                  "description": "Filtro por ID de usuario (opcional)"
+                },
+                {
+                  "key": "searchText",
+                  "value": "",
+                  "description": "Texto de búsqueda (opcional)"
+                },
+                {
+                  "key": "page",
+                  "value": "0",
+                  "description": "Número de página"
+                },
+                {
+                  "key": "size",
+                  "value": "10",
+                  "description": "Tamaño de página"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "POST /api/portafolio/save",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": null,\n  \"titulo\": \"Mi Portafolio\",\n  \"descripcion\": \"Descripción del portafolio\",\n  \"userId\": 1,\n  \"tipo\": \"personal\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/portafolio/save",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "portafolio",
+                "save"
+              ]
+            }
+          }
+        },
+        {
+          "name": "DELETE /api/portafolio/delete/{id}",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/portafolio/delete/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "portafolio",
+                "delete",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1",
+                  "description": "ID del portafolio a eliminar"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "PresentacionController",
+      "description": "Controlador de presentaciones — /api/presentacion",
+      "item": [
+        {
+          "name": "GET /api/presentacion/all",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/presentacion/all?parrafo=&userId=&page=0&size=10",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "presentacion",
+                "all"
+              ],
+              "query": [
+                {
+                  "key": "parrafo",
+                  "value": "",
+                  "description": "Texto de búsqueda en párrafo (opcional)"
+                },
+                {
+                  "key": "userId",
+                  "value": "",
+                  "description": "Filtro por ID de usuario (opcional)"
+                },
+                {
+                  "key": "page",
+                  "value": "0",
+                  "description": "Número de página (opcional)"
+                },
+                {
+                  "key": "size",
+                  "value": "10",
+                  "description": "Tamaño de página (opcional)"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "GET /api/presentacion/user/{userId}",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/presentacion/user/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "presentacion",
+                "user",
+                ":userId"
+              ],
+              "variable": [
+                {
+                  "key": "userId",
+                  "value": "1",
+                  "description": "ID del usuario"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "POST /api/presentacion/save",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": null,\n  \"parrafo\": \"Soy un desarrollador full stack con 5 años de experiencia\",\n  \"userId\": 1\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/presentacion/save",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "presentacion",
+                "save"
+              ]
+            }
+          }
+        },
+        {
+          "name": "DELETE /api/presentacion/delete/{id}",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/presentacion/delete/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "presentacion",
+                "delete",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1",
+                  "description": "ID de la presentación a eliminar"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "RolController",
+      "description": "Controlador de roles — /api/roles",
+      "item": [
+        {
+          "name": "GET /api/roles/list",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/roles/list",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "roles",
+                "list"
+              ]
+            }
+          }
+        },
+        {
+          "name": "GET /api/roles/{id}",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/roles/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "roles",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1",
+                  "description": "ID del rol"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "GET /api/roles/all",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/roles/all?nombre=&active=true&page=0&rows=10",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "roles",
+                "all"
+              ],
+              "query": [
+                {
+                  "key": "nombre",
+                  "value": "",
+                  "description": "Nombre del rol para filtrar (opcional)"
+                },
+                {
+                  "key": "active",
+                  "value": "true",
+                  "description": "Estado activo"
+                },
+                {
+                  "key": "page",
+                  "value": "0",
+                  "description": "Número de página"
+                },
+                {
+                  "key": "rows",
+                  "value": "10",
+                  "description": "Registros por página"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "GET /api/roles/active",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/roles/active",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "roles",
+                "active"
+              ]
+            }
+          }
+        },
+        {
+          "name": "POST /api/roles/save",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": null,\n  \"nombre\": \"Administrador\",\n  \"activo\": true,\n  \"descripcion\": \"Rol con todos los permisos\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/roles/save",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "roles",
+                "save"
+              ]
+            }
+          }
+        },
+        {
+          "name": "DELETE /api/roles/{id}",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/roles/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "roles",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1",
+                  "description": "ID del rol a eliminar"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "TecnologiaController",
+      "description": "Controlador de tecnologías — /api/tecnologias",
+      "item": [
+        {
+          "name": "GET /api/tecnologias/all",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/tecnologias/all?searchText=&page=0&size=10",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "tecnologias",
+                "all"
+              ],
+              "query": [
+                {
+                  "key": "searchText",
+                  "value": "",
+                  "description": "Texto de búsqueda"
+                },
+                {
+                  "key": "page",
+                  "value": "0",
+                  "description": "Número de página"
+                },
+                {
+                  "key": "size",
+                  "value": "10",
+                  "description": "Tamaño de página"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "GET /api/tecnologias/list",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/tecnologias/list?searchText=",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "tecnologias",
+                "list"
+              ],
+              "query": [
+                {
+                  "key": "searchText",
+                  "value": "",
+                  "description": "Texto de búsqueda"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "GET /api/tecnologias/{id}",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/tecnologias/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "tecnologias",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1",
+                  "description": "ID de la tecnología"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "POST /api/tecnologias/save",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": null,\n  \"nombre\": \"Spring Boot\",\n  \"icono\": \"spring\",\n  \"url\": \"https://spring.io\",\n  \"descripcion\": \"Framework de desarrollo Java\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/tecnologias/save",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "tecnologias",
+                "save"
+              ]
+            }
+          }
+        },
+        {
+          "name": "DELETE /api/tecnologias/delete/{id}",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/tecnologias/delete/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "tecnologias",
+                "delete",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1",
+                  "description": "ID de la tecnología a eliminar"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "TrabajoController",
+      "description": "Controlador de trabajos/experiencia laboral — /api/trabajos",
+      "item": [
+        {
+          "name": "GET /api/trabajos/list",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/trabajos/list?searchText=&userId=1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "trabajos",
+                "list"
+              ],
+              "query": [
+                {
+                  "key": "searchText",
+                  "value": "",
+                  "description": "Texto de búsqueda"
+                },
+                {
+                  "key": "userId",
+                  "value": "1",
+                  "description": "ID del usuario"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "GET /api/trabajos/all",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/trabajos/all?searchText=&userId=1&page=0&size=10",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "trabajos",
+                "all"
+              ],
+              "query": [
+                {
+                  "key": "searchText",
+                  "value": "",
+                  "description": "Texto de búsqueda"
+                },
+                {
+                  "key": "userId",
+                  "value": "1",
+                  "description": "ID del usuario"
+                },
+                {
+                  "key": "page",
+                  "value": "0",
+                  "description": "Número de página"
+                },
+                {
+                  "key": "size",
+                  "value": "10",
+                  "description": "Tamaño de página"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "GET /api/trabajos/{id}",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/trabajos/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "trabajos",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1",
+                  "description": "ID del trabajo"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "POST /api/trabajos/save",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": null,\n  \"empresa\": \"Tech Corp\",\n  \"cargo\": \"Desarrollador Senior\",\n  \"fechaInicio\": \"2022-01-01\",\n  \"fechaFin\": \"2025-12-31\",\n  \"userId\": 1,\n  \"descripcion\": \"Desarrollo de aplicaciones web\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/trabajos/save",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "trabajos",
+                "save"
+              ]
+            }
+          }
+        },
+        {
+          "name": "DELETE /api/trabajos/delete/{id}",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/trabajos/delete/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "trabajos",
+                "delete",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1",
+                  "description": "ID del trabajo a eliminar"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "UserPresentationController",
+      "description": "Controlador de presentaciones de usuario — /api/userPresentation",
+      "item": [
+        {
+          "name": "GET /api/userPresentation/all",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/userPresentation/all?searchText=&userId=&page=0&size=10",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "userPresentation",
+                "all"
+              ],
+              "query": [
+                {
+                  "key": "searchText",
+                  "value": "",
+                  "description": "Texto de búsqueda"
+                },
+                {
+                  "key": "userId",
+                  "value": "",
+                  "description": "ID del usuario"
+                },
+                {
+                  "key": "page",
+                  "value": "0",
+                  "description": "Número de página"
+                },
+                {
+                  "key": "size",
+                  "value": "10",
+                  "description": "Tamaño de página"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "GET /api/userPresentation/{id}",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/userPresentation/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "userPresentation",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1",
+                  "description": "ID de la presentación de usuario"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "POST /api/userPresentation/save",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": null,\n  \"userId\": 1,\n  \"presentacionId\": 1\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/userPresentation/save",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "userPresentation",
+                "save"
+              ]
+            }
+          }
+        },
+        {
+          "name": "DELETE /api/userPresentation/delete/{id}",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/userPresentation/delete/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "userPresentation",
+                "delete",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1",
+                  "description": "ID de la presentación de usuario a eliminar"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "UsuarioController",
+      "description": "Controlador de usuarios — /api/user",
+      "item": [
+        {
+          "name": "GET /api/user/list",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/user/list?filter=",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "user",
+                "list"
+              ],
+              "query": [
+                {
+                  "key": "filter",
+                  "value": "",
+                  "description": "Filtro por nombre o email (opcional)"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "GET /api/user/{id}",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/user/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "user",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1",
+                  "description": "ID del usuario"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "GET /api/user/all",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/user/all?filter=&page=0&size=10",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "user",
+                "all"
+              ],
+              "query": [
+                {
+                  "key": "filter",
+                  "value": "",
+                  "description": "Filtro por nombre o email (opcional)"
+                },
+                {
+                  "key": "page",
+                  "value": "0",
+                  "description": "Número de página (opcional)"
+                },
+                {
+                  "key": "size",
+                  "value": "10",
+                  "description": "Tamaño de página (opcional)"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "POST /api/user/save",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": null,\n  \"email\": \"nuevo@example.com\",\n  \"nombre\": \"Juan Pérez\",\n  \"password\": \"123456\",\n  \"rolId\": 1\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/user/save",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "user",
+                "save"
+              ]
+            }
+          }
+        },
+        {
+          "name": "DELETE /api/user/{id}",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/user/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "user",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1",
+                  "description": "ID del usuario a eliminar"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

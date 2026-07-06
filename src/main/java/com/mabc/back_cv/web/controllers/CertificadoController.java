@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
  * Proporciona endpoints para listar, paginar, obtener, guardar y eliminar certificados.
  */
 @RestController
-@RequestMapping("/certificado")
+@RequestMapping("/api/certificado")
 public class CertificadoController {
 
     @Autowired

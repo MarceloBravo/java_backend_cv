@@ -84,7 +84,7 @@ public class TrabajoControllerTest{
         List<TrabajoDTO> trabajos = Arrays.asList(trabajoDTO1, trabajoDTO2);
 
         when(service.getAll(1L, "")).thenReturn(trabajos);
-        mockMvc.perform(get("/trabajos/list")
+        mockMvc.perform(get("/api/trabajos/list")
                 .param("searchText", "")
                 .param("userId", "1"))
                 .andExpect(status().isOk())
@@ -98,7 +98,7 @@ public class TrabajoControllerTest{
         List<TrabajoDTO> trabajos = Arrays.asList(trabajoDTO1);
 
         when(service.getAll(1L, "Empresa 1")).thenReturn(trabajos);
-        mockMvc.perform(get("/trabajos/list")
+        mockMvc.perform(get("/api/trabajos/list")
                 .param("searchText", "Empresa 1")
                 .param("userId", "1"))
                 .andExpect(status().isOk())
@@ -113,7 +113,7 @@ public class TrabajoControllerTest{
         List<TrabajoDTO> trabajos = Arrays.asList(trabajoDTO1, trabajoDTO2);
 
         when(service.getAll(1L, "")).thenReturn(trabajos);
-        mockMvc.perform(get("/trabajos/list")
+        mockMvc.perform(get("/api/trabajos/list")
                 .param("userId", "1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)));
@@ -126,7 +126,7 @@ public class TrabajoControllerTest{
     void getAll_ShouldHandleError() throws Exception {
 
         when(service.getAll(1L, "")).thenThrow(new RuntimeException("Error"));
-        mockMvc.perform(get("/trabajos/list")
+        mockMvc.perform(get("/api/trabajos/list")
                 .param("userId", "1"))
                 .andExpect(status().is5xxServerError());
 
@@ -137,7 +137,7 @@ public class TrabajoControllerTest{
     @DisplayName("Obtiene una lista de trabajos con éxito sin parámetros")
     void getAll_WhithOutParameters_ShouldReturnListOfTrabajos() throws Exception {
         
-        mockMvc.perform(get("/trabajos/list"))
+        mockMvc.perform(get("/api/trabajos/list"))
                     .andExpect(status().is4xxClientError());
 
         verifyNoInteractions(service);
@@ -148,7 +148,7 @@ public class TrabajoControllerTest{
     void getAll_whithUserIdInvalid_shouldReturnEmptList() throws Exception {
         when(service.getAll(99999L, "")).thenReturn(Arrays.asList());
 
-        mockMvc.perform(get("/trabajos/list")
+        mockMvc.perform(get("/api/trabajos/list")
                     .param("userId", "99999"))
                     .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(0)));
@@ -166,7 +166,7 @@ public class TrabajoControllerTest{
         Page<TrabajoDTO> page = new PageImpl<>(trabajos, PageRequest.of(0, 10), 2);
 
         when(service.getAll(1L, "", 0, 10)).thenReturn(page);
-        mockMvc.perform(get("/trabajos/all")
+        mockMvc.perform(get("/api/trabajos/all")
                 .param("searchText", "")
                 .param("userId", "1")
                 .param("page", "0")
@@ -184,7 +184,7 @@ public class TrabajoControllerTest{
         Page<TrabajoDTO> page = new PageImpl<>(trabajos, PageRequest.of(0, 10), 1);
 
         when(service.getAll(1L, "Empresa 1", 0, 10)).thenReturn(page);
-        mockMvc.perform(get("/trabajos/all")
+        mockMvc.perform(get("/api/trabajos/all")
                 .param("searchText", "Empresa 1")
                 .param("userId", "1")
                 .param("page", "0")
@@ -202,7 +202,7 @@ public class TrabajoControllerTest{
         Page<TrabajoDTO> page = new PageImpl<>(trabajos, PageRequest.of(0, 10), 2);
 
         when(service.getAll(1L, "", -10, -200)).thenReturn(page);
-        mockMvc.perform(get("/trabajos/all")
+        mockMvc.perform(get("/api/trabajos/all")
                 .param("searchText", "")
                 .param("userId", "1")
                 .param("page", "-10")
@@ -220,7 +220,7 @@ public class TrabajoControllerTest{
         Page<TrabajoDTO> page = new PageImpl<>(trabajos, PageRequest.of(0, 10), 2);
 
         when(service.getAll(1L, "", 0, 10)).thenReturn(page);
-        mockMvc.perform(get("/trabajos/all")
+        mockMvc.perform(get("/api/trabajos/all")
                 .param("userId", "1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content", hasSize(2)));
@@ -233,7 +233,7 @@ public class TrabajoControllerTest{
     void getPage_ShouldHandleError() throws Exception {
 
         when(service.getAll(1L, "", 0, 10)).thenThrow(new RuntimeException("Error"));
-        mockMvc.perform(get("/trabajos/all")
+        mockMvc.perform(get("/api/trabajos/all")
                 .param("userId", "1"))
                 .andExpect(status().is5xxServerError());
 
@@ -244,7 +244,7 @@ public class TrabajoControllerTest{
     @DisplayName("Obtiene una página  de trabajos con éxito sin parámetros")
     void getPage_WhithOutParameters_ShouldReturnPageOfTrabajos() throws Exception {
         
-        mockMvc.perform(get("/trabajos/all"))
+        mockMvc.perform(get("/api/trabajos/all"))
                     .andExpect(status().is4xxClientError());
 
         verifyNoInteractions(service);
@@ -256,7 +256,7 @@ public class TrabajoControllerTest{
         Page<TrabajoDTO> page = new PageImpl<>(Arrays.asList(), PageRequest.of(0, 10), 0);
         when(service.getAll(99999L, "", 0, 10)).thenReturn(page);
 
-        mockMvc.perform(get("/trabajos/all")
+        mockMvc.perform(get("/api/trabajos/all")
                     .param("userId", "99999"))
                     .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content", hasSize(0)));
@@ -272,7 +272,7 @@ public class TrabajoControllerTest{
     void getById_ShouldReturnTrabajo() throws Exception {
 
         when(service.getById(1L)).thenReturn(trabajoDTO1);
-        mockMvc.perform(get("/trabajos/1"))
+        mockMvc.perform(get("/api/trabajos/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(1)))
                 .andExpect(jsonPath("$.company", is("Empresa 1")));
@@ -285,7 +285,7 @@ public class TrabajoControllerTest{
     void getById_ShouldReturnNotFoundTrabajo() throws Exception {
 
         when(service.getById(99999L)).thenReturn((TrabajoDTO) null);
-        mockMvc.perform(get("/trabajos/99999"))
+        mockMvc.perform(get("/api/trabajos/99999"))
                 .andExpect(status().isNotFound());
 
         verify(service, times(1)).getById(99999L);
@@ -296,7 +296,7 @@ public class TrabajoControllerTest{
     void getById_shouldHandleError() throws Exception {
         when(service.getById(1L)).thenThrow(new RuntimeException("Error"));
 
-        mockMvc.perform(get("/trabajos/1"))
+        mockMvc.perform(get("/api/trabajos/1"))
                 .andExpect(status().is5xxServerError());
 
         verify(service, times(1)).getById(1L);
@@ -312,7 +312,7 @@ public class TrabajoControllerTest{
 
         when(service.save(any(TrabajoDTO.class))).thenReturn(trabajoDTO1);
         
-        mockMvc.perform(post("/trabajos/save")
+        mockMvc.perform(post("/api/trabajos/save")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(newTrabajoDTO)))
                 .andExpect(status().isOk())
@@ -329,7 +329,7 @@ public class TrabajoControllerTest{
 
         when(service.save(any(TrabajoDTO.class))).thenReturn(requestDTO);
         
-        mockMvc.perform(post("/trabajos/save")
+        mockMvc.perform(post("/api/trabajos/save")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(requestDTO)))
                 .andExpect(status().isOk())
@@ -344,7 +344,7 @@ public class TrabajoControllerTest{
     void save_shouldHandleError() throws Exception {
         when(service.save(any(TrabajoDTO.class))).thenThrow(new RuntimeException("Error"));
 
-        mockMvc.perform(post("/trabajos/save")
+        mockMvc.perform(post("/api/trabajos/save")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(trabajoDTO1)))
                 .andExpect(status().is5xxServerError());
@@ -359,7 +359,7 @@ public class TrabajoControllerTest{
     @DisplayName("Elimina un registro de trabajos con éxito")
     void delete_ShouldReturnAStatusOk() throws Exception {
 
-        mockMvc.perform(delete("/trabajos/delete/1")
+        mockMvc.perform(delete("/api/trabajos/delete/1")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
 
@@ -371,7 +371,7 @@ public class TrabajoControllerTest{
     void delete_shouldHandleError() throws Exception {
         doThrow(new RuntimeException("Error al eliminar en la BD")).when(service).deleteById(1L);
 
-        mockMvc.perform(delete("/trabajos/delete/1"))
+        mockMvc.perform(delete("/api/trabajos/delete/1"))
                 .andExpect(status().isBadRequest());
 
         verify(service, times(1)).deleteById(1L);

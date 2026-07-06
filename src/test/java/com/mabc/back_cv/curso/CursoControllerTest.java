@@ -107,7 +107,7 @@ class CursoControllerTest {
         when(cursoService.findBySearchText(1L, "Java", 0, 10))
                 .thenReturn(cursoPage);
 
-        mockMvc.perform(get("/curso/all")
+        mockMvc.perform(get("/api/curso/all")
                 .param("userId", "1")
                 .param("searchText", "Java")
                 .param("page", "0")
@@ -120,7 +120,7 @@ class CursoControllerTest {
         when(cursoService.findBySearchText(null, null, null, null))
                 .thenReturn(cursoPage);
 
-        mockMvc.perform(get("/curso/all"))
+        mockMvc.perform(get("/api/curso/all"))
                 .andExpect(status().isOk());
     }
 
@@ -129,7 +129,7 @@ class CursoControllerTest {
         when(cursoService.findBySearchText(null, "test", 0, 10))
                 .thenReturn(cursoPage);
 
-        mockMvc.perform(get("/curso/all")
+        mockMvc.perform(get("/api/curso/all")
                 .param("searchText", "test")
                 .param("page", "0")
                 .param("size", "10"))
@@ -141,7 +141,7 @@ class CursoControllerTest {
         when(cursoService.findBySearchText(1L, null, 0, 10))
                 .thenReturn(cursoPage);
 
-        mockMvc.perform(get("/curso/all")
+        mockMvc.perform(get("/api/curso/all")
                 .param("userId", "1")
                 .param("page", "0")
                 .param("size", "10"))
@@ -153,7 +153,7 @@ class CursoControllerTest {
         when(cursoService.findBySearchText(1L, "Java", null, 10))
                 .thenReturn(cursoPage);
 
-        mockMvc.perform(get("/curso/all")
+        mockMvc.perform(get("/api/curso/all")
                 .param("userId", "1")
                 .param("searchText", "Java")
                 .param("size", "10"))
@@ -165,7 +165,7 @@ class CursoControllerTest {
         when(cursoService.findBySearchText(1L, "Java", 0, null))
                 .thenReturn(cursoPage);
 
-        mockMvc.perform(get("/curso/all")
+        mockMvc.perform(get("/api/curso/all")
                 .param("userId", "1")
                 .param("searchText", "Java")
                 .param("page", "0"))
@@ -177,7 +177,7 @@ class CursoControllerTest {
         when(cursoService.findBySearchText(anyLong(), any(), any(), any()))
                 .thenReturn(cursoPage);
 
-        mockMvc.perform(get("/curso/all")
+        mockMvc.perform(get("/api/curso/all")
                 .param("userId", "1")
                 .param("page", "-1"))
                 .andExpect(status().isOk());
@@ -188,7 +188,7 @@ class CursoControllerTest {
         when(cursoService.findBySearchText(anyLong(), any(), any(), any()))
                 .thenReturn(cursoPage);
 
-        mockMvc.perform(get("/curso/all")
+        mockMvc.perform(get("/api/curso/all")
                 .param("userId", "1")
                 .param("size", "0"))
                 .andExpect(status().isOk());
@@ -199,7 +199,7 @@ class CursoControllerTest {
         when(cursoService.findBySearchText(anyLong(), any(), any(), any()))
                 .thenReturn(cursoPage);
 
-        mockMvc.perform(get("/curso/all")
+        mockMvc.perform(get("/api/curso/all")
                 .param("userId", "1")
                 .param("size", "-5"))
                 .andExpect(status().isOk());
@@ -210,7 +210,7 @@ class CursoControllerTest {
         when(cursoService.findBySearchText(anyLong(), any(), any(), any()))
                 .thenThrow(new RuntimeException("Error de servicio"));
 
-        mockMvc.perform(get("/curso/all")
+        mockMvc.perform(get("/api/curso/all")
                 .param("userId", "1"))
                 .andExpect(status().isInternalServerError());
     }
@@ -219,7 +219,7 @@ class CursoControllerTest {
     void getById_conIdValido_retorna200() throws Exception {
         when(cursoService.findById(1L)).thenReturn(cursoDTO);
 
-        mockMvc.perform(get("/curso/1"))
+        mockMvc.perform(get("/api/curso/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value("Curso de Java"))
                 .andExpect(jsonPath("$.title").value("Java Avanzado"));
@@ -229,7 +229,7 @@ class CursoControllerTest {
     void getById_conIdNoExistente_retorna404() throws Exception {
         when(cursoService.findById(999L)).thenReturn(null);
 
-        mockMvc.perform(get("/curso/999"))
+        mockMvc.perform(get("/api/curso/999"))
                 .andExpect(status().isNotFound());
     }
 
@@ -237,7 +237,7 @@ class CursoControllerTest {
     void getById_conIdCero_retorna404() throws Exception {
         when(cursoService.findById(0L)).thenReturn(null);
 
-        mockMvc.perform(get("/curso/0"))
+        mockMvc.perform(get("/api/curso/0"))
                 .andExpect(status().isNotFound());
     }
 
@@ -245,7 +245,7 @@ class CursoControllerTest {
     void getById_conIdNegativo_retorna404() throws Exception {
         when(cursoService.findById(-1L)).thenReturn(null);
 
-        mockMvc.perform(get("/curso/-1"))
+        mockMvc.perform(get("/api/curso/-1"))
                 .andExpect(status().isNotFound());
     }
 
@@ -253,7 +253,7 @@ class CursoControllerTest {
     void getById_conServiceLanzaExcepcion_retorna500() throws Exception {
         when(cursoService.findById(1L)).thenThrow(new RuntimeException("Error de servicio"));
 
-        mockMvc.perform(get("/curso/1"))
+        mockMvc.perform(get("/api/curso/1"))
                 .andExpect(status().isInternalServerError());
     }
 
@@ -262,7 +262,7 @@ class CursoControllerTest {
         when(cursoService.findByUserId(anyLong(), any(), any()))
                 .thenReturn(cursoPage);
 
-        mockMvc.perform(get("/curso/user/1"))
+        mockMvc.perform(get("/api/curso/user/1"))
                 .andExpect(status().isOk());
     }
 
@@ -271,7 +271,7 @@ class CursoControllerTest {
         when(cursoService.findByUserId(anyLong(), any(), any()))
                 .thenReturn(cursoPage);
 
-        mockMvc.perform(get("/curso/user/1")
+        mockMvc.perform(get("/api/curso/user/1")
                 .param("size", "20"))
                 .andExpect(status().isOk());
     }
@@ -281,7 +281,7 @@ class CursoControllerTest {
         when(cursoService.findByUserId(anyLong(), any(), any()))
                 .thenReturn(cursoPage);
 
-        mockMvc.perform(get("/curso/user/1")
+        mockMvc.perform(get("/api/curso/user/1")
                 .param("page", "2"))
                 .andExpect(status().isOk());
     }
@@ -291,7 +291,7 @@ class CursoControllerTest {
         when(cursoService.findByUserId(anyLong(), any(), any()))
                 .thenReturn(cursoPage);
 
-        mockMvc.perform(get("/curso/user/1")
+        mockMvc.perform(get("/api/curso/user/1")
                 .param("page", "2")
                 .param("size", "20"))
                 .andExpect(status().isOk())
@@ -304,7 +304,7 @@ class CursoControllerTest {
         when(cursoService.findByUserId(anyLong(), any(), any()))
                 .thenReturn(paginaVacia);
 
-        mockMvc.perform(get("/curso/user/1"))
+        mockMvc.perform(get("/api/curso/user/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content").isEmpty());
     }
@@ -314,7 +314,7 @@ class CursoControllerTest {
         when(cursoService.findByUserId(anyLong(), any(), any()))
                 .thenThrow(new RuntimeException("Error de servicio"));
 
-        mockMvc.perform(get("/curso/user/1"))
+        mockMvc.perform(get("/api/curso/user/1"))
                 .andExpect(status().isInternalServerError());
     }
 
@@ -322,7 +322,7 @@ class CursoControllerTest {
     void save_conDTOValido_retorna200() throws Exception {
         when(cursoService.save(any(CursoDTO.class))).thenReturn(cursoDTO);
 
-        mockMvc.perform(post("/curso/save")
+        mockMvc.perform(post("/api/curso/save")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(cursoDTO)))
                 .andExpect(status().isOk())
@@ -344,7 +344,7 @@ class CursoControllerTest {
 
         when(cursoService.save(any(CursoDTO.class))).thenReturn(cursoGuardado);
 
-        mockMvc.perform(post("/curso/save")
+        mockMvc.perform(post("/api/curso/save")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(cursoDTO)))
                 .andExpect(status().isOk())
@@ -360,7 +360,7 @@ class CursoControllerTest {
         when(cursoService.save(any(CursoDTO.class)))
                 .thenThrow(new IllegalArgumentException("Datos inválidos."));
 
-        mockMvc.perform(post("/curso/save")
+        mockMvc.perform(post("/api/curso/save")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(dtoIncompleto)))
                 .andExpect(status().isInternalServerError());
@@ -371,7 +371,7 @@ class CursoControllerTest {
         when(cursoService.save(any(CursoDTO.class)))
                 .thenThrow(new IllegalArgumentException("Datos inválidos."));
 
-        mockMvc.perform(post("/curso/save")
+        mockMvc.perform(post("/api/curso/save")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{}"))
                 .andExpect(status().isInternalServerError());
@@ -382,7 +382,7 @@ class CursoControllerTest {
         when(cursoService.save(any(CursoDTO.class)))
                 .thenThrow(new RuntimeException("Error de base de datos"));
 
-        mockMvc.perform(post("/curso/save")
+        mockMvc.perform(post("/api/curso/save")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(cursoDTO)))
                 .andExpect(status().isInternalServerError());
@@ -390,7 +390,7 @@ class CursoControllerTest {
 
     @Test
     void save_conJSONInvalido_retorna400() throws Exception {
-        mockMvc.perform(post("/curso/save")
+        mockMvc.perform(post("/api/curso/save")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{invalid json}"))
                 .andExpect(status().isBadRequest());
@@ -400,7 +400,7 @@ class CursoControllerTest {
     void delete_conIdValido_retorna200() throws Exception {
         doNothing().when(cursoService).delete(1L);
 
-        mockMvc.perform(delete("/curso/delete/1"))
+        mockMvc.perform(delete("/api/curso/delete/1"))
                 .andExpect(status().isOk())
                 .andExpect(content().string("\"Curso eliminado correctamente\""));
     }
@@ -410,7 +410,7 @@ class CursoControllerTest {
         doThrow(new IllegalArgumentException("Registro no encontrado o inexistente."))
                 .when(cursoService).delete(999L);
 
-        mockMvc.perform(delete("/curso/delete/999"))
+        mockMvc.perform(delete("/api/curso/delete/999"))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string("\"Error al eliminar el curso\""));
     }
@@ -420,7 +420,7 @@ class CursoControllerTest {
         doThrow(new IllegalArgumentException("Registro no encontrado o inexistente."))
                 .when(cursoService).delete(0L);
 
-        mockMvc.perform(delete("/curso/delete/0"))
+        mockMvc.perform(delete("/api/curso/delete/0"))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string("\"Error al eliminar el curso\""));
     }
@@ -430,7 +430,7 @@ class CursoControllerTest {
         doThrow(new IllegalArgumentException("Registro no encontrado o inexistente."))
                 .when(cursoService).delete(-1L);
 
-        mockMvc.perform(delete("/curso/delete/-1"))
+        mockMvc.perform(delete("/api/curso/delete/-1"))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string("\"Error al eliminar el curso\""));
     }
@@ -440,14 +440,14 @@ class CursoControllerTest {
         doThrow(new RuntimeException("Error de base de datos"))
                 .when(cursoService).delete(1L);
 
-        mockMvc.perform(delete("/curso/delete/1"))
+        mockMvc.perform(delete("/api/curso/delete/1"))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string("\"Error al eliminar el curso\""));
     }
 
     @Test
     void delete_conIdNull_retorna400() throws Exception {
-        mockMvc.perform(delete("/curso/delete/null"))
+        mockMvc.perform(delete("/api/curso/delete/null"))
                 .andExpect(status().isBadRequest());
     }
 }

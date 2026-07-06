@@ -70,7 +70,7 @@ public class TecnologiaControllerTest{
         Page<TecnologiaDTO> page = new PageImpl<>(tecnologias, PageRequest.of(0, 10), 2);
 
         when(service.findAll("", 0, 10)).thenReturn(page);
-        mockMvc.perform(get("/tecnologias/all")
+        mockMvc.perform(get("/api/tecnologias/all")
                 .param("searchText", "")
                 .param("page", "0")
                 .param("size", "10"))
@@ -87,7 +87,7 @@ public class TecnologiaControllerTest{
         Page<TecnologiaDTO> page = new PageImpl<>(tecnologias, PageRequest.of(0, 10), 2);
 
         when(service.findAll("", 0, 10)).thenReturn(page);
-        mockMvc.perform(get("/tecnologias/all"))
+        mockMvc.perform(get("/api/tecnologias/all"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content", hasSize(2)));
 
@@ -101,7 +101,7 @@ public class TecnologiaControllerTest{
         Page<TecnologiaDTO> page = new PageImpl<>(tecnologias, PageRequest.of(0, 10), 1);
 
         when(service.findAll("Java", 0, 10)).thenReturn(page);
-        mockMvc.perform(get("/tecnologias/all")
+        mockMvc.perform(get("/api/tecnologias/all")
                 .param("searchText", "Java"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content", hasSize(1)))
@@ -117,7 +117,7 @@ public class TecnologiaControllerTest{
         Page<TecnologiaDTO> page = new PageImpl<>(tecnologias, PageRequest.of(0, 10), 2);
 
         when(service.findAll("", -1, -10)).thenReturn(page);
-        mockMvc.perform(get("/tecnologias/all")
+        mockMvc.perform(get("/api/tecnologias/all")
                 .param("searchText", "")
                 .param("page", "-1")
                 .param("size", "-10"))
@@ -132,7 +132,7 @@ public class TecnologiaControllerTest{
     void getAll_shouldHandleError() throws Exception {
         when(service.findAll("", 0, 10)).thenThrow(new RuntimeException("Error"));
 
-        mockMvc.perform(get("/tecnologias/all")
+        mockMvc.perform(get("/api/tecnologias/all")
                     .param("searchText", "")
                     .param("page", "0")
                     .param("size", "10"))
@@ -150,7 +150,7 @@ public class TecnologiaControllerTest{
         List<TecnologiaDTO> tecnologias = Arrays.asList(tecnologiaDTO1, tecnologiaDTO2);
 
         when(service.findAll("")).thenReturn(tecnologias);
-        mockMvc.perform(get("/tecnologias/list")
+        mockMvc.perform(get("/api/tecnologias/list")
                 .param("searchText", ""))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)));
@@ -164,7 +164,7 @@ public class TecnologiaControllerTest{
         List<TecnologiaDTO> tecnologias = Arrays.asList(tecnologiaDTO1, tecnologiaDTO2);
 
         when(service.findAll("")).thenReturn(tecnologias);
-        mockMvc.perform(get("/tecnologias/list"))
+        mockMvc.perform(get("/api/tecnologias/list"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)));
 
@@ -177,7 +177,7 @@ public class TecnologiaControllerTest{
         List<TecnologiaDTO> tecnologias = Arrays.asList(tecnologiaDTO1);
 
         when(service.findAll("Java")).thenReturn(tecnologias);
-        mockMvc.perform(get("/tecnologias/list")
+        mockMvc.perform(get("/api/tecnologias/list")
                 .param("searchText", "Java"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)))
@@ -191,7 +191,7 @@ public class TecnologiaControllerTest{
     void getList_shouldHandleError() throws Exception {
         when(service.findAll("")).thenThrow(new RuntimeException("Error"));
 
-        mockMvc.perform(get("/tecnologias/list")
+        mockMvc.perform(get("/api/tecnologias/list")
                     .param("searchText", ""))
                     .andExpect(status().is5xxServerError());
 
@@ -207,7 +207,7 @@ public class TecnologiaControllerTest{
     void getById_ShouldReturnTecnologia() throws Exception {
 
         when(service.getById(1L)).thenReturn(tecnologiaDTO1);
-        mockMvc.perform(get("/tecnologias/1"))
+        mockMvc.perform(get("/api/tecnologias/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name", is("Java")));
 
@@ -219,7 +219,7 @@ public class TecnologiaControllerTest{
     void getById_ShouldReturnNotFoundTecnologia() throws Exception {
 
         when(service.getById(99999L)).thenReturn((TecnologiaDTO) null);
-        mockMvc.perform(get("/tecnologias/99999"))
+        mockMvc.perform(get("/api/tecnologias/99999"))
                 .andExpect(status().isNotFound());
 
         verify(service, times(1)).getById(99999L);
@@ -230,7 +230,7 @@ public class TecnologiaControllerTest{
     void getById_shouldHandleError() throws Exception {
         when(service.getById(1L)).thenThrow(new RuntimeException("Error"));
 
-        mockMvc.perform(get("/tecnologias/1"))
+        mockMvc.perform(get("/api/tecnologias/1"))
                 .andExpect(status().is5xxServerError());
 
         verify(service, times(1)).getById(1L);
@@ -246,7 +246,7 @@ public class TecnologiaControllerTest{
 
         when(service.save(any(TecnologiaDTO.class))).thenReturn(tecnologiaDTO1);
         
-        mockMvc.perform(post("/tecnologias/save")
+        mockMvc.perform(post("/api/tecnologias/save")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(newTecnologiaDTO)))
                 .andExpect(status().isOk())
@@ -263,7 +263,7 @@ public class TecnologiaControllerTest{
 
         when(service.save(any(TecnologiaDTO.class))).thenReturn(requestDTO);
         
-        mockMvc.perform(post("/tecnologias/save")
+        mockMvc.perform(post("/api/tecnologias/save")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(requestDTO)))
                 .andExpect(status().isOk())
@@ -278,7 +278,7 @@ public class TecnologiaControllerTest{
     void save_shouldHandleError() throws Exception {
         when(service.save(any(TecnologiaDTO.class))).thenThrow(new RuntimeException("Error"));
 
-        mockMvc.perform(post("/tecnologias/save")
+        mockMvc.perform(post("/api/tecnologias/save")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(tecnologiaDTO1)))
                 .andExpect(status().is5xxServerError());
@@ -293,7 +293,7 @@ public class TecnologiaControllerTest{
     @DisplayName("Elimina un registro de tecnologias con éxito")
     void delete_ShouldReturnAStatusOk() throws Exception {
 
-        mockMvc.perform(delete("/tecnologias/delete/1")
+        mockMvc.perform(delete("/api/tecnologias/delete/1")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
 
@@ -305,7 +305,7 @@ public class TecnologiaControllerTest{
     void delete_shouldHandleError() throws Exception {
         doThrow(new RuntimeException("Error al eliminar en la BD")).when(service).deleteById(1L);
 
-        mockMvc.perform(delete("/tecnologias/delete/1"))
+        mockMvc.perform(delete("/api/tecnologias/delete/1"))
                 .andExpect(status().isBadRequest());
 
         verify(service, times(1)).deleteById(1L);

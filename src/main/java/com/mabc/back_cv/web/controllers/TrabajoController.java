@@ -25,7 +25,7 @@ import java.util.List;
  * Proporciona endpoints para listar, paginar, obtener, guardar y eliminar trabajos.
  */
 @RestController
-@RequestMapping("/trabajos")
+@RequestMapping("/api/trabajos")
 public class TrabajoController{
 
     @Autowired

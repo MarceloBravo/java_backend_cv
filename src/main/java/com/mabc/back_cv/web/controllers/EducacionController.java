@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
  * Proporciona endpoints para listar, paginar, obtener, guardar y eliminar registros educativos.
  */
 @RestController
-@RequestMapping("/educacion")
+@RequestMapping("/api/educacion")
 public class EducacionController{
 
     @Autowired

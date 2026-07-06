@@ -91,7 +91,7 @@ public class UserPresentationControllerTest{
         when(userPresentationService.getAll("párrafo", 1L, 0, 10))
             .thenReturn(page);
 
-        mockMvc.perform(get("/userPresentation/all")
+        mockMvc.perform(get("/api/userPresentation/all")
                         .param("searchText", "párrafo")
                         .param("userId", "1")
                         .param("page", "0")
@@ -107,7 +107,7 @@ public class UserPresentationControllerTest{
         when(userPresentationService.getAll(any(), any(), any(), any()))
        .thenThrow(new RuntimeException("Error simulado en la base de datos"));
 
-    mockMvc.perform(get("/userPresentation/all")
+    mockMvc.perform(get("/api/userPresentation/all")
                     .param("userId", "1")
                     .param("page", "0")
                     .param("size", "10"))
@@ -119,7 +119,7 @@ public class UserPresentationControllerTest{
         when(userPresentationService.getAll(null, null, null, null))
         .thenThrow(new NullPointerException("NPE al desempaquetar parámetros"));
 
-        mockMvc.perform(get("/userPresentation/all"))
+        mockMvc.perform(get("/api/userPresentation/all"))
             .andExpect(status().isInternalServerError()); // Ahora
     }
 
@@ -129,7 +129,7 @@ public class UserPresentationControllerTest{
     void getById_conIdValido_retorna200() throws Exception {
         when(userPresentationService.findById(1L)).thenReturn(userPresentationDTO);
 
-        mockMvc.perform(get("/userPresentation/1"))
+        mockMvc.perform(get("/api/userPresentation/1"))
                 .andExpect(status().isOk());
     }
 
@@ -137,7 +137,7 @@ public class UserPresentationControllerTest{
     void getById_conIdCero_retorna404() throws Exception {
         when(userPresentationService.findById(0L)).thenReturn(null);
 
-        mockMvc.perform(get("/userPresentation/0"))
+        mockMvc.perform(get("/api/userPresentation/0"))
                 .andExpect(status().isNotFound());
     }
 
@@ -145,7 +145,7 @@ public class UserPresentationControllerTest{
     void getById_conIdNegativo_retorna404() throws Exception {
         when(userPresentationService.findById(-1L)).thenReturn(null);
 
-        mockMvc.perform(get("/userPresentation/-1"))
+        mockMvc.perform(get("/api/userPresentation/-1"))
                 .andExpect(status().isNotFound());
     }
 
@@ -153,7 +153,7 @@ public class UserPresentationControllerTest{
     void getById_conIdNoExistente_retorna404() throws Exception {
         when(userPresentationService.findById(999L)).thenReturn(null);
 
-        mockMvc.perform(get("/userPresentation/999"))
+        mockMvc.perform(get("/api/userPresentation/999"))
                 .andExpect(status().isNotFound());
     }
 
@@ -161,7 +161,7 @@ public class UserPresentationControllerTest{
     void getById_conServiceLanzaExcepcion_retorna500() throws Exception {
         when(userPresentationService.findById(1L)).thenThrow(new RuntimeException("Error de servicio"));
 
-        mockMvc.perform(get("/userPresentation/1"))
+        mockMvc.perform(get("/api/userPresentation/1"))
                 .andExpect(status().isInternalServerError());
     }
 
@@ -172,7 +172,7 @@ public class UserPresentationControllerTest{
         userPresentationDTO.setUser(usuarioDTO);
         when(userPresentationService.save(any(UserPresentationDTO.class))).thenReturn(userPresentationDTO);
         
-        mockMvc.perform(post("/userPresentation/save")
+        mockMvc.perform(post("/api/userPresentation/save")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(userPresentationDTO)))
                 .andExpect(status().isOk())
@@ -184,7 +184,7 @@ public class UserPresentationControllerTest{
         userPresentationDTO.setUser(usuarioDTO);
         when(userPresentationService.save(any(UserPresentationDTO.class))).thenThrow(new RuntimeException("Error"));
         
-        mockMvc.perform(post("/userPresentation/save")
+        mockMvc.perform(post("/api/userPresentation/save")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(userPresentationDTO)))
                 .andExpect(status().isInternalServerError());
@@ -196,7 +196,7 @@ public class UserPresentationControllerTest{
     void delete_conIdValido_retorna200() throws Exception {
         doNothing().when(userPresentationService).delete(1L);
 
-        mockMvc.perform(delete("/userPresentation/delete/1"))
+        mockMvc.perform(delete("/api/userPresentation/delete/1"))
                 .andExpect(status().isOk())
                 .andExpect(content().string("\"UserPresentation eliminada correctamente\""));
     }
@@ -206,7 +206,7 @@ public class UserPresentationControllerTest{
         doThrow(new IllegalArgumentException("Error: El id no puede ser nulo."))
                 .when(userPresentationService).delete(0L);
 
-        mockMvc.perform(delete("/userPresentation/delete/0"))
+        mockMvc.perform(delete("/api/userPresentation/delete/0"))
                 .andExpect(status().isBadRequest());
     }
 
@@ -215,7 +215,7 @@ public class UserPresentationControllerTest{
         doThrow(new IllegalArgumentException("Error: El id no puede ser nulo."))
                 .when(userPresentationService).delete(-1L);
 
-        mockMvc.perform(delete("/userPresentation/delete/-1"))
+        mockMvc.perform(delete("/api/userPresentation/delete/-1"))
                 .andExpect(status().isBadRequest());
     }
 
@@ -224,13 +224,13 @@ public class UserPresentationControllerTest{
         doThrow(new RuntimeException("Error: El registro no existe."))
                 .when(userPresentationService).delete(999L);
 
-        mockMvc.perform(delete("/userPresentation/delete/999"))
+        mockMvc.perform(delete("/api/userPresentation/delete/999"))
                 .andExpect(status().isBadRequest());
     }
 
     @Test
     void delete_conIdNull_retorna400() throws Exception {
-        mockMvc.perform(delete("/userPresentation/delete/null"))
+        mockMvc.perform(delete("/api/userPresentation/delete/null"))
                 .andExpect(status().isBadRequest());
     }
 
@@ -239,7 +239,7 @@ public class UserPresentationControllerTest{
         doThrow(new RuntimeException("Error al eliminar"))
                 .when(userPresentationService).delete(1L);
 
-        mockMvc.perform(delete("/userPresentation/delete/1"))
+        mockMvc.perform(delete("/api/userPresentation/delete/1"))
                 .andExpect(status().isBadRequest());
     }
 }

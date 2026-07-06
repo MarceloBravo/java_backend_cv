@@ -21,7 +21,7 @@ import jakarta.validation.Valid;
  * Proporciona endpoints para obtener, buscar, guardar y eliminar portafolios.
  */
 @RestController
-@RequestMapping("/portafolio")
+@RequestMapping("/api/portafolio")
 public class PortafolioController {
 
     @Autowired

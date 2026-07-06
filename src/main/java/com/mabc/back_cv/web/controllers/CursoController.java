@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
  * Proporciona endpoints para listar, paginar, obtener, guardar y eliminar cursos.
  */
 @RestController
-@RequestMapping("/curso")
+@RequestMapping("/api/curso")
 public class CursoController {
 
     @Autowired

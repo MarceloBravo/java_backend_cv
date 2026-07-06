@@ -22,7 +22,7 @@ import com.mabc.back_cv.web.services.Rol.RolService;
  * Mapea las solicitudes que inician con /api/roles.
  */
 @RestController
-@RequestMapping("/roles")
+@RequestMapping("/api/roles")
 public class RolController {
 
     private RolService service;

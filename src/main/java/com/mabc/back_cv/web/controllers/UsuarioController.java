@@ -27,7 +27,7 @@ import org.springframework.data.domain.Page;
  * @version 1.0
  */
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/api/user")
 public class UsuarioController {
 
     @Autowired

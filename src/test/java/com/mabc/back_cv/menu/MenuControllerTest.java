@@ -57,7 +57,7 @@ class MenuControllerTest {
 
         when(menuService.getAllMenus()).thenReturn(menus);
 
-        mockMvc.perform(get("/menus/list"))
+        mockMvc.perform(get("/api/menus/list"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$", hasSize(2)))
@@ -74,7 +74,7 @@ class MenuControllerTest {
         MenuDTO menu1 = new MenuDTO(1L, "Inicio", "/home", "home-icon", 1, null, true, null);
         when(menuService.getMainMenusByRol(1L)).thenReturn(List.of(menu1));
 
-        mockMvc.perform(get("/menus/main/{rolId}", 1L))
+        mockMvc.perform(get("/api/menus/main/{rolId}", 1L))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)))
                 .andExpect(jsonPath("$[0].nombre", is("Inicio")));
@@ -87,7 +87,7 @@ class MenuControllerTest {
         MenuDTO menu1 = new MenuDTO(2L, "SubMenu", "/sub", "sub-icon", 1, 1L, true, null);
         when(menuService.getSubMenusByMenuAndRol(1L, 3L)).thenReturn(List.of(menu1));
 
-        mockMvc.perform(get("/menus/sub/{menuId}/{rolId}", 1L, 3L))
+        mockMvc.perform(get("/api/menus/sub/{menuId}/{rolId}", 1L, 3L))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)))
                 .andExpect(jsonPath("$[0].nombre", is("SubMenu")));
@@ -100,7 +100,7 @@ class MenuControllerTest {
         MenuDTO menu1 = new MenuDTO(1L, "Activo", "/act", "icon", 1, null, true, null);
         when(menuService.getActiveMenus()).thenReturn(List.of(menu1));
 
-        mockMvc.perform(get("/menus/active"))
+        mockMvc.perform(get("/api/menus/active"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)))
                 .andExpect(jsonPath("$[0].nombre", is("Activo")));
@@ -113,7 +113,7 @@ class MenuControllerTest {
         MenuDTO menu1 = new MenuDTO(2L, "No Recursive Option", "/opt", "icon", 2, null, true, null);
         when(menuService.getNoRecursiveMenusOptions(1L)).thenReturn(List.of(menu1));
 
-        mockMvc.perform(get("/menus/no-recursive/{menuId}", 1L))
+        mockMvc.perform(get("/api/menus/no-recursive/{menuId}", 1L))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)))
                 .andExpect(jsonPath("$[0].nombre", is("No Recursive Option")));
@@ -126,7 +126,7 @@ class MenuControllerTest {
         MenuDTO menu = new MenuDTO(1L, "Inicio", "/home", "home-icon", 1, null, true, null);
         when(menuService.getMenuById(1L)).thenReturn(menu);
 
-        mockMvc.perform(get("/menus/{id}", 1L))
+        mockMvc.perform(get("/api/menus/{id}", 1L))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(1)))
                 .andExpect(jsonPath("$.nombre", is("Inicio")));
@@ -141,7 +141,7 @@ class MenuControllerTest {
 
         when(menuService.saveMenu(any(MenuDTO.class))).thenReturn(saved);
 
-        mockMvc.perform(post("/menus/save")
+        mockMvc.perform(post("/api/menus/save")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(toSave)))
                 .andExpect(status().isOk())
@@ -157,7 +157,7 @@ class MenuControllerTest {
 
         when(menuService.saveMenu(any(MenuDTO.class))).thenThrow(new RuntimeException("Recursividad detectada"));
 
-        mockMvc.perform(post("/menus/save")
+        mockMvc.perform(post("/api/menus/save")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(toSave)))
                 .andExpect(status().isBadRequest())
@@ -170,7 +170,7 @@ class MenuControllerTest {
     void deleteMenu_Success_ShouldReturnOkMessage() throws Exception {
         doNothing().when(menuService).deleteMenu(1L);
 
-        mockMvc.perform(delete("/menus/delete/{id}", 1L))
+        mockMvc.perform(delete("/api/menus/delete/{id}", 1L))
                 .andExpect(status().isOk())
                 .andExpect(content().string("Menu eliminado correctamente"));
 
@@ -181,7 +181,7 @@ class MenuControllerTest {
     void deleteMenu_Failure_ShouldReturnBadRequestMessage() throws Exception {
         doThrow(new RuntimeException("Error DB")).when(menuService).deleteMenu(1L);
 
-        mockMvc.perform(delete("/menus/delete/{id}", 1L))
+        mockMvc.perform(delete("/api/menus/delete/{id}", 1L))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string("Error al eliminar el menú"));
 

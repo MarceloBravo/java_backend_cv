@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
  * Proporciona endpoints para listar, buscar, obtener, guardar y eliminar descripciones de portafolio.
  */
 @RestController
-@RequestMapping("/descripcion-portafolio")
+@RequestMapping("/api/descripcion-portafolio")
 public class DescripcionPortafolioController {
 
     @Autowired

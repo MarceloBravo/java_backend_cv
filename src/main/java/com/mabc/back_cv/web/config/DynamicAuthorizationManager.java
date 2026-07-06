@@ -108,7 +108,6 @@ public class DynamicAuthorizationManager implements AuthorizationManager<Request
         List<PermisoPantalla> permisos = permisoPantallaRepository.findAllByRolIdAndMenuUrlAndActive(roleId, ruta, true);
         return permisos.stream()
                 .filter(pp -> pp.getPantalla() != null)
-                .filter(pp -> PATH_MATCHER.match(pp.getPantalla().getMenu().getUrl(), ruta))
                 .findFirst();
     }
 
@@ -124,6 +123,7 @@ public class DynamicAuthorizationManager implements AuthorizationManager<Request
         if (requestUri.endsWith("/")) {
             requestUri = requestUri.substring(0, requestUri.length() - 1);
         }
+        
         return switch (method) {
             case "POST" -> Boolean.TRUE.equals(permiso.getAccion_crear());
             case "PUT", "PATCH" -> Boolean.TRUE.equals(permiso.getAccion_editar());

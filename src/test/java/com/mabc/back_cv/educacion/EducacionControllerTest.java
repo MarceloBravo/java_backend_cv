@@ -118,7 +118,7 @@ class EducacionControllerTest {
         when(educacionService.findBySearchText(1L, "Ingeniería", 0, 10))
                 .thenReturn(educacionPage);
 
-        mockMvc.perform(get("/educacion/all")
+        mockMvc.perform(get("/api/educacion/all")
                 .param("userId", "1")
                 .param("searchText", "Ingeniería")
                 .param("page", "0")
@@ -132,7 +132,7 @@ class EducacionControllerTest {
         when(educacionService.findBySearchText(null, null, null, null))
                 .thenReturn(educacionPage);
 
-        mockMvc.perform(get("/educacion/all"))
+        mockMvc.perform(get("/api/educacion/all"))
                 .andExpect(status().isOk());
     }
 
@@ -143,7 +143,7 @@ class EducacionControllerTest {
         when(educacionService.findBySearchText(null, "test", 0, 10))
                 .thenReturn(educacionPage);
 
-        mockMvc.perform(get("/educacion/all")
+        mockMvc.perform(get("/api/educacion/all")
                 .param("searchText", "test")
                 .param("page", "0")
                 .param("size", "10"))
@@ -156,7 +156,7 @@ class EducacionControllerTest {
         when(educacionService.findBySearchText(1L, null, 0, 10))
                 .thenReturn(educacionPage);
 
-        mockMvc.perform(get("/educacion/all")
+        mockMvc.perform(get("/api/educacion/all")
                 .param("userId", "1")
                 .param("page", "0")
                 .param("size", "10"))
@@ -170,7 +170,7 @@ class EducacionControllerTest {
         when(educacionService.findBySearchText(1L, "Ingeniería", null, 10))
                 .thenReturn(educacionPage);
 
-        mockMvc.perform(get("/educacion/all")
+        mockMvc.perform(get("/api/educacion/all")
                 .param("userId", "1")
                 .param("searchText", "Ingeniería")
                 .param("size", "10"))
@@ -184,7 +184,7 @@ class EducacionControllerTest {
         when(educacionService.findBySearchText(1L, "Ingeniería", 0, null))
                 .thenReturn(educacionPage);
 
-        mockMvc.perform(get("/educacion/all")
+        mockMvc.perform(get("/api/educacion/all")
                 .param("userId", "1")
                 .param("searchText", "Ingeniería")
                 .param("page", "0"))
@@ -196,7 +196,7 @@ class EducacionControllerTest {
         when(educacionService.findBySearchText(anyLong(), any(), any(), any()))
                 .thenReturn(educacionPage);
 
-        mockMvc.perform(get("/educacion/all")
+        mockMvc.perform(get("/api/educacion/all")
                 .param("userId", "1")
                 .param("page", "-1"))
                 .andExpect(status().isOk());
@@ -208,7 +208,7 @@ class EducacionControllerTest {
         when(educacionService.findBySearchText(anyLong(), any(), any(), any()))
                 .thenReturn(educacionPage);
 
-        mockMvc.perform(get("/educacion/all")
+        mockMvc.perform(get("/api/educacion/all")
                 .param("userId", "1")
                 .param("size", "0"))
                 .andExpect(status().isOk());
@@ -222,7 +222,7 @@ class EducacionControllerTest {
         when(educacionService.findBySearchText(anyLong(), any(), any(), any()))
                 .thenReturn(educacionPage);
 
-        mockMvc.perform(get("/educacion/all")
+        mockMvc.perform(get("/api/educacion/all")
                 .param("userId", "1")
                 .param("size", "-5"))
                 .andExpect(status().isOk());
@@ -236,7 +236,7 @@ class EducacionControllerTest {
         when(educacionService.findBySearchText(anyLong(), any(), any(), any()))
                 .thenThrow(new RuntimeException("Error de servicio"));
 
-        mockMvc.perform(get("/educacion/all")
+        mockMvc.perform(get("/api/educacion/all")
                 .param("userId", "1"))
                 .andExpect(status().isInternalServerError());
     }
@@ -249,7 +249,7 @@ class EducacionControllerTest {
     void getById_conIdValido_retorna200() throws Exception {
         when(educacionService.findById(1L)).thenReturn(educacionDTO);
 
-        mockMvc.perform(get("/educacion/1"))
+        mockMvc.perform(get("/api/educacion/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.institution").value("Universidad de Chile"))
                 .andExpect(jsonPath("$.title").value("Ingeniería Civil"));
@@ -260,14 +260,14 @@ class EducacionControllerTest {
     @Test
     void getById_conIdNoExistente_retorna404() throws Exception {
         when(educacionService.findById(999L)).thenReturn(null);
-        mockMvc.perform(get("/educacion/999"))
+        mockMvc.perform(get("/api/educacion/999"))
                 .andExpect(status().isNotFound());
     }
 
     @Test
     void getById_conIdCero_retorna404() throws Exception {
         when(educacionService.findById(0L)).thenReturn(null);
-        mockMvc.perform(get("/educacion/0"))
+        mockMvc.perform(get("/api/educacion/0"))
                 .andExpect(status().isNotFound());
     }
 
@@ -276,7 +276,7 @@ class EducacionControllerTest {
     void getById_conIdNegativo_retorna404() throws Exception {
         when(educacionService.findById(-1L)).thenReturn(null);
 
-        mockMvc.perform(get("/educacion/-1"))
+        mockMvc.perform(get("/api/educacion/-1"))
                 .andExpect(status().isNotFound());
     }
 
@@ -286,7 +286,7 @@ class EducacionControllerTest {
     void getById_conServiceLanzaExcepcion_retorna500() throws Exception {
         when(educacionService.findById(1L)).thenThrow(new RuntimeException("Error de servicio"));
 
-        mockMvc.perform(get("/educacion/1"))
+        mockMvc.perform(get("/api/educacion/1"))
                 .andExpect(status().isInternalServerError());
     }
 
@@ -298,7 +298,7 @@ class EducacionControllerTest {
         when(educacionService.findByUserId(anyLong(), any(), any()))
                 .thenReturn(educacionPage);
 
-        mockMvc.perform(get("/educacion/user/1"))
+        mockMvc.perform(get("/api/educacion/user/1"))
                 .andExpect(status().isOk());
 
     }
@@ -309,7 +309,7 @@ class EducacionControllerTest {
         when(educacionService.findByUserId(anyLong(), any(), any()))
                 .thenReturn(educacionPage);
 
-        mockMvc.perform(get("/educacion/user/1")
+        mockMvc.perform(get("/api/educacion/user/1")
                 .param("size", "20"))
                 .andExpect(status().isOk());
     }
@@ -321,7 +321,7 @@ class EducacionControllerTest {
         when(educacionService.findByUserId(anyLong(), any(), any()))
                 .thenReturn(educacionPage);
 
-        mockMvc.perform(get("/educacion/user/1")
+        mockMvc.perform(get("/api/educacion/user/1")
                 .param("page", "2"))
                 .andExpect(status().isOk());
 
@@ -334,7 +334,7 @@ class EducacionControllerTest {
         when(educacionService.findByUserId(anyLong(), any(), any()))
                 .thenReturn(educacionPage);
 
-        mockMvc.perform(get("/educacion/user/1")
+        mockMvc.perform(get("/api/educacion/user/1")
                 .param("page", "2")
                 .param("size", "20"))
                 .andExpect(status().isOk())
@@ -348,7 +348,7 @@ class EducacionControllerTest {
         when(educacionService.findByUserId(anyLong(), any(), any()))
                 .thenReturn(paginaVacia);
 
-        mockMvc.perform(get("/educacion/user/1"))
+        mockMvc.perform(get("/api/educacion/user/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content").isEmpty());
     }
@@ -360,7 +360,7 @@ class EducacionControllerTest {
         when(educacionService.findByUserId(anyLong(), any(), any()))
                 .thenThrow(new RuntimeException("Error de servicio"));
 
-        mockMvc.perform(get("/educacion/user/1"))
+        mockMvc.perform(get("/api/educacion/user/1"))
                 .andExpect(status().isInternalServerError());
     }
 
@@ -372,7 +372,7 @@ class EducacionControllerTest {
     void save_conDTOValido_retorna200() throws Exception {
         when(educacionService.save(any(EducacionDTO.class))).thenReturn(educacionDTO);
 
-        mockMvc.perform(post("/educacion/save")
+        mockMvc.perform(post("/api/educacion/save")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(educacionDTO)))
                 .andExpect(status().isOk())
@@ -398,7 +398,7 @@ class EducacionControllerTest {
 
         when(educacionService.save(any(EducacionDTO.class))).thenReturn(educacionGuardada);
 
-        mockMvc.perform(post("/educacion/save")
+        mockMvc.perform(post("/api/educacion/save")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(educacionDTO)))
                 .andExpect(status().isOk())
@@ -415,7 +415,7 @@ class EducacionControllerTest {
         when(educacionService.save(any(EducacionDTO.class)))
                 .thenThrow(new IllegalArgumentException("Datos inválidos."));
 
-        mockMvc.perform(post("/educacion/save")
+        mockMvc.perform(post("/api/educacion/save")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(dtoIncompleto)))
                 .andExpect(status().isInternalServerError());
@@ -429,7 +429,7 @@ class EducacionControllerTest {
         when(educacionService.save(any(EducacionDTO.class)))
                 .thenThrow(new IllegalArgumentException("Datos inválidos."));
 
-        mockMvc.perform(post("/educacion/save")
+        mockMvc.perform(post("/api/educacion/save")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{}"))
                 .andExpect(status().isInternalServerError());
@@ -442,7 +442,7 @@ class EducacionControllerTest {
         when(educacionService.save(any(EducacionDTO.class)))
                 .thenThrow(new RuntimeException("Error de base de datos"));
 
-        mockMvc.perform(post("/educacion/save")
+        mockMvc.perform(post("/api/educacion/save")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(educacionDTO)))
                 .andExpect(status().isInternalServerError());
@@ -451,7 +451,7 @@ class EducacionControllerTest {
 
     @Test
     void save_conJSONInvalido_retorna400() throws Exception {
-        mockMvc.perform(post("/educacion/save")
+        mockMvc.perform(post("/api/educacion/save")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{invalid json}"))
                 .andExpect(status().isBadRequest());
@@ -464,7 +464,7 @@ class EducacionControllerTest {
     void delete_conIdValido_retorna200() throws Exception {
         doNothing().when(educacionService).delete(1L);
 
-        mockMvc.perform(delete("/educacion/delete/1"))
+        mockMvc.perform(delete("/api/educacion/delete/1"))
                 .andExpect(status().isOk())
                 .andExpect(content().string("\"Educacion eliminada correctamente\""));
     }
@@ -475,7 +475,7 @@ class EducacionControllerTest {
         doThrow(new IllegalArgumentException("Registro no encontrado o inexistente."))
                 .when(educacionService).delete(999L);
 
-        mockMvc.perform(delete("/educacion/delete/999"))
+        mockMvc.perform(delete("/api/educacion/delete/999"))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string("\"Error al eliminar la educacion\""));
     }
@@ -486,7 +486,7 @@ class EducacionControllerTest {
         doThrow(new IllegalArgumentException("Registro no encontrado o inexistente."))
                 .when(educacionService).delete(0L);
 
-        mockMvc.perform(delete("/educacion/delete/0"))
+        mockMvc.perform(delete("/api/educacion/delete/0"))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string("\"Error al eliminar la educacion\""));
     }
@@ -497,7 +497,7 @@ class EducacionControllerTest {
         doThrow(new IllegalArgumentException("Registro no encontrado o inexistente."))
                 .when(educacionService).delete(-1L);
 
-        mockMvc.perform(delete("/educacion/delete/-1"))
+        mockMvc.perform(delete("/api/educacion/delete/-1"))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string("\"Error al eliminar la educacion\""));
 
@@ -510,7 +510,7 @@ class EducacionControllerTest {
         doThrow(new RuntimeException("Error de base de datos"))
                 .when(educacionService).delete(1L);
 
-        mockMvc.perform(delete("/educacion/delete/1"))
+        mockMvc.perform(delete("/api/educacion/delete/1"))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string("\"Error al eliminar la educacion\""));
     }
@@ -518,7 +518,7 @@ class EducacionControllerTest {
 
     @Test
     void delete_conIdNull_retorna400() throws Exception {
-        mockMvc.perform(delete("/educacion/delete/null"))
+        mockMvc.perform(delete("/api/educacion/delete/null"))
                 .andExpect(status().isBadRequest());
     }
 

@@ -23,7 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * Proporciona endpoints para listar, obtener, guardar y eliminar presentaciones de usuario.
  */
 @RestController
-@RequestMapping("/userPresentation")
+@RequestMapping("/api/userPresentation")
 public class UserPresentationController{
 
     @Autowired

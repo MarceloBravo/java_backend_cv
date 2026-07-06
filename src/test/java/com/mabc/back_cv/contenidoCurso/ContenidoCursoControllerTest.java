@@ -105,7 +105,7 @@ public class ContenidoCursoControllerTest{
         Page<ContenidoCursoDTO> page = new PageImpl<>(contenidoCurso, PageRequest.of(0, 10), 2);
 
         when(service.findAllPage(any(), any(), any(), any())).thenReturn(page);
-        mockMvc.perform(get("/contenido-curso/all")
+        mockMvc.perform(get("/api/contenido-curso/all")
                 .param("searchText", "")
                 .param("page", "0")
                 .param("size", "10")
@@ -124,7 +124,7 @@ public class ContenidoCursoControllerTest{
         Page<ContenidoCursoDTO> page = new PageImpl<>(contenidoCurso, PageRequest.of(0, 10), 2);
 
         when(service.findAllPage(any(), any(), any(), any())).thenReturn(page);
-        mockMvc.perform(get("/contenido-curso/all")
+        mockMvc.perform(get("/api/contenido-curso/all")
                 .header("Accept", "application/json"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content", hasSize(2)));
@@ -139,7 +139,7 @@ public class ContenidoCursoControllerTest{
         Page<ContenidoCursoDTO> page = new PageImpl<>(contenidoCurso, PageRequest.of(0, 10), 1);
 
         when(service.findAllPage(any(), any(), any(), any())).thenReturn(page);
-        mockMvc.perform(get("/contenido-curso/all")
+        mockMvc.perform(get("/api/contenido-curso/all")
                 .param("searchText", "Curso 1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content", hasSize(1)))
@@ -157,7 +157,7 @@ public class ContenidoCursoControllerTest{
         Page<ContenidoCursoDTO> page = new PageImpl<>(contenidoCurso, PageRequest.of(0, 10), 2);
 
         when(service.findAllPage("", -1, -10, true)).thenReturn(page);
-        mockMvc.perform(get("/contenido-curso/all")
+        mockMvc.perform(get("/api/contenido-curso/all")
                 .param("searchText", "")
                 .param("page", "-1")
                 .param("size", "-10")
@@ -179,7 +179,7 @@ public class ContenidoCursoControllerTest{
     void getAll_shouldHandleError() throws Exception {
         when(service.findAllPage("", 0, 10, true)).thenThrow(new RuntimeException("Error"));
 
-        mockMvc.perform(get("/contenido-curso/all")
+        mockMvc.perform(get("/api/contenido-curso/all")
                     .param("searchText", "")
                     .param("page", "0")
                     .param("size", "10")
@@ -198,7 +198,7 @@ public class ContenidoCursoControllerTest{
         List<ContenidoCursoDTO> contenidoCurso = Arrays.asList(contenidoCursoDTO1, contenidoCursoDTO2);
 
         when(service.findAllList(null, null)).thenReturn(contenidoCurso);
-        mockMvc.perform(get("/contenido-curso/list"))
+        mockMvc.perform(get("/api/contenido-curso/list"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)));
 
@@ -211,7 +211,7 @@ public class ContenidoCursoControllerTest{
         List<ContenidoCursoDTO> contenidocurso = Arrays.asList(contenidoCursoDTO1);
 
         when(service.findAllList("Curso 1", true)).thenReturn(contenidocurso);
-        mockMvc.perform(get("/contenido-curso/list")
+        mockMvc.perform(get("/api/contenido-curso/list")
                 .param("searchText", "Curso 1")
                 .param("activo", "true"))
                 .andExpect(status().isOk())
@@ -229,7 +229,7 @@ public class ContenidoCursoControllerTest{
         List<ContenidoCursoDTO> contenidocurso = Arrays.asList(contenidoCursoDTO1);
 
         when(service.findAllList("Curso 1", null)).thenReturn(contenidocurso);
-        mockMvc.perform(get("/contenido-curso/list")
+        mockMvc.perform(get("/api/contenido-curso/list")
                 .param("searchText", "Curso 1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)))
@@ -246,7 +246,7 @@ public class ContenidoCursoControllerTest{
         List<ContenidoCursoDTO> contenidocurso = Arrays.asList(contenidoCursoDTO3);
 
         when(service.findAllList(null, false)).thenReturn(contenidocurso);
-        mockMvc.perform(get("/contenido-curso/list")
+        mockMvc.perform(get("/api/contenido-curso/list")
                 .param("activo", "false"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)))
@@ -262,7 +262,7 @@ public class ContenidoCursoControllerTest{
     void getList_ShouldReturnListWitAllParams_returnEmptyList() throws Exception {
 
         when(service.findAllList("Curso 1", false)).thenReturn(Arrays.asList());
-        mockMvc.perform(get("/contenido-curso/list")
+        mockMvc.perform(get("/api/contenido-curso/list")
                 .param("searchText", "Curso 1")
                 .param("activo", "false"))
                 .andExpect(status().isOk())
@@ -276,7 +276,7 @@ public class ContenidoCursoControllerTest{
     void getList_shouldHandleError() throws Exception {
         when(service.findAllList(null, null)).thenThrow(new RuntimeException("Error"));
 
-        mockMvc.perform(get("/contenido-curso/list"))
+        mockMvc.perform(get("/api/contenido-curso/list"))
                     .andExpect(status().is5xxServerError());
 
         verify(service, times(1)).findAllList(null, null);
@@ -291,7 +291,7 @@ public class ContenidoCursoControllerTest{
     void getById_ShouldReturnContenidoCurso() throws Exception {
 
         when(service.getById(1L)).thenReturn(contenidoCursoDTO1);
-        mockMvc.perform(get("/contenido-curso/1"))
+        mockMvc.perform(get("/api/contenido-curso/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.title", is(contenidoCursoDTO1.getTitle())))
                 .andExpect(jsonPath("$.description", is(contenidoCursoDTO1.getDescription())))
@@ -305,7 +305,7 @@ public class ContenidoCursoControllerTest{
     void getById_ShouldReturnNotFoundContenidoCurso() throws Exception {
 
         when(service.getById(99999L)).thenReturn((ContenidoCursoDTO) null);
-        mockMvc.perform(get("/contenido-curso/99999"))
+        mockMvc.perform(get("/api/contenido-curso/99999"))
                 .andExpect(status().isNotFound());
 
         verify(service, times(1)).getById(99999L);
@@ -316,7 +316,7 @@ public class ContenidoCursoControllerTest{
     void getById_shouldHandleError() throws Exception {
         when(service.getById(1L)).thenThrow(new RuntimeException("Error"));
 
-        mockMvc.perform(get("/contenido-curso/1"))
+        mockMvc.perform(get("/api/contenido-curso/1"))
                 .andExpect(status().is5xxServerError());
 
         verify(service, times(1)).getById(1L);
@@ -332,7 +332,7 @@ public class ContenidoCursoControllerTest{
 
         when(service.save(any(ContenidoCursoDTO.class))).thenReturn(contenidoCursoDTO1);
         
-        mockMvc.perform(post("/contenido-curso/save")
+        mockMvc.perform(post("/api/contenido-curso/save")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(newContenidoCursoDTO)))
                 .andExpect(status().isOk())
@@ -351,7 +351,7 @@ public class ContenidoCursoControllerTest{
 
         when(service.save(any(ContenidoCursoDTO.class))).thenReturn(requestDTO);
         
-        mockMvc.perform(post("/contenido-curso/save")
+        mockMvc.perform(post("/api/contenido-curso/save")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(requestDTO)))
                 .andExpect(status().isOk())
@@ -368,7 +368,7 @@ public class ContenidoCursoControllerTest{
     void save_shouldHandleError() throws Exception {
         when(service.save(any(ContenidoCursoDTO.class))).thenThrow(new RuntimeException("Error"));
 
-        mockMvc.perform(post("/contenido-curso/save")
+        mockMvc.perform(post("/api/contenido-curso/save")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(contenidoCursoDTO1)))
                 .andExpect(status().is5xxServerError());
@@ -383,7 +383,7 @@ public class ContenidoCursoControllerTest{
     @DisplayName("Elimina un registro de contenidocurso con éxito")
     void delete_ShouldReturnAStatusOk() throws Exception {
 
-        mockMvc.perform(delete("/contenido-curso/delete/1")
+        mockMvc.perform(delete("/api/contenido-curso/delete/1")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
 
@@ -395,7 +395,7 @@ public class ContenidoCursoControllerTest{
     void delete_shouldHandleError() throws Exception {
         doThrow(new RuntimeException("Error al eliminar en la BD")).when(service).delete(1L);
 
-        mockMvc.perform(delete("/contenido-curso/delete/1"))
+        mockMvc.perform(delete("/api/contenido-curso/delete/1"))
                 .andExpect(status().isBadRequest());
 
         verify(service, times(1)).delete(1L);
@@ -406,7 +406,7 @@ public class ContenidoCursoControllerTest{
     void deleteANonExistentRecord_shouldHandleError() throws Exception {
         doThrow(new RuntimeException("Registro no encontrado o inexistente.")).when(service).delete(1L);
 
-        mockMvc.perform(delete("/contenido-curso/delete/1"))
+        mockMvc.perform(delete("/api/contenido-curso/delete/1"))
                 .andExpect(status().isBadRequest());
 
         verify(service, times(1)).delete(1L);

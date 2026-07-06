@@ -33,7 +33,7 @@ public interface PermisoPantallaRepository extends JpaRepository<PermisoPantalla
             JOIN pantallas p ON pp.pantalla_id = p.id 
             JOIN menus m on p.menu_id = m.id 
         WHERE r.id = :rolId
-            AND m.url = :url 
+            AND :url LIKE CONCAT("%",m.url,"%")   
             AND p.activo = true
             AND m.activo = true
         AND (:activo IS NULL OR pp.activo = :activo);

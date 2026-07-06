@@ -26,7 +26,7 @@ import java.util.List;
  * Proporciona endpoints para listar, paginar, obtener, guardar y eliminar tecnologías.
  */
 @RestController
-@RequestMapping("/tecnologias")
+@RequestMapping("/api/tecnologias")
 public class TecnologiaController {
 
     @Autowired

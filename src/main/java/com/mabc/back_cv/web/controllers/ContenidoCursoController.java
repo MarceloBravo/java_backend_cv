@@ -17,7 +17,7 @@ import java.util.List;
  * Proporciona endpoints para listar, paginar, obtener, guardar y eliminar contenido de cursos.
  */
 @RestController
-@RequestMapping("/contenido-curso")
+@RequestMapping("/api/contenido-curso")
 public class ContenidoCursoController{
 
     @Autowired

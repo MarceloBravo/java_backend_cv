@@ -64,7 +64,7 @@ class RolControllerTest {
 
         when(rolService.getAll()).thenReturn(roles);
 
-        mockMvc.perform(get("/roles/list"))
+        mockMvc.perform(get("/api/roles/list"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$", hasSize(2)))
@@ -80,7 +80,7 @@ class RolControllerTest {
     void getAllRoles_ServiceThrowsException_ShouldReturnBadRequest() throws Exception {
         when(rolService.getAll()).thenThrow(new RuntimeException("DB error"));
 
-        mockMvc.perform(get("/roles/list"))
+        mockMvc.perform(get("/api/roles/list"))
                 .andExpect(status().isBadRequest());
 
         verify(rolService, times(1)).getAll();
@@ -95,7 +95,7 @@ class RolControllerTest {
         RolDTO rol = new RolDTO(1L, "ADMIN", true);
         when(rolService.findById(1L)).thenReturn(rol);
 
-        mockMvc.perform(get("/roles/{id}", 1L))
+        mockMvc.perform(get("/api/roles/{id}", 1L))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(1)))
                 .andExpect(jsonPath("$.nombre", is("ADMIN")))
@@ -108,7 +108,7 @@ class RolControllerTest {
     void getRolById_ServiceThrowsException_ShouldReturnBadRequest() throws Exception {
         when(rolService.findById(99L)).thenThrow(new RuntimeException("Not found"));
 
-        mockMvc.perform(get("/roles/{id}", 99L))
+        mockMvc.perform(get("/api/roles/{id}", 99L))
                 .andExpect(status().isBadRequest());
 
         verify(rolService, times(1)).findById(99L);
@@ -125,7 +125,7 @@ class RolControllerTest {
 
         when(rolService.searchBy("", true, 0, 10)).thenReturn(page);
 
-        mockMvc.perform(get("/roles/all")
+        mockMvc.perform(get("/api/roles/all")
                 .param("nombre", "")
                 .param("active", "true")
                 .param("page", "0")
@@ -143,7 +143,7 @@ class RolControllerTest {
         when(rolService.searchBy(any(), any(), anyInt(), anyInt()))
                 .thenThrow(new RuntimeException("DB error"));
 
-        mockMvc.perform(get("/roles/all"))
+        mockMvc.perform(get("/api/roles/all"))
                 .andExpect(status().isBadRequest());
     }
 
@@ -156,7 +156,7 @@ class RolControllerTest {
         RolDTO rol = new RolDTO(1L, "USER", true);
         when(rolService.getActiveRoles()).thenReturn(List.of(rol));
 
-        mockMvc.perform(get("/roles/active"))
+        mockMvc.perform(get("/api/roles/active"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)))
                 .andExpect(jsonPath("$[0].nombre", is("USER")))
@@ -169,7 +169,7 @@ class RolControllerTest {
     void getActiveRoles_ServiceThrowsException_ShouldReturnBadRequest() throws Exception {
         when(rolService.getActiveRoles()).thenThrow(new RuntimeException("DB error"));
 
-        mockMvc.perform(get("/roles/active"))
+        mockMvc.perform(get("/api/roles/active"))
                 .andExpect(status().isBadRequest());
 
         verify(rolService, times(1)).getActiveRoles();
@@ -186,7 +186,7 @@ class RolControllerTest {
 
         when(rolService.save(any(RolDTO.class))).thenReturn(saved);
 
-        mockMvc.perform(post("/roles/save")
+        mockMvc.perform(post("/api/roles/save")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(toSave)))
                 .andExpect(status().isOk())
@@ -202,7 +202,7 @@ class RolControllerTest {
 
         when(rolService.save(any(RolDTO.class))).thenThrow(new RuntimeException("Datos inválidos"));
 
-        mockMvc.perform(post("/roles/save")
+        mockMvc.perform(post("/api/roles/save")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(toSave)))
                 .andExpect(status().isBadRequest());
@@ -218,7 +218,7 @@ class RolControllerTest {
     void deleteById_Success_ShouldReturnOkMessage() throws Exception {
         doNothing().when(rolService).delete(1L);
 
-        mockMvc.perform(delete("/roles/{id}", 1L))
+        mockMvc.perform(delete("/api/roles/{id}", 1L))
                 .andExpect(status().isOk())
                 .andExpect(content().string("Rol eliminado correctamente"));
 
@@ -229,7 +229,7 @@ class RolControllerTest {
     void deleteById_ServiceThrowsException_ShouldReturnBadRequestMessage() throws Exception {
         doThrow(new RuntimeException("Rol no encontrado")).when(rolService).delete(99L);
 
-        mockMvc.perform(delete("/roles/{id}", 99L))
+        mockMvc.perform(delete("/api/roles/{id}", 99L))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string("Error: El rol no pudo ser eliminado: Rol no encontrado"));
 

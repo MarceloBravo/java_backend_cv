@@ -15,7 +15,7 @@ import java.util.List;
  * además de filtrar menús por roles y dependencias (menús padres/hijos).
  */
 @RestController
-@RequestMapping("/menus")
+@RequestMapping("/api/menus")
 public class MenuController {
 
     private final MenuService menuService;

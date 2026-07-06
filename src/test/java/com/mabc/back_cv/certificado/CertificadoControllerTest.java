@@ -105,7 +105,7 @@ class CertificadoControllerTest {
         when(certificadoService.findBySearchText(1L, "Java", 0, 10))
                 .thenReturn(certificadoPage);
 
-        mockMvc.perform(get("/certificado/all")
+        mockMvc.perform(get("/api/certificado/all")
                 .param("userId", "1")
                 .param("searchText", "Java")
                 .param("page", "0")
@@ -118,7 +118,7 @@ class CertificadoControllerTest {
         when(certificadoService.findBySearchText(null, null, null, null))
                 .thenReturn(certificadoPage);
 
-        mockMvc.perform(get("/certificado/all"))
+        mockMvc.perform(get("/api/certificado/all"))
                 .andExpect(status().isOk());
     }
 
@@ -127,7 +127,7 @@ class CertificadoControllerTest {
         when(certificadoService.findBySearchText(null, "test", 0, 10))
                 .thenReturn(certificadoPage);
 
-        mockMvc.perform(get("/certificado/all")
+        mockMvc.perform(get("/api/certificado/all")
                 .param("searchText", "test")
                 .param("page", "0")
                 .param("size", "10"))
@@ -139,7 +139,7 @@ class CertificadoControllerTest {
         when(certificadoService.findBySearchText(1L, null, 0, 10))
                 .thenReturn(certificadoPage);
 
-        mockMvc.perform(get("/certificado/all")
+        mockMvc.perform(get("/api/certificado/all")
                 .param("userId", "1")
                 .param("page", "0")
                 .param("size", "10"))
@@ -151,7 +151,7 @@ class CertificadoControllerTest {
         when(certificadoService.findBySearchText(1L, "Java", null, 10))
                 .thenReturn(certificadoPage);
 
-        mockMvc.perform(get("/certificado/all")
+        mockMvc.perform(get("/api/certificado/all")
                 .param("userId", "1")
                 .param("searchText", "Java")
                 .param("size", "10"))
@@ -163,7 +163,7 @@ class CertificadoControllerTest {
         when(certificadoService.findBySearchText(1L, "Java", 0, null))
                 .thenReturn(certificadoPage);
 
-        mockMvc.perform(get("/certificado/all")
+        mockMvc.perform(get("/api/certificado/all")
                 .param("userId", "1")
                 .param("searchText", "Java")
                 .param("page", "0"))
@@ -175,7 +175,7 @@ class CertificadoControllerTest {
         when(certificadoService.findBySearchText(anyLong(), any(), any(), any()))
                 .thenReturn(certificadoPage);
 
-        mockMvc.perform(get("/certificado/all")
+        mockMvc.perform(get("/api/certificado/all")
                 .param("userId", "1")
                 .param("page", "-1"))
                 .andExpect(status().isOk());
@@ -186,7 +186,7 @@ class CertificadoControllerTest {
         when(certificadoService.findBySearchText(anyLong(), any(), any(), any()))
                 .thenReturn(certificadoPage);
 
-        mockMvc.perform(get("/certificado/all")
+        mockMvc.perform(get("/api/certificado/all")
                 .param("userId", "1")
                 .param("size", "0"))
                 .andExpect(status().isOk());
@@ -197,7 +197,7 @@ class CertificadoControllerTest {
         when(certificadoService.findBySearchText(anyLong(), any(), any(), any()))
                 .thenReturn(certificadoPage);
 
-        mockMvc.perform(get("/certificado/all")
+        mockMvc.perform(get("/api/certificado/all")
                 .param("userId", "1")
                 .param("size", "-5"))
                 .andExpect(status().isOk());
@@ -208,7 +208,7 @@ class CertificadoControllerTest {
         when(certificadoService.findBySearchText(anyLong(), any(), any(), any()))
                 .thenThrow(new RuntimeException("Error de servicio"));
 
-        mockMvc.perform(get("/certificado/all")
+        mockMvc.perform(get("/api/certificado/all")
                 .param("userId", "1"))
                 .andExpect(status().isInternalServerError());
     }
@@ -217,7 +217,7 @@ class CertificadoControllerTest {
     void getById_conIdValido_retorna200() throws Exception {
         when(certificadoService.findById(1L)).thenReturn(certificadoDTO);
 
-        mockMvc.perform(get("/certificado/1"))
+        mockMvc.perform(get("/api/certificado/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value("Certificado Java"))
                 .andExpect(jsonPath("$.url").value("https://certificados.com/java"));
@@ -227,7 +227,7 @@ class CertificadoControllerTest {
     void getById_conIdNoExistente_retorna404() throws Exception {
         when(certificadoService.findById(999L)).thenReturn(null);
 
-        mockMvc.perform(get("/certificado/999"))
+        mockMvc.perform(get("/api/certificado/999"))
                 .andExpect(status().isNotFound());
     }
 
@@ -235,7 +235,7 @@ class CertificadoControllerTest {
     void getById_conIdCero_retorna404() throws Exception {
         when(certificadoService.findById(0L)).thenReturn(null);
 
-        mockMvc.perform(get("/certificado/0"))
+        mockMvc.perform(get("/api/certificado/0"))
                 .andExpect(status().isNotFound());
     }
 
@@ -243,7 +243,7 @@ class CertificadoControllerTest {
     void getById_conIdNegativo_retorna404() throws Exception {
         when(certificadoService.findById(-1L)).thenReturn(null);
 
-        mockMvc.perform(get("/certificado/-1"))
+        mockMvc.perform(get("/api/certificado/-1"))
                 .andExpect(status().isNotFound());
     }
 
@@ -251,7 +251,7 @@ class CertificadoControllerTest {
     void getById_conServiceLanzaExcepcion_retorna500() throws Exception {
         when(certificadoService.findById(1L)).thenThrow(new RuntimeException("Error de servicio"));
 
-        mockMvc.perform(get("/certificado/1"))
+        mockMvc.perform(get("/api/certificado/1"))
                 .andExpect(status().isInternalServerError());
     }
 
@@ -260,7 +260,7 @@ class CertificadoControllerTest {
         when(certificadoService.findByUserId(anyLong(), any(), any()))
                 .thenReturn(certificadoPage);
 
-        mockMvc.perform(get("/certificado/user/1"))
+        mockMvc.perform(get("/api/certificado/user/1"))
                 .andExpect(status().isOk());
     }
 
@@ -269,7 +269,7 @@ class CertificadoControllerTest {
         when(certificadoService.findByUserId(anyLong(), any(), any()))
                 .thenReturn(certificadoPage);
 
-        mockMvc.perform(get("/certificado/user/1")
+        mockMvc.perform(get("/api/certificado/user/1")
                 .param("size", "20"))
                 .andExpect(status().isOk());
     }
@@ -279,7 +279,7 @@ class CertificadoControllerTest {
         when(certificadoService.findByUserId(anyLong(), any(), any()))
                 .thenReturn(certificadoPage);
 
-        mockMvc.perform(get("/certificado/user/1")
+        mockMvc.perform(get("/api/certificado/user/1")
                 .param("page", "2"))
                 .andExpect(status().isOk());
     }
@@ -289,7 +289,7 @@ class CertificadoControllerTest {
         when(certificadoService.findByUserId(anyLong(), any(), any()))
                 .thenReturn(certificadoPage);
 
-        mockMvc.perform(get("/certificado/user/1")
+        mockMvc.perform(get("/api/certificado/user/1")
                 .param("page", "2")
                 .param("size", "20"))
                 .andExpect(status().isOk())
@@ -302,7 +302,7 @@ class CertificadoControllerTest {
         when(certificadoService.findByUserId(anyLong(), any(), any()))
                 .thenReturn(paginaVacia);
 
-        mockMvc.perform(get("/certificado/user/1"))
+        mockMvc.perform(get("/api/certificado/user/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content").isEmpty());
     }
@@ -312,7 +312,7 @@ class CertificadoControllerTest {
         when(certificadoService.findByUserId(anyLong(), any(), any()))
                 .thenThrow(new RuntimeException("Error de servicio"));
 
-        mockMvc.perform(get("/certificado/user/1"))
+        mockMvc.perform(get("/api/certificado/user/1"))
                 .andExpect(status().isInternalServerError());
     }
 
@@ -320,7 +320,7 @@ class CertificadoControllerTest {
     void save_conDTOValido_retorna200() throws Exception {
         when(certificadoService.save(any(CertificadoDTO.class))).thenReturn(certificadoDTO);
 
-        mockMvc.perform(post("/certificado/save")
+        mockMvc.perform(post("/api/certificado/save")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(certificadoDTO)))
                 .andExpect(status().isOk())
@@ -342,7 +342,7 @@ class CertificadoControllerTest {
 
         when(certificadoService.save(any(CertificadoDTO.class))).thenReturn(certificadoGuardado);
 
-        mockMvc.perform(post("/certificado/save")
+        mockMvc.perform(post("/api/certificado/save")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(certificadoDTO)))
                 .andExpect(status().isOk())
@@ -358,7 +358,7 @@ class CertificadoControllerTest {
         when(certificadoService.save(any(CertificadoDTO.class)))
                 .thenThrow(new IllegalArgumentException("Datos inválidos."));
 
-        mockMvc.perform(post("/certificado/save")
+        mockMvc.perform(post("/api/certificado/save")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(dtoIncompleto)))
                 .andExpect(status().isInternalServerError());
@@ -369,7 +369,7 @@ class CertificadoControllerTest {
         when(certificadoService.save(any(CertificadoDTO.class)))
                 .thenThrow(new IllegalArgumentException("Datos inválidos."));
 
-        mockMvc.perform(post("/certificado/save")
+        mockMvc.perform(post("/api/certificado/save")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{}"))
                 .andExpect(status().isInternalServerError());
@@ -380,7 +380,7 @@ class CertificadoControllerTest {
         when(certificadoService.save(any(CertificadoDTO.class)))
                 .thenThrow(new RuntimeException("Error de base de datos"));
 
-        mockMvc.perform(post("/certificado/save")
+        mockMvc.perform(post("/api/certificado/save")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(certificadoDTO)))
                 .andExpect(status().isInternalServerError());
@@ -388,7 +388,7 @@ class CertificadoControllerTest {
 
     @Test
     void save_conJSONInvalido_retorna400() throws Exception {
-        mockMvc.perform(post("/certificado/save")
+        mockMvc.perform(post("/api/certificado/save")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{invalid json}"))
                 .andExpect(status().isBadRequest());
@@ -398,7 +398,7 @@ class CertificadoControllerTest {
     void delete_conIdValido_retorna200() throws Exception {
         doNothing().when(certificadoService).delete(1L);
 
-        mockMvc.perform(delete("/certificado/delete/1"))
+        mockMvc.perform(delete("/api/certificado/delete/1"))
                 .andExpect(status().isOk())
                 .andExpect(content().string("\"Certificado eliminado correctamente\""));
     }
@@ -408,7 +408,7 @@ class CertificadoControllerTest {
         doThrow(new IllegalArgumentException("Registro no encontrado o inexistente."))
                 .when(certificadoService).delete(999L);
 
-        mockMvc.perform(delete("/certificado/delete/999"))
+        mockMvc.perform(delete("/api/certificado/delete/999"))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string("\"Error al eliminar el certificado\""));
     }
@@ -418,7 +418,7 @@ class CertificadoControllerTest {
         doThrow(new IllegalArgumentException("Registro no encontrado o inexistente."))
                 .when(certificadoService).delete(0L);
 
-        mockMvc.perform(delete("/certificado/delete/0"))
+        mockMvc.perform(delete("/api/certificado/delete/0"))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string("\"Error al eliminar el certificado\""));
     }
@@ -428,7 +428,7 @@ class CertificadoControllerTest {
         doThrow(new IllegalArgumentException("Registro no encontrado o inexistente."))
                 .when(certificadoService).delete(-1L);
 
-        mockMvc.perform(delete("/certificado/delete/-1"))
+        mockMvc.perform(delete("/api/certificado/delete/-1"))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string("\"Error al eliminar el certificado\""));
     }
@@ -438,14 +438,14 @@ class CertificadoControllerTest {
         doThrow(new RuntimeException("Error de base de datos"))
                 .when(certificadoService).delete(1L);
 
-        mockMvc.perform(delete("/certificado/delete/1"))
+        mockMvc.perform(delete("/api/certificado/delete/1"))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string("\"Error al eliminar el certificado\""));
     }
 
     @Test
     void delete_conIdNull_retorna400() throws Exception {
-        mockMvc.perform(delete("/certificado/delete/null"))
+        mockMvc.perform(delete("/api/certificado/delete/null"))
                 .andExpect(status().isBadRequest());
     }
 

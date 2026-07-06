@@ -62,7 +62,7 @@ class DescripcionPortafolioControllerTest {
         DescripcionPortafolioDTO dto = createDto(1L, "texto prueba", 1);
         when(descripcionPortafolioService.getAll()).thenReturn(List.of(dto));
 
-        mockMvc.perform(get("/descripcion-portafolio/list"))
+        mockMvc.perform(get("/api/descripcion-portafolio/list"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(1))
                 .andExpect(jsonPath("$[0].parrafo").value(dto.getParrafo()));
@@ -76,7 +76,7 @@ class DescripcionPortafolioControllerTest {
         .when(descripcionPortafolioService)
         .getAll();
 
-        mockMvc.perform(get("/descripcion-portafolio/list"))
+        mockMvc.perform(get("/api/descripcion-portafolio/list"))
                 .andExpect(status().isBadRequest());
 
         verify(descripcionPortafolioService, times(1)).getAll();
@@ -88,7 +88,7 @@ class DescripcionPortafolioControllerTest {
         Page<DescripcionPortafolioDTO> page = new PageImpl<>(List.of(dto), PageRequest.of(0, 5), 1);
         when(descripcionPortafolioService.getAll(eq("busqueda"), eq(0), eq(5))).thenReturn(page);
 
-        mockMvc.perform(get("/descripcion-portafolio/all")
+        mockMvc.perform(get("/api/descripcion-portafolio/all")
                         .param("terminoBuscado", "busqueda")
                         .param("page", "0")
                         .param("size", "5"))
@@ -103,14 +103,14 @@ class DescripcionPortafolioControllerTest {
         Page<DescripcionPortafolioDTO> page = new PageImpl<>(List.of(dto), PageRequest.of(0, 10), 1);
         when(descripcionPortafolioService.getAll(null, null, null)).thenReturn(page);
 
-        mockMvc.perform(get("/descripcion-portafolio/all"))
+        mockMvc.perform(get("/api/descripcion-portafolio/all"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content.length()").value(1));
     }
 
     @Test
     void shouldReturnBadRequestForInvalidPageParameter() throws Exception {
-        mockMvc.perform(get("/descripcion-portafolio/all")
+        mockMvc.perform(get("/api/descripcion-portafolio/all")
                         .param("page", "abc")
                         .param("size", "5"))
                 .andExpect(status().isBadRequest());
@@ -123,7 +123,7 @@ class DescripcionPortafolioControllerTest {
         .when(descripcionPortafolioService)
         .getAll(any(), anyInt(), anyInt());
 
-        mockMvc.perform(get("/descripcion-portafolio/all")
+        mockMvc.perform(get("/api/descripcion-portafolio/all")
                 .param("terminoBuscado", "abc")
                 .param("page", "0")
                 .param("size", "10"))
@@ -136,7 +136,7 @@ class DescripcionPortafolioControllerTest {
     void shouldReturnNotFoundWhenGetByIdDoesNotExist() throws Exception {
         when(descripcionPortafolioService.getById(anyLong())).thenReturn(null);
 
-        mockMvc.perform(get("/descripcion-portafolio/99"))
+        mockMvc.perform(get("/api/descripcion-portafolio/99"))
                 .andExpect(status().isNotFound());
     }
     
@@ -145,7 +145,7 @@ class DescripcionPortafolioControllerTest {
         DescripcionPortafolioDTO dto = createDto(1L, "texto prueba", 1);
         when(descripcionPortafolioService.getById(anyLong())).thenReturn(dto);
 
-        mockMvc.perform(get("/descripcion-portafolio/1"))
+        mockMvc.perform(get("/api/descripcion-portafolio/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(dto.getId()));
     }
@@ -154,7 +154,7 @@ class DescripcionPortafolioControllerTest {
     void shouldReturnServerErrorWhenGetByIdThrowsException() throws Exception {
         when(descripcionPortafolioService.getById(anyLong())).thenThrow(new RuntimeException("fail"));
 
-        mockMvc.perform(get("/descripcion-portafolio/1"))
+        mockMvc.perform(get("/api/descripcion-portafolio/1"))
                 .andExpect(status().isInternalServerError());
     }
 
@@ -164,7 +164,7 @@ class DescripcionPortafolioControllerTest {
         DescripcionPortafolioDTO savedDto = createDto(10L, "guardar descripcion", 1);
         when(descripcionPortafolioService.save(any(DescripcionPortafolioDTO.class))).thenReturn(savedDto);
 
-        mockMvc.perform(post("/descripcion-portafolio/save")
+        mockMvc.perform(post("/api/descripcion-portafolio/save")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isOk())
@@ -178,7 +178,7 @@ class DescripcionPortafolioControllerTest {
         when(descripcionPortafolioService.save(any(DescripcionPortafolioDTO.class)))
                 .thenThrow(new RuntimeException("fail"));
 
-        mockMvc.perform(post("/descripcion-portafolio/save")
+        mockMvc.perform(post("/api/descripcion-portafolio/save")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isInternalServerError());
@@ -188,7 +188,7 @@ class DescripcionPortafolioControllerTest {
     void shouldDeleteDescriptionSuccessfully() throws Exception {
         doNothing().when(descripcionPortafolioService).delete(1L);
 
-        mockMvc.perform(delete("/descripcion-portafolio/delete/1"))
+        mockMvc.perform(delete("/api/descripcion-portafolio/delete/1"))
                 .andExpect(status().isOk())
                 .andExpect(content().string("Descripción de portafolio eliminada correctamente"));
     }
@@ -197,7 +197,7 @@ class DescripcionPortafolioControllerTest {
     void shouldReturnBadRequestWhenDeleteThrowsException() throws Exception {
         doThrow(new IllegalArgumentException("no existe")).when(descripcionPortafolioService).delete(1L);
 
-        mockMvc.perform(delete("/descripcion-portafolio/delete/1"))
+        mockMvc.perform(delete("/api/descripcion-portafolio/delete/1"))
                 .andExpect(status().isBadRequest());
     }
 

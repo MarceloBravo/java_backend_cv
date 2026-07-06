@@ -24,7 +24,7 @@ import com.mabc.back_cv.web.services.permisoPantalla.PermisoPantallaService;
  * de pantalla asociados a roles y pantallas en el sistema.
  */
 @RestController
-@RequestMapping("/permisos-pantalla")
+@RequestMapping("/api/permisos-pantalla")
 public class PermisoPantallaController {
 
     private final PermisoPantallaService permisoPantallaService;

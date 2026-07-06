@@ -65,7 +65,7 @@ public class PermisoPantallaControllerTest {
         PermisoPantallaDTO dto = buildDto(1L);
         when(permisoPantallaService.obtenerPermisosPantallaPorRol(1L)).thenReturn(List.of(dto));
 
-        mockMvc.perform(get("/permisos-pantalla/rol/1"))
+        mockMvc.perform(get("/api/permisos-pantalla/rol/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)))
                 .andExpect(jsonPath("$[0].id", is(1)));
@@ -75,7 +75,7 @@ public class PermisoPantallaControllerTest {
     public void obtenerPermisosPantallaPorRol_ServiceException() throws Exception {
         when(permisoPantallaService.obtenerPermisosPantallaPorRol(1L)).thenThrow(new RuntimeException("boom"));
 
-        mockMvc.perform(get("/permisos-pantalla/rol/1"))
+        mockMvc.perform(get("/api/permisos-pantalla/rol/1"))
                 .andExpect(status().isInternalServerError());
     }
 
@@ -85,13 +85,13 @@ public class PermisoPantallaControllerTest {
         PermisoPantallaDTO dto = buildDto(1L);
         when(permisoPantallaService.obtenerPermisoPantallaPorRolYPantalla(1L, 2L, true)).thenReturn(dto);
 
-        mockMvc.perform(get("/permisos-pantalla/rol/1/pantalla/2"))
+        mockMvc.perform(get("/api/permisos-pantalla/rol/1/pantalla/2"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(1)));
 
         when(permisoPantallaService.obtenerPermisoPantallaPorRolYPantalla(1L, 3L, true)).thenReturn(null);
 
-        mockMvc.perform(get("/permisos-pantalla/rol/1/pantalla/3"))
+        mockMvc.perform(get("/api/permisos-pantalla/rol/1/pantalla/3"))
                 .andExpect(status().isNotFound());
     }
 
@@ -101,7 +101,7 @@ public class PermisoPantallaControllerTest {
     public void obtenerPermisoPantallaPorRolYPantalla_Error() throws Exception {
         when(permisoPantallaService.obtenerPermisoPantallaPorRolYPantalla(1L, 2L, true)).thenThrow(new RuntimeException("fail"));
 
-        mockMvc.perform(get("/permisos-pantalla/rol/1/pantalla/2"))
+        mockMvc.perform(get("/api/permisos-pantalla/rol/1/pantalla/2"))
                 .andExpect(status().isInternalServerError());
     }
     
@@ -113,7 +113,7 @@ public class PermisoPantallaControllerTest {
 
         String json = objectMapper.writeValueAsString(List.of(dto));
 
-        mockMvc.perform(post("/permisos-pantalla/grabar")
+        mockMvc.perform(post("/api/permisos-pantalla/grabar")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isOk())
@@ -125,7 +125,7 @@ public class PermisoPantallaControllerTest {
         // malformed JSON
         String badJson = "[{\"id\":1,\"rol\": {}}"; // missing closing ]
 
-        mockMvc.perform(post("/permisos-pantalla/grabar")
+        mockMvc.perform(post("/api/permisos-pantalla/grabar")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(badJson))
                 .andExpect(status().isBadRequest());
@@ -144,7 +144,7 @@ public class PermisoPantallaControllerTest {
 
         String json = objectMapper.writeValueAsString(List.of(dto));
 
-        mockMvc.perform(post("/permisos-pantalla/grabar")
+        mockMvc.perform(post("/api/permisos-pantalla/grabar")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isOk())
@@ -163,7 +163,7 @@ public class PermisoPantallaControllerTest {
 
         String json = objectMapper.writeValueAsString(List.of(dto));
 
-        mockMvc.perform(post("/permisos-pantalla/grabar")
+        mockMvc.perform(post("/api/permisos-pantalla/grabar")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isOk())
@@ -180,7 +180,7 @@ public class PermisoPantallaControllerTest {
 
         String json = objectMapper.writeValueAsString(List.of(dto));
 
-        mockMvc.perform(post("/permisos-pantalla/grabar")
+        mockMvc.perform(post("/api/permisos-pantalla/grabar")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isInternalServerError());
@@ -194,7 +194,7 @@ public class PermisoPantallaControllerTest {
         Long id_rol = 1L;
         when(permisoPantallaService.eliminarPermisosPantallaPorRolId(id_rol)).thenReturn(true);
 
-        mockMvc.perform(delete("/permisos-pantalla/eliminar/rol/{id_rol}", id_rol))
+        mockMvc.perform(delete("/api/permisos-pantalla/eliminar/rol/{id_rol}", id_rol))
                 .andExpect(status().isOk())
                 .andExpect(content().string("PermisosPantalla eliminados correctamente por rol"));
     }
@@ -205,7 +205,7 @@ public class PermisoPantallaControllerTest {
         Long id_rol = 1L;
         when(permisoPantallaService.eliminarPermisosPantallaPorRolId(id_rol)).thenReturn(false);
 
-        mockMvc.perform(delete("/permisos-pantalla/eliminar/rol/{id_rol}", id_rol))
+        mockMvc.perform(delete("/api/permisos-pantalla/eliminar/rol/{id_rol}", id_rol))
                 .andExpect(status().isNotFound());
     }
 
@@ -215,7 +215,7 @@ public class PermisoPantallaControllerTest {
         Long id_rol = 1L;
         when(permisoPantallaService.eliminarPermisosPantallaPorRolId(id_rol)).thenThrow(new RuntimeException("fail"));
 
-        mockMvc.perform(delete("/permisos-pantalla/eliminar/rol/{id_rol}", id_rol))
+        mockMvc.perform(delete("/api/permisos-pantalla/eliminar/rol/{id_rol}", id_rol))
                 .andExpect(status().isInternalServerError());
     }
 
@@ -225,7 +225,7 @@ public class PermisoPantallaControllerTest {
         Long id = 1L;
         when(permisoPantallaService.desactivarPermisosPantallaPorRolId(id)).thenReturn(true);
 
-        mockMvc.perform(put("/permisos-pantalla/desactivar/rol/{id}", id))
+        mockMvc.perform(put("/api/permisos-pantalla/desactivar/rol/{id}", id))
                 .andExpect(status().isOk())
                 .andExpect(content().string("PermisosPantalla desactivados correctamente por rol"));
     }
@@ -236,7 +236,7 @@ public class PermisoPantallaControllerTest {
         Long id = 1L;
         when(permisoPantallaService.desactivarPermisosPantallaPorRolId(id)).thenReturn(false);
 
-        mockMvc.perform(put("/permisos-pantalla/desactivar/rol/{id}", id))
+        mockMvc.perform(put("/api/permisos-pantalla/desactivar/rol/{id}", id))
                 .andExpect(status().isNotFound());
     }   
 
@@ -246,7 +246,7 @@ public class PermisoPantallaControllerTest {
         Long id = 1L;
         when(permisoPantallaService.desactivarPermisosPantallaPorRolId(id)).thenThrow(new RuntimeException("fail"));
 
-        mockMvc.perform(put("/permisos-pantalla/desactivar/rol/{id}", id))
+        mockMvc.perform(put("/api/permisos-pantalla/desactivar/rol/{id}", id))
                 .andExpect(status().isInternalServerError());
     }
 

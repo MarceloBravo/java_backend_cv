@@ -21,7 +21,7 @@ import java.util.List;
  * Proporciona endpoints para listar, buscar, obtener, guardar y eliminar pantallas.
  */
 @RestController
-@RequestMapping("/pantallas")
+@RequestMapping("/api/pantallas")
 public class PantallaController {
 
     private final PantallaService pantallaService;
