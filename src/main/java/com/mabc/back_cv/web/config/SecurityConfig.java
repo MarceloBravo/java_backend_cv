@@ -59,6 +59,11 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable()) // Deshabilitamos CSRF ya que usamos JWT
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/api/auth/**").permitAll() // Rutas públicas (Login/Registro)
+                .requestMatchers(       // Rutas públicas para Swagger/OpenAPI
+                    "/v3/api-docs/**",
+                    "/swagger-ui/**",
+                    "/swagger-ui.html"
+                ).permitAll()
                 .anyRequest().access(dynamicAuthorizationManager) // Autorización dinámica por DB
             )
             .sessionManagement(session -> session
