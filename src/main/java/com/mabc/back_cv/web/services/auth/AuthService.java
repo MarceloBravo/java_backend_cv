@@ -6,6 +6,10 @@ import com.mabc.back_cv.web.entities.User;
 import com.mabc.back_cv.web.repositories.RolRepository;
 import com.mabc.back_cv.web.repositories.UserRepository;
 
+import com.mabc.back_cv.web.dto.CredencialesDTO;
+import com.mabc.back_cv.web.dto.UsuarioDTO;
+
+
 import java.util.Map;
 
 import org.springframework.security.authentication.AuthenticationManager;
@@ -78,7 +82,7 @@ public class AuthService {
      * @throws RuntimeException Si el rol predeterminado no se encuentra
      *                          inicializado en la base de datos.
      */
-    public Map<String, String> register(User request) {
+    public Map<String, String> register(UsuarioDTO request) {
         Rol defaultRol = rolRepository.findByNombre("ROLE_USER")
                 .orElseThrow(() -> new RuntimeException(
                         "Error: El rol 'ROLE_USER' no está inicializado en la base de datos."));
@@ -111,7 +115,7 @@ public class AuthService {
      * @return Un mapa que asocia las claves "accessToken" y "refreshToken" con sus
      *         respectivos valores.
      */
-    public Map<String, String> authenticate(User request) {
+    public Map<String, String> authenticate(CredencialesDTO request) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
 

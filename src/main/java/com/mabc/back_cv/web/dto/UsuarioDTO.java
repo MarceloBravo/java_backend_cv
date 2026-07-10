@@ -47,7 +47,7 @@ public class UsuarioDTO {
     private String idioma;
     
     @NotBlank(message = "La contraseña es obligatoria")
-    @Size(max = 100, message = "La contraseña no puede exceder 100 caracteres")
+    @Size(max = 20, message = "La contraseña no puede exceder 20 caracteres")
     private String password;
     
     private Boolean activo = true;

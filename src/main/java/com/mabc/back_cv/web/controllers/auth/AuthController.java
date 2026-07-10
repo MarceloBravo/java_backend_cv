@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.mabc.back_cv.web.dto.CredencialesDTO;
+import com.mabc.back_cv.web.dto.UsuarioDTO;
+
 import java.util.Map;
 
 /**
@@ -44,7 +47,7 @@ public class AuthController {
      *         recién generados.
      */
     @PostMapping("/register")
-    public ResponseEntity<Map<String, String>> register(@RequestBody User user) {
+    public ResponseEntity<Map<String, String>> register(@RequestBody UsuarioDTO user) {
         try {
             return ResponseEntity.ok(authService.register(user));
         } catch (Exception e) {
@@ -61,9 +64,9 @@ public class AuthController {
      *         generados.
      */
     @PostMapping("/login")
-    public ResponseEntity<Map<String, String>> login(@RequestBody User user) {
+    public ResponseEntity<Map<String, String>> login(@RequestBody CredencialesDTO credencialesDTO) {
         try {
-            return ResponseEntity.ok(authService.authenticate(user));
+            return ResponseEntity.ok(authService.authenticate(credencialesDTO));
         } catch (Exception e) {
             return ResponseEntity.status(500).body(Map.of("error", e.getMessage()));
         }
